@@ -13,6 +13,7 @@ import lombok.Setter;
 public class KakaoUserInfo {
 
     private String id;
+    private String kakaoId;
     private String email;
     private String nickname;
 }

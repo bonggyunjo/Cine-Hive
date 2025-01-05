@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface KakaoUserRepository extends JpaRepository<Long, KakaoUser> {
+public interface KakaoUserRepository extends JpaRepository<KakaoUser, Long> {
     Optional<KakaoUser> findByKakaoId(String kakaoId);
 }

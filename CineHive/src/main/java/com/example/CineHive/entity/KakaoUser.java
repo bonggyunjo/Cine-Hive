@@ -21,6 +21,7 @@ public class KakaoUser {
     @Column(name = "kakao_id", unique = true)
     private String kakaoId;
 
+
     @Column(length = 50)
     private String nickname;
 
