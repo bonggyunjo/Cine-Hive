@@ -49,8 +49,9 @@ public class User {
     @Column(nullable = false)
     private String mem_type;
 
-    @Column(name = "kakao_id", nullable = true) // nullable을 true로 설정
+    @Column(name = "kakao_id", nullable = true)
     private String kakaoId; // 카카오 ID
+
     @PrePersist //필드를 자동으로 현재 시간으로 설정
     public void prePersist() {
         this.mem_register_datetime = LocalDateTime.now();

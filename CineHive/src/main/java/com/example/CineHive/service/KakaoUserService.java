@@ -75,19 +75,32 @@ public class KakaoUserService {
         try (Response response = client.newCall(request).execute()) {
             if (response.isSuccessful()) {
                 String responseBody = response.body().string();
+                System.out.println("Response Body: " + responseBody); // 응답 출력
                 JSONObject jsonObject = new JSONObject(responseBody);
                 KakaoUserInfo userInfo = new KakaoUserInfo();
                 userInfo.setId(String.valueOf(jsonObject.getLong("id")));
                 userInfo.setKakaoId(userInfo.getId());
                 JSONObject properties = jsonObject.getJSONObject("properties");
                 userInfo.setNickname(properties.getString("nickname"));
-                userInfo.setEmail(properties.getString("email"));
+
+                // 이메일 필드가 있는지 확인
+                if (jsonObject.has("kakao_account")) {
+                    JSONObject kakaoAccount = jsonObject.getJSONObject("kakao_account");
+                    if (kakaoAccount.has("email")) {
+                        userInfo.setEmail(kakaoAccount.getString("email"));
+                    } else {
+                        userInfo.setEmail("이메일 미제공"); // 기본값 설정
+                    }
+                } else {
+                    userInfo.setEmail("이메일 미제공");
+                }
                 return userInfo;
             } else {
                 throw new RuntimeException("Failed to get user info: " + response.message());
             }
         }
     }
+
 
     public void registerUser(KakaoUserInfo userInfo) {
         // SocialUser 저장
@@ -103,7 +116,10 @@ public class KakaoUserService {
             newUser.setMem_phone("0");
             newUser.setMem_sex("0");
             newUser.setMem_name("0");
-            // 일단 0으로 설정하고 추후에 클라이언트 구현할 때 수정 필요
+            newUser.setMem_userid(userInfo.getKakaoId());
+            // 일단 0 OR default 값으로 설정하고 추후에 클라이언트 구현할 때 수정 필요
+
+
 
             newUser.setMem_email(userInfo.getEmail()); //이메일
             newUser.setMem_pw("0"); //비밀번호는 디폴트 0으로 (소셜로그인은 비밀번호 제공 x)
