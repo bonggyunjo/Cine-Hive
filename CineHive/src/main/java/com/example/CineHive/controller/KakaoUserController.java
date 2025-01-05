@@ -28,7 +28,7 @@ public class KakaoUserController {
     }
 
     @GetMapping("/kakao/callback")
-    public RedirectView kakaoCallback(@RequestParam String code, HttpServletRequest request) {
+    public ResponseEntity<?> kakaoCallback(@RequestParam String code, HttpServletRequest request) {
         try {
             String accessToken = kakaoUserService.getAccessToken(code);
             KakaoUserInfo userInfo = kakaoUserService.getUserInfo(accessToken);
@@ -37,14 +37,14 @@ public class KakaoUserController {
             HttpSession session = request.getSession();
             session.setAttribute("user", userInfo);
 
-            RedirectView redirectView = new RedirectView();
-            redirectView.setUrl("http://localhost:8080/success");
-            return redirectView;
+            // 성공시 사용자 정보를 JSON 형식으로 응답
+            return ResponseEntity.ok(userInfo);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("Error during Kakao login process", e);
+            return ResponseEntity.status(500).body("Error during Kakao login process");
         }
     }
+
     @PostMapping("/session")
     public ResponseEntity<?> createSession(@RequestBody KakaoUserInfo userInfo, HttpServletRequest request) {
         HttpSession session = request.getSession();
