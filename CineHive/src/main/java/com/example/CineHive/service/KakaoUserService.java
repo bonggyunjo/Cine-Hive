@@ -33,10 +33,10 @@ public class KakaoUserService {
     private String logoutRedirectUri;
 
     @Autowired
-    private KakaoUserRepository userRepository;
+    private KakaoUserRepository kakaouserRepository;
 
     @Autowired
-    private UserRepository user1Repository;
+    private UserRepository userRepository;
 
     private final OkHttpClient client = new OkHttpClient();
 
@@ -91,21 +91,27 @@ public class KakaoUserService {
 
     public void registerUser(KakaoUserInfo userInfo) {
         // SocialUser 저장
-        KakaoUser socialUser = userRepository.findByKakaoId(userInfo.getKakaoId())
+        KakaoUser socialUser = kakaouserRepository.findByKakaoId(userInfo.getKakaoId())
                 .orElse(new KakaoUser(userInfo.getKakaoId(), userInfo.getNickname(), userInfo.getEmail()));
-        userRepository.save(socialUser);
+        kakaouserRepository.save(socialUser);
 
         // users 테이블에 사용자 정보 저장
-        User newUser = user1Repository.findByKakaoId(userInfo.getKakaoId()).orElse(null);
+        User newUser = userRepository.findByKakaoId(userInfo.getKakaoId()).orElse(null);
         if (newUser == null) {
             newUser = new User();
-            newUser.setMem_email(userInfo.getEmail());
-            newUser.setMem_pw("0");
-            newUser.setMem_nickname(userInfo.getNickname());
-            newUser.setMem_register_datetime(LocalDateTime.now());
-            newUser.setKakaoId(userInfo.getKakaoId());
-            newUser.setMem_type("카카오");
-            user1Repository.save(newUser);
+            newUser.setMem_gener(0);
+            newUser.setMem_phone("0");
+            newUser.setMem_sex("0");
+            newUser.setMem_name("0");
+            // 일단 0으로 설정하고 추후에 클라이언트 구현할 때 수정 필요
+
+            newUser.setMem_email(userInfo.getEmail()); //이메일
+            newUser.setMem_pw("0"); //비밀번호는 디폴트 0으로 (소셜로그인은 비밀번호 제공 x)
+            newUser.setMem_nickname(userInfo.getNickname()); // 닉네임
+            newUser.setMem_register_datetime(LocalDateTime.now()); //날짜
+            newUser.setKakaoId(userInfo.getKakaoId());  // 카카오 아이디
+            newUser.setMem_type("카카오");  //가입유형
+            userRepository.save(newUser);
         }
     }
 
