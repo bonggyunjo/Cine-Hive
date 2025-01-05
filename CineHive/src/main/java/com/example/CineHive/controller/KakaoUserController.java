@@ -38,6 +38,7 @@ public class KakaoUserController {
             session.setAttribute("user", userInfo);
 
             // 성공시 사용자 정보를 JSON 형식으로 응답
+            // 나중에 vue 구현할 때 redirectView로 변경 필요
             return ResponseEntity.ok(userInfo);
         } catch (Exception e) {
             e.printStackTrace();

@@ -26,7 +26,7 @@ public class SecurityConfig {
                                 "/api/auth/kakao/callback",
                                 "/api/auth/kakao/success",
                                 "/api/auth/session"
-                        ).permitAll() // 카카오 및 네이버, 구글 관련 URL을 허용
+                        ).permitAll() // 카카오 URL 허용
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth -> oauth
