@@ -78,8 +78,8 @@ public class KakaoUserService {
                 System.out.println("Response Body: " + responseBody); // 응답 출력
                 JSONObject jsonObject = new JSONObject(responseBody);
                 KakaoUserInfo userInfo = new KakaoUserInfo();
-                userInfo.setId(String.valueOf(jsonObject.getLong("id")));
-                userInfo.setKakaoId(userInfo.getId());
+                userInfo.setKakaoId(userInfo.getKakaoId());
+                userInfo.setKakaoId(String.valueOf(jsonObject.getLong("id"))); 
                 JSONObject properties = jsonObject.getJSONObject("properties");
                 userInfo.setNickname(properties.getString("nickname"));
 
