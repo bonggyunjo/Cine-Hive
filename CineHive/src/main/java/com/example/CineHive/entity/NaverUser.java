@@ -21,7 +21,6 @@ public class NaverUser {
     @Column(name = "naver_id", unique = true)
     private String naverId; //네이버 고유 아이디
 
-
     @Column(length = 50)
     private String nickname; //별명
 
