@@ -11,7 +11,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NaverUserInfo {
-    private String id;
 
     private String naverId;
 

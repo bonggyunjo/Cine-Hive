@@ -12,7 +12,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class KakaoUserInfo {
 
-    private String id;
     private String kakaoId;
     private String email;
     private String nickname;
