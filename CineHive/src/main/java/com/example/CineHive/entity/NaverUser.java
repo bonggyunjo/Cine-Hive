@@ -44,7 +44,7 @@ public class NaverUser {
     @JoinColumn(name = "user_id", referencedColumnName = "mem_id", insertable = false, updatable = false)
     private User user;
 
-    public NaverUser(String naverId, String nickname,String mem_name, String memUserId, String mem_sex, String mem_phone) {
+    public NaverUser(String naverId, String nickname, String mem_name, String memUserId, String mem_sex, String mem_phone) {
         this.naverId = naverId;
         this.nickname = nickname;
         this.mem_name = mem_name;
