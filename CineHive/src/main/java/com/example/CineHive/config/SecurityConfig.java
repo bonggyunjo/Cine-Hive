@@ -25,7 +25,10 @@ public class SecurityConfig {
                                 "/api/auth/logout",
                                 "/api/auth/kakao/callback",
                                 "/api/auth/kakao/success",
-                                "/api/auth/session"
+                                "/api/auth/session",
+                                "/api/auth/naver",
+                                "/api/auth/naver/callback",
+                                "/api/auth/naver/success"
                         ).permitAll() // 카카오 URL 허용
                         .anyRequest().authenticated()
                 )

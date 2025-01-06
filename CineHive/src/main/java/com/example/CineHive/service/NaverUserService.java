@@ -83,7 +83,11 @@ public class NaverUserService {
             userInfo.setNaverId(responseObject.getString("id"));
             userInfo.setEmail(responseObject.getString("email"));
             userInfo.setNickname(responseObject.getString("nickname"));
-            userInfo.setPhone(responseObject.getString("phone"));
+            if (responseObject.has("phone")) {
+                userInfo.setPhone(responseObject.getString("phone"));
+            } else {
+                userInfo.setPhone(null); // 또는 기본값 설정
+            }
             userInfo.setGender(responseObject.getString("gender"));
             userInfo.setName(responseObject.getString("name"));
             return userInfo;
@@ -94,7 +98,7 @@ public class NaverUserService {
 
     public void registerUser(NaverUserInfo userInfo) {
         NaverUser naverUser = naverUserRepository.findByNaverId(userInfo.getNaverId())
-                .orElse(new NaverUser(userInfo.getNaverId(), userInfo.getEmail(), userInfo.getName(), userInfo.getNickname(),userInfo.getPhone(), userInfo.getGender()));
+                .orElse(new NaverUser(userInfo.getNaverId(), userInfo.getNickname(), userInfo.getName(),userInfo.getEmail(), userInfo.getGender(),userInfo.getPhone()));
 
         naverUserRepository.save(naverUser);
 
@@ -102,18 +106,19 @@ public class NaverUserService {
         if (newUser == null) {
             newUser = new User();
             newUser.setMem_gener(0);
-            newUser.setMem_phone("0");
-            newUser.setMem_sex("0");
-            newUser.setMem_name("0");
+            newUser.setMem_pw("0"); //비밀번호는 디폴트 0으로 (소셜로그인은 비밀번호 제공 x)
             newUser.setMem_userid(userInfo.getNaverId());
+
             // 일단 0 OR default 값으로 설정하고 추후에 클라이언트 구현할 때 수정 필요
 
             //네이버에서 동의 항목에서 체크한 목록들
+            newUser.setMem_email(userInfo.getEmail()); // 이메일 추가
             newUser.setMem_name(userInfo.getName());
             newUser.setMem_sex(userInfo.getGender());
             newUser.setMem_phone(userInfo.getPhone());
             newUser.setMem_nickname(userInfo.getNickname());
             newUser.setMem_register_datetime(LocalDateTime.now());
+            newUser.setNaverId(userInfo.getNaverId());  // 카카오 아이디
             newUser.setMem_type("네이버");
             userRepository.save(newUser);
         }
