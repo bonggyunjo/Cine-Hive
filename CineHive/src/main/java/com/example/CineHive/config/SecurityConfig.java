@@ -28,7 +28,10 @@ public class SecurityConfig {
                                 "/api/auth/session",
                                 "/api/auth/naver",
                                 "/api/auth/naver/callback",
-                                "/api/auth/naver/success"
+                                "/api/auth/naver/success",
+                                "/api/auth/google",
+                                "/api/auth/google/callback",
+                                "/api/auth/google/success"
                         ).permitAll() // 카카오 URL 허용
                         .anyRequest().authenticated()
                 )
