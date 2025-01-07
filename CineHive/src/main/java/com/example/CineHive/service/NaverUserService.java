@@ -107,7 +107,7 @@ public class NaverUserService {
             newUser = new User();
             newUser.setMem_gener(0);
             newUser.setMem_pw("0"); //비밀번호는 디폴트 0으로 (소셜로그인은 비밀번호 제공 x)
-            newUser.setMem_userid(userInfo.getNaverId());
+            newUser.setMemUserid(userInfo.getNaverId());
 
             // 일단 0 OR default 값으로 설정하고 추후에 클라이언트 구현할 때 수정 필요
 

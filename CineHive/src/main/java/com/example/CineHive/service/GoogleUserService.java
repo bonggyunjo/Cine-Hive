@@ -99,7 +99,7 @@ public class GoogleUserService {
             newUser.setMem_name("0");
             newUser.setMem_sex("0");
             newUser.setMem_phone("0");
-            newUser.setMem_userid(userInfo.getGoogleId());
+            newUser.setMemUserid(userInfo.getGoogleId());
 
             // 일단 0 OR default 값으로 설정하고 추후에 클라이언트 구현할 때 수정 필요
 
