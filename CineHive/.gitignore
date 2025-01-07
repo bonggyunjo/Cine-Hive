@@ -36,4 +36,4 @@ out/
 ### VS Code ###
 .vscode/
 
-CineHive/src/main/resources/application.properties
+src/main/resources/application.properties
