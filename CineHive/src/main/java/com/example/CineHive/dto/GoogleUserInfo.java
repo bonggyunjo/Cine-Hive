@@ -17,10 +17,4 @@ public class GoogleUserInfo {
 
     private String nickname;
 
-    private String name;
-
-    private String gender;
-
-    private String phone;
-
 }

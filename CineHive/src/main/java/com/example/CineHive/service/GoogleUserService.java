@@ -77,11 +77,8 @@ public class GoogleUserService {
             JSONObject jsonObject = new JSONObject(response.getBody());
             GoogleUserInfo userInfo = new GoogleUserInfo();
             userInfo.setGoogleId(jsonObject.getString("id"));
-            userInfo.setNickname(jsonObject.getString("nickname"));
-            userInfo.setName(jsonObject.getString("name"));
+            userInfo.setNickname(jsonObject.getString("name"));
             userInfo.setEmail(jsonObject.getString("email"));
-            userInfo.setPhone(jsonObject.getString("phone"));
-            userInfo.setGender(jsonObject.getString("gender"));
             return userInfo;
         } else {
             throw new IOException("Failed to get user info: " + response.getStatusCode());
@@ -90,7 +87,7 @@ public class GoogleUserService {
 
     public void registerUser(GoogleUserInfo userInfo) {
         GoogleUser googleUser = googleUserRepository.findByGoogleId(userInfo.getGoogleId())
-                .orElse(new GoogleUser(userInfo.getGoogleId(), userInfo.getNickname(), userInfo.getEmail(), userInfo.getName(), userInfo.getGender(), userInfo.getPhone()));
+                .orElse(new GoogleUser(userInfo.getGoogleId(), userInfo.getNickname(), userInfo.getEmail()));
 
         googleUserRepository.save(googleUser);
 
@@ -99,18 +96,18 @@ public class GoogleUserService {
             newUser = new User();
             newUser.setMem_gener(0);
             newUser.setMem_pw("0"); //비밀번호는 디폴트 0으로 (소셜로그인은 비밀번호 제공 x)
+            newUser.setMem_name("0");
+            newUser.setMem_sex("0");
+            newUser.setMem_phone("0");
             newUser.setMem_userid(userInfo.getGoogleId());
 
             // 일단 0 OR default 값으로 설정하고 추후에 클라이언트 구현할 때 수정 필요
 
             //네이버에서 동의 항목에서 체크한 목록들
             newUser.setMem_email(userInfo.getEmail()); // 이메일 추가
-            newUser.setMem_name(userInfo.getName());
-            newUser.setMem_sex(userInfo.getGender());
-            newUser.setMem_phone(userInfo.getPhone());
             newUser.setMem_nickname(userInfo.getNickname());
             newUser.setMem_register_datetime(LocalDateTime.now());
-            newUser.setNaverId(userInfo.getGoogleId());  // 구글 아이디
+            newUser.setGoogleId(userInfo.getGoogleId());  // 구글 아이디
             newUser.setMem_type("네이버");
             userRepository.save(newUser);
         }

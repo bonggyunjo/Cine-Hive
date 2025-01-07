@@ -27,15 +27,6 @@ public class GoogleUser {
     @Column(name = "mem_userid", nullable = false)
     private String memUserId;
 
-    @Column
-    private String mem_name; //회원 이름
-
-    @Column
-    private String mem_sex;
-
-    @Column
-    private String mem_phone;
-
     @Column(name = "user_id")
     private Long userId; // users 테이블의 외래 키
 
@@ -44,13 +35,10 @@ public class GoogleUser {
     @JoinColumn(name = "user_id", referencedColumnName = "mem_id", insertable = false, updatable = false)
     private User user;
 
-    public GoogleUser(String googleId, String nickname, String memUserId, String mem_name, String mem_sex, String mem_phone) {
+    public GoogleUser(String googleId, String nickname, String memUserId) {
         this.googleId = googleId;
         this.nickname = nickname;
         this.memUserId = memUserId; // 추가된 필드 초기화
-        this.mem_name = mem_name;
-        this.mem_sex = mem_sex;
-        this.mem_phone = mem_phone;
 
     }
 }
