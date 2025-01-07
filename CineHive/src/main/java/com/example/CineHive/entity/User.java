@@ -13,14 +13,15 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long mem_id;
 
-    @Column(nullable = false)
-    private String mem_userid;
+    @Column(nullable = true)
+    private String memUserid;
 
     @Column
     private String mem_pw;
@@ -62,4 +63,6 @@ public class User {
     public void prePersist() {
         this.mem_register_datetime = LocalDateTime.now();
     }
+
+
 }
