@@ -55,6 +55,9 @@ public class User {
     @Column(name = "naver_id", nullable = true)
     private String naverId; // 네이버 ID
 
+    @Column(name = "google_id", nullable = true)
+    private String googleId; // 카카오 ID
+
     @PrePersist //필드를 자동으로 현재 시간으로 설정
     public void prePersist() {
         this.mem_register_datetime = LocalDateTime.now();

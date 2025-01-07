@@ -118,7 +118,7 @@ public class NaverUserService {
             newUser.setMem_phone(userInfo.getPhone());
             newUser.setMem_nickname(userInfo.getNickname());
             newUser.setMem_register_datetime(LocalDateTime.now());
-            newUser.setNaverId(userInfo.getNaverId());  // 카카오 아이디
+            newUser.setNaverId(userInfo.getNaverId());  // 네이버 아이디
             newUser.setMem_type("네이버");
             userRepository.save(newUser);
         }

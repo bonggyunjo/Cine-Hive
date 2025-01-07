@@ -11,15 +11,14 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "kakao_users")
-public class KakaoUser {
+public class GoogleUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "kakao_id", unique = true)
-    private String kakaoId; //카카오 고유 아이디
+    @Column(name = "google_id", unique = true)
+    private String googleId; //구글 고유 아이디
 
 
     @Column(length = 50)
@@ -36,9 +35,11 @@ public class KakaoUser {
     @JoinColumn(name = "user_id", referencedColumnName = "mem_id", insertable = false, updatable = false)
     private User user;
 
-    public KakaoUser(String kakaoId, String nickname, String memUserId) {
-        this.kakaoId = kakaoId;
+    public GoogleUser(String googleId, String nickname, String memUserId) {
+        this.googleId = googleId;
         this.nickname = nickname;
         this.memUserId = memUserId; // 추가된 필드 초기화
+
     }
 }
+
