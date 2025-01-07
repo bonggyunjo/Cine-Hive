@@ -20,7 +20,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable()) // CSRF 비활성화 (테스트용)
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers(
+                        .requestMatchers( //카카오, 구글, 네이버 등 Access token 요청에 인증 성공 시 redriect URI와 callback 처리를 위한 권한 부여
                                 "/api/auth/kakao",
                                 "/api/auth/logout",
                                 "/api/auth/kakao/callback",

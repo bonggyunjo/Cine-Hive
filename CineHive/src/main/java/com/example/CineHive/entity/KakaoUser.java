@@ -19,7 +19,7 @@ public class KakaoUser {
     private Long id;
 
     @Column(name = "kakao_id", unique = true)
-    private String kakaoId;
+    private String kakaoId; //카카오 고유 아이디
 
 
     @Column(length = 50)

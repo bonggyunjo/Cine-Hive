@@ -18,7 +18,7 @@ public class GoogleUser {
     private Long id;
 
     @Column(name = "google_id", unique = true)
-    private String googleId;
+    private String googleId; //구글 고유 아이디
 
 
     @Column(length = 50)
