@@ -1,11 +1,13 @@
 package com.example.CineHive.controller;
 
+import com.example.CineHive.dto.LoginRequest;
 import com.example.CineHive.dto.UserDto;
 import com.example.CineHive.entity.User;
 import com.example.CineHive.service.UserService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
@@ -31,6 +33,20 @@ public class UserController {
         } else {
             // 실패 시 HTTP 400 Bad Request 응답
             return ResponseEntity.badRequest().body("Failed to register user.");
+        }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
+        try {
+            boolean loginSuccess = userService.loginUser(loginRequest.getMem_userid(), loginRequest.getMem_password());
+            if (loginSuccess) {
+                return ResponseEntity.ok("로그인 성공");
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 실패");
+            }
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
     }
 }

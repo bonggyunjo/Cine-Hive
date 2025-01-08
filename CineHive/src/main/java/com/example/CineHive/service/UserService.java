@@ -45,4 +45,23 @@ public class UserService{
 
         return true;
     }
+    public boolean loginUser(String mem_userid, String mem_password) {
+        // 사용자 ID로 사용자 조회
+        Optional<User> existingUser = userRepository.findByMemUserid(mem_userid);
+
+        if (existingUser.isEmpty()) {
+            throw new IllegalArgumentException("존재하지 않는 사용자입니다.");
+        }
+
+        User user = existingUser.get();
+
+        // 비밀번호 비교
+        if (!passwordEncoder.matches(mem_password, user.getMem_pw())) {
+            throw new IllegalArgumentException("비밀번호가 맞지 않습니다.");
+        }
+
+        // 로그인 성공 처리 (예: 세션 생성, 토큰 발급 등)
+        return true;
+    }
+
 }

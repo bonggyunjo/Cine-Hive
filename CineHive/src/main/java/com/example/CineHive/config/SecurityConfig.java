@@ -34,7 +34,8 @@ public class SecurityConfig {
                                 "/api/auth/google",
                                 "/api/auth/google/callback",
                                 "/api/auth/google/success",
-                                "/register"
+                                "/register",
+                                "/login"
                         ).permitAll() // 카카오 URL 허용
                         .anyRequest().authenticated()
                 )
