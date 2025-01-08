@@ -15,13 +15,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import io.github.cdimascio.dotenv.Dotenv;
 import java.io.IOException;
 import java.time.LocalDateTime;
 @Service
 public class GoogleUserService {
-
-    private static Dotenv dotenv = Dotenv.load();
 
 
     @Getter
