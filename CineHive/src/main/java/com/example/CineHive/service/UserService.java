@@ -4,10 +4,7 @@ import com.example.CineHive.dto.UserDto;
 import com.example.CineHive.entity.User;
 import com.example.CineHive.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 
@@ -24,18 +21,14 @@ public class UserService{
     }
 
     public boolean registerUser(UserDto userDto) {
-        Optional<User> existingUser = userRepository.findByMemUserid(userDto.getMem_userid());
-        if (existingUser.isPresent()) {
-            throw new IllegalArgumentException("이미 존재하는 사용자 ID입니다.");
-        }
         User user= new User();
-        user.setMem_email(userDto.getMem_email());
+        user.setMemEmail(userDto.getMem_email());
         user.setMemUserid(userDto.getMem_userid());
         user.setMem_pw(passwordEncoder.encode(userDto.getMem_password()));
         user.setMem_name(userDto.getMem_name());
         user.setMem_sex(userDto.getMem_sex());
         user.setMem_phone(userDto.getMem_phone());
-        user.setMem_nickname(userDto.getMem_nickname());
+        user.setMemNickname(userDto.getMem_nickname());
         user.setMem_type(userDto.getMem_type());
         user.setMem_register_datetime(LocalDateTime.now());
         user.setMem_gener(userDto.getMem_gener());
@@ -45,6 +38,28 @@ public class UserService{
 
         return true;
     }
+
+    public void checkDuplicateUserId(String memUserid) {
+        Optional<User> existingUser = userRepository.findByMemUserid(memUserid);
+        if (existingUser.isPresent()) {
+            throw new IllegalArgumentException("이미 존재하는 사용자 ID입니다.");
+        }
+    }
+
+    public void checkDuplicateEmail(String memEmail) {
+        Optional<User> existingUser = userRepository.findByMemEmail(memEmail);
+        if (existingUser.isPresent()) {
+            throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
+        }
+    }
+
+    public void checkDuplicateNickname(String memNickname) {
+        Optional<User> existingUser = userRepository.findByMemNickname(memNickname);
+        if (existingUser.isPresent()) {
+            throw new IllegalArgumentException("이미 존재하는 닉네임입니다.");
+        }
+    }
+
     public boolean loginUser(String mem_userid, String mem_password) {
         // 사용자 ID로 사용자 조회
         Optional<User> existingUser = userRepository.findByMemUserid(mem_userid);

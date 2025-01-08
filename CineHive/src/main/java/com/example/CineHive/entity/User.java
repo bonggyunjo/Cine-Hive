@@ -27,13 +27,13 @@ public class User {
     private String mem_pw;
 
     @Column(nullable = false)
-    private String mem_email;
+    private String memEmail;
 
     @Column
     private String mem_name;
 
     @Column(nullable = false)
-    private String mem_nickname;
+    private String memNickname;
 
     @Column
     private String mem_sex;

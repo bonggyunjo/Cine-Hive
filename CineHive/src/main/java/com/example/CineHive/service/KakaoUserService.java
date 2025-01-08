@@ -121,9 +121,9 @@ public class KakaoUserService {
 
 
 
-            newUser.setMem_email(userInfo.getEmail()); //이메일
+            newUser.setMemEmail(userInfo.getEmail()); //이메일
             newUser.setMem_pw("0"); //비밀번호는 디폴트 0으로 (소셜로그인은 비밀번호 제공 x)
-            newUser.setMem_nickname(userInfo.getNickname()); // 닉네임
+            newUser.setMemNickname(userInfo.getNickname()); // 닉네임
             newUser.setMem_register_datetime(LocalDateTime.now()); //날짜
             newUser.setKakaoId(userInfo.getKakaoId());  // 카카오 아이디
             newUser.setMem_type("카카오");  //가입유형

@@ -15,11 +15,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-
+import io.github.cdimascio.dotenv.Dotenv;
 import java.io.IOException;
 import java.time.LocalDateTime;
 @Service
 public class GoogleUserService {
+
+    private static Dotenv dotenv = Dotenv.load();
+
 
     @Getter
     @Value("${google.client.id}")
@@ -104,8 +107,8 @@ public class GoogleUserService {
             // 일단 0 OR default 값으로 설정하고 추후에 클라이언트 구현할 때 수정 필요
 
             //네이버에서 동의 항목에서 체크한 목록들
-            newUser.setMem_email(userInfo.getEmail()); // 이메일 추가
-            newUser.setMem_nickname(userInfo.getNickname());
+            newUser.setMemEmail(userInfo.getEmail()); // 이메일 추가
+            newUser.setMemNickname(userInfo.getNickname());
             newUser.setMem_register_datetime(LocalDateTime.now());
             newUser.setGoogleId(userInfo.getGoogleId());  // 구글 아이디
             newUser.setMem_type("네이버");

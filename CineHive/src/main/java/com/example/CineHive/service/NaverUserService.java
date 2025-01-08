@@ -112,11 +112,11 @@ public class NaverUserService {
             // 일단 0 OR default 값으로 설정하고 추후에 클라이언트 구현할 때 수정 필요
 
             //네이버에서 동의 항목에서 체크한 목록들
-            newUser.setMem_email(userInfo.getEmail()); // 이메일 추가
+            newUser.setMemEmail(userInfo.getEmail()); // 이메일 추가
             newUser.setMem_name(userInfo.getName());
             newUser.setMem_sex(userInfo.getGender());
             newUser.setMem_phone(userInfo.getPhone());
-            newUser.setMem_nickname(userInfo.getNickname());
+            newUser.setMemNickname(userInfo.getNickname());
             newUser.setMem_register_datetime(LocalDateTime.now());
             newUser.setNaverId(userInfo.getNaverId());  // 네이버 아이디
             newUser.setMem_type("네이버");
