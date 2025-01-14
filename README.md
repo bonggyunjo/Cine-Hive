@@ -15,7 +15,9 @@ DMBS : MariaDB
 ### 시퀸스 다이어그램 & 기능 요구사항
 - <a href="https://www.notion.so/15b8dbd47b68804dbbc5fcd38456ac7c?pvs=13" class="no-underline">🔍Data Flow</a>
 - <a href="https://o365deu-my.sharepoint.com/:x:/g/personal/20193182_office_deu_ac_kr/EQp7XdyTBDhBiZ5o-DJJEzQBmfE28vab2-ylCRDJKjSFrw" class="no-underline">🔍기능 요구사항</a>
-- <a href="https://www.notion.so/15d8dbd47b68804e8740e8b8a5c77c04?pvs=4" class="no-underline">🔍플로우 차트</a> 
+- <a href="https://www.notion.so/15d8dbd47b68804e8740e8b8a5c77c04?pvs=4" class="no-underline">🔍플로우 차트</a>
+- [프로토타입](https://www.figma.com/design/pVakiN6E5WK5N9gSGRHN5f/CineHive?node-id=0-1&t=jtmkunevVoipEOyh-1)
+
 ### ERD
 
 `회원 테이블`
