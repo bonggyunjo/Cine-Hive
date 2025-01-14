@@ -1,13 +1,13 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Home from '@/View/Home.vue';
-import SignUp from "@/View/SignUp.vue";
+import AuthView from "@/View/AuthView.vue";
 
 Vue.use(Router);
 
 const routes = [
     { path: '/', component: Home },
-    {path: '/signup', component: SignUp}
+    {path: '/auth', component: AuthView}
 ];
 
 const router = new Router({
