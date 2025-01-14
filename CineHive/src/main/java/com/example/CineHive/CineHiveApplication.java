@@ -5,9 +5,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class CineHiveApplication {
-
+	//asas
+	//check
 	public static void main(String[] args) {
 		SpringApplication.run(CineHiveApplication.class, args);
 	}
-
 }
