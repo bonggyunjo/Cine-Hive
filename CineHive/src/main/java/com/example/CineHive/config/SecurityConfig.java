@@ -20,9 +20,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // CSRF 비활성화 (테스트용)
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers( //카카오, 구글, 네이버 등 Access token 요청에 인증 성공 시 redriect URI와 callback 처리를 위한 권한 부여
+                        .requestMatchers(
                                 "/api/auth/kakao",
                                 "/api/auth/logout",
                                 "/api/auth/kakao/callback",
@@ -35,18 +35,14 @@ public class SecurityConfig {
                                 "/api/auth/google/callback",
                                 "/api/auth/google/success",
                                 "/register",
-                                "/login"
-                        ).permitAll() // 카카오 URL 허용
+                                "/login",
+                                "/now_playing"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
-                .oauth2Login(oauth -> oauth
-                        .loginPage("/login") // 기본 로그인 페이지 설정
-                        .defaultSuccessUrl("/success") // 로그인 성공 후 리다이렉트 URL
-                        .failureUrl("/api/auth/failure") // 로그인 실패 시 리다이렉트 URL
-                )
                 .sessionManagement(session -> session
-                        .sessionFixation().newSession() // 세션 고정 공격 방지
-                        .maximumSessions(1).maxSessionsPreventsLogin(true) // 최대 세션 수 설정
+                        .sessionFixation().newSession()
+                        .maximumSessions(1).maxSessionsPreventsLogin(true)
                 );
 
         return http.build();
