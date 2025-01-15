@@ -139,6 +139,10 @@ export default {
     };
   },
   methods: {
+    validateEmail(email) {
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailPattern.test(email);
+    },
     validatePassword(password) {
       const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
       return passwordPattern.test(password);
@@ -198,6 +202,10 @@ export default {
           alert('빈칸을 입력해 주세요.');
           return;
         }
+        if (!this.validateEmail(this.memEmail)) {
+          alert('이메일 형식이 올바르지 않습니다.');
+          return;
+        }
 
 
         const isUniqueName = await this.checkDuplicatesName();
@@ -226,13 +234,6 @@ export default {
           alert('빈칸을 입력해 주세요.');
           return;
         }
-
-
-        const isUniqueNickname = await this.checkDuplicatesNickname();
-        if (!isUniqueNickname) {
-          alert('이미 존재하는 닉네임입니다.');
-          return;
-        }
       }
 
 
@@ -242,7 +243,11 @@ export default {
         alert('최소 하나의 장르를 선택해야 합니다.');
         return;
       }
-
+      const isUniqueNickname = await this.checkDuplicatesNickname();
+      if (!isUniqueNickname) {
+        alert('이미 존재하는 닉네임입니다.');
+        return;
+      }
       const userData = {
         memUserid: this.memUserid,
         memSex: this.memSex,
