@@ -2,14 +2,18 @@ package com.example.CineHive.controller;
 
 import com.example.CineHive.dto.LoginRequest;
 import com.example.CineHive.dto.UserDto;
+import com.example.CineHive.entity.User;
+import com.example.CineHive.repository.UserRepository;
 import com.example.CineHive.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Controller
@@ -18,6 +22,8 @@ public class UserController {
     @Autowired
     private final UserService userService;
 
+    @Autowired
+    private final UserRepository userRepository;
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody UserDto userDto) {
         try {
@@ -57,5 +63,26 @@ public class UserController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
+    }
+
+    @GetMapping("/checkuserId/{memUserid}")
+    public ResponseEntity<Boolean> checkUserId(@PathVariable(value="memUserid") String memUserid) {
+        Optional<User> existingUser = userRepository.findByMemUserid(memUserid);
+        boolean isAvailable = existingUser.isEmpty(); // 사용자 ID가 존재하지 않으면 사용 가능
+        return ResponseEntity.ok(isAvailable);
+    }
+
+    @GetMapping("/checknickname/{memNickname}")
+    public ResponseEntity<Boolean> checkmemNickname(@PathVariable(value="memNickname") String memNickname) {
+        Optional<User> existingUser = userRepository.findByMemNickname(memNickname);
+        boolean isAvailable = existingUser.isEmpty(); // 사용자 ID가 존재하지 않으면 사용 가능
+        return ResponseEntity.ok(isAvailable);
+    }
+
+    @GetMapping("/checkemail/{memEmail}")
+    public ResponseEntity<Boolean> checkmemEmail(@PathVariable(value="memEmail") String memEmail) {
+        Optional<User> existingUser = userRepository.findByMemEmail(memEmail);
+        boolean isAvailable = existingUser.isEmpty(); // 사용자 ID가 존재하지 않으면 사용 가능
+        return ResponseEntity.ok(isAvailable);
     }
 }

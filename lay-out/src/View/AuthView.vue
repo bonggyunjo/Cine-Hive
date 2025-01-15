@@ -25,7 +25,7 @@
         <h1 class="signup-title">CINEHIVE</h1>
         <div class="signup-prompt">
           <p>로그인하시겠습니까?</p>
-          <button class="signup-button" @click="toggleForm">로그인</button>
+          <button class="signup-button1" @click="toggleForm">로그인</button>
         </div>
       </div>
 
@@ -34,13 +34,13 @@
         <h1 class="signup-title">CINEHIVE</h1>
         <div class="signup-prompt">
           <p>회원이 아니신가요?</p>
-          <button class="signup-button" @click="toggleForm">회원가입</button>
+          <button class="signup-button1" @click="toggleForm">회원가입</button>
         </div>
       </div>
 
       <div class="left-section"  v-else-if="currentStep === 1">
         <div class="step-indicator">
-          {{ currentStep }} / 3
+          {{ currentStep }} / 2
         </div>
 
         <h1 class="signup-title-h1">SIGN UP</h1>
@@ -63,12 +63,15 @@
           <div v-if="passwordError" class="error-message" style="color: red;">
             {{ passwordError }}
           </div>
-          <button class="signup-button" @click="nextStep">계속</button>
+          <button class="signup-button1" @click="nextStep">계속</button>
         </div>
       </div>
 
       <!-- 회원가입 단계 2 -->
       <div class="left-section" v-else-if="currentStep === 2">
+        <div class="step-indicator">
+          {{ currentStep }} / 2
+        </div>
         <h1 class="signup-title-h1">SIGN UP</h1>
         <div class="signup-prompt-1">
           <div class="form-group-signup">
@@ -89,14 +92,6 @@
             <input type="text" id="nickname" minlength="4" class="input-field" placeholder="닉네임" v-model="memNickname" required />
             <span style="font-size:11px; color: #333333; position: relative; top:-20px;">닉네임은 4글자 이상으로 입력하세요.</span>
           </div>
-          <button class="signup-button" @click="goToGenreSelection">계속</button>
-        </div>
-      </div>
-
-      <div class="left-section" v-else-if="currentStep === 3">
-        <h1 class="genre-title-h1">장르 선택</h1>
-        <div class="signup-prompt-1">
-          <p class="genre-instruction">선호하는 장르를 선택하세요</p>
           <div class="genre-images-container">
             <div class="genre-item" @click="toggleGenre('드라마')">
               <img :src="require('@/assets/selectGenre/드라마.jpg')" alt="드라마" class="genre-image" width="120" height="110">
@@ -117,6 +112,8 @@
           <button class="signup-button" @click="submitForm">회원가입</button>
         </div>
       </div>
+
+
 
     </div>
   </div>
@@ -147,35 +144,98 @@ export default {
       return passwordPattern.test(password);
     },
     toggleForm() {
-      this.isLogin = !this.isLogin; // 로그인/회원가입 토글
-      this.currentStep = 1; // 초기 단계로 리셋
+      this.isLogin = !this.isLogin;
+      this.currentStep = 1;
     },
-    nextStep() {
+    async checkDuplicatesName() {
+      // 중복 체크 요청
+      const memUserid = this.memUserid;
+
+      try {
+        const response = await axios.get(`http://localhost:8081/checkuserId/${memUserid}`);
+        return response.data;
+      } catch (error) {
+        if (error.response) {
+          console.log('요청 실패: ' + error.response.data);
+        }
+        return false;
+      }
+    },
+
+    async checkDuplicatesEmail() {
+
+      const memEmail = this.memEmail;
+
+      try {
+        const response = await axios.get(`http://localhost:8081/checkemail/${memEmail}`);
+        return response.data;
+      } catch (error) {
+        if (error.response) {
+          console.log('요청 실패: ' + error.response.data);
+        }
+        return false;
+      }
+    },
+
+    async checkDuplicatesNickname() {
+
+      const memNickname = this.memNickname;
+
+      try {
+        const response = await axios.get(`http://localhost:8081/checknickname/${memNickname}`);
+        return response.data;
+      } catch (error) {
+        if (error.response) {
+          console.log('요청 실패: ' + error.response.data);
+        }
+        return false;
+      }
+    },
+    async nextStep() {
       if (this.currentStep === 1) {
+
         if (!this.memUserid || !this.memEmail || !this.memPassword) {
-          alert('빈칸을 입력해 주세요.'); // 입력 값이 비어있을 경우 경고
+          alert('빈칸을 입력해 주세요.');
           return;
         }
+
+
+        const isUniqueName = await this.checkDuplicatesName();
+        const isUniqueEmail = await this.checkDuplicatesEmail();
+
+        if (!isUniqueName) {
+          alert('이미 존재하는 아이디입니다.');
+          return;
+        }
+
+        if (!isUniqueEmail) {
+          alert('이미 존재하는 이메일입니다.');
+          return;
+        }
+
+        if (!this.validatePassword(this.memPassword)) {
+          this.passwordError = '비밀번호 형식이 일치하지 않습니다.';
+          return;
+        }
+
+        this.currentStep++;
+
       } else if (this.currentStep === 2) {
+
         if (!this.memName || !this.memSex || !this.memPhone || !this.memNickname) {
-          alert('빈칸을 입력해 주세요.'); // 입력 값이 비어있을 경우 경고
+          alert('빈칸을 입력해 주세요.');
+          return;
+        }
+
+
+        const isUniqueNickname = await this.checkDuplicatesNickname();
+        if (!isUniqueNickname) {
+          alert('이미 존재하는 닉네임입니다.');
           return;
         }
       }
-      if (!this.validatePassword(this.memPassword)) {
-        this.passwordError = '비밀번호 형식이 일치하지 않습니다.';
-        return;
-      }
 
-      this.currentStep++; // 다음 단계로 이동
-    },
-    goToGenreSelection() {
-      if (!this.memName || !this.memSex || !this.memPhone || !this.memNickname) {
-        alert('모든 필드를 입력하세요.'); // 입력 값이 비어있을 경우 경고
-        return;
-      }
 
-      this.currentStep = 3; // 장르 선택 단계로 이동
     },
     async submitForm() {
       if (this.selectedGenres.length === 0) {
@@ -184,30 +244,30 @@ export default {
       }
 
       const userData = {
-        memUserid:this.memUserid,
+        memUserid: this.memUserid,
         memSex: this.memSex,
         memPhone: this.memPhone,
         memNickname: this.memNickname,
         memName: this.memName,
         memEmail: this.memEmail,
         memPassword: this.memPassword,
-        genres: this.selectedGenres // 선택한 장르 ID를 포함
+        genres: this.selectedGenres
       };
-      console.log('Sending User Data:', userData); // 전송할 데이터 확인
+      console.log('Sending User Data:', userData);
       try {
         const response = await axios.post('http://localhost:8081/register', userData);
         alert(response.data); // 성공 메시지 표시
+        window.location.reload();
       } catch (error) {
         if (error.response) {
-          alert(error.response.data); // 에러 메시지 표시
-          console.log('Sending User Data:', userData); // userData 확인
+          alert(error.response.data);
+          console.log('Sending User Data:', userData);
         } else {
-          console.log('Sending User Data:', userData); // userData 확인
+          console.log('Sending User Data:', userData);
           alert('회원가입 중 오류가 발생했습니다. 다시 시도해 주세요.');
         }
       }
     },
-
     async login() {
       const loginData = {
         memUserid: this.memUserid,
@@ -225,12 +285,13 @@ export default {
           alert('로그인 중 오류가 발생했습니다. 다시 시도해 주세요.');
         }
       }
-    },leGenre(genre) {
+    },
+    toggleGenre(genre) {
       const index = this.selectedGenres.indexOf(genre);
       if (index === -1) {
-        this.selectedGenres.push(genre); // 장르 추가
+        this.selectedGenres.push(genre);
       } else {
-        this.selectedGenres.splice(index, 1); // 장르 제거
+        this.selectedGenres.splice(index, 1);
       }
     },
   }
@@ -386,9 +447,25 @@ export default {
   border-radius: 5px;
   transition: background-color 0.3s;
   position: relative;
-  top:20px;
+  top:-20px;
 }
-
+.signup-button1{
+  margin-top: 10px;
+  background-color: #1E1E1E;
+  width: 120px;
+  height: 40px;
+  font-size: 12px;
+  font-weight: bolder;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+  position: relative;
+  top:40px;
+}
+.signup-button1:hover {
+  background-color: #333;
+}
 .signup-button:hover {
   background-color: #333;
 }
@@ -402,16 +479,12 @@ export default {
   color: white;
   font-weight: bolder;
   transition: background-color 0.3s;
+  position: relative;
+  top:30px;
 }
 
 .login-btn:hover {
   background-color: #d95a15;
-}
-
-.signup-all-title {
-  font-size: 11.5px;
-  position: relative;
-  left: -100px;
 }
 
 .signup-prompt-1 {
@@ -423,14 +496,6 @@ export default {
   width: 60%;
   position: relative;
   margin: auto;
-}
-
-.signup-all-title {
-  margin-bottom: 10px;
-  font-weight: bold;
-  color: #333;
-  position: relative;
-  left: -100px;
 }
 
 .input-field {
@@ -450,13 +515,6 @@ export default {
 .input-field:focus {
   border-color: #007bff;
   outline: none;
-}
-
-.genre-title-h1 {
-  position: relative;
-  top: -120px;
-  font-size: 25px;
-  color: #333333;
 }
 
 .genre-label {
@@ -495,16 +553,10 @@ export default {
 }
 .checkmark {
   position: absolute;
-  top: 5px; /* 이미지 위 */
-  right: 5px; /* 오른쪽에 위치 */
-  font-size: 24px; /* 체크 표시 크기 */
-  color: green; /* 체크 표시 색상 */
-}
-.genre-instruction{
-  position: relative;
-  top:-70px;
-  font-size: 13px;
-  color: #333333;
+  top: 5px;
+  right: 5px;
+  font-size: 24px;
+  color: green;
 }
 .error-message{
   font-size:11.5px;

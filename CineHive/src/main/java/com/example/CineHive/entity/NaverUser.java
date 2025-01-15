@@ -24,17 +24,8 @@ public class NaverUser {
     @Column(length = 50)
     private String nickname; //별명
 
-    @Column
-    private String mem_name; //회원 이름
-
     @Column(name = "mem_userid", nullable = false)
     private String memUserId; //이메일
-
-    @Column
-    private String memSex;
-
-    @Column
-    private String memPhone;
 
     @Column(name = "user_id")
     private Long userId; // users 테이블의 외래 키
@@ -44,12 +35,9 @@ public class NaverUser {
     @JoinColumn(name = "user_id", referencedColumnName = "mem_id", insertable = false, updatable = false)
     private User user;
 
-    public NaverUser(String naverId, String nickname, String mem_name, String memUserId, String memSex, String memPhone) {
+    public NaverUser(String naverId, String nickname, String memUserId) {
         this.naverId = naverId;
         this.nickname = nickname;
-        this.mem_name = mem_name;
         this.memUserId = memUserId; // 추가된 필드 초기화
-        this.memSex= memSex;
-        this.memPhone=memPhone;
     }
 }

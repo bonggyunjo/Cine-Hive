@@ -83,13 +83,7 @@ public class NaverUserService {
             userInfo.setNaverId(responseObject.getString("id"));
             userInfo.setEmail(responseObject.getString("email"));
             userInfo.setNickname(responseObject.getString("nickname"));
-            if (responseObject.has("phone")) {
-                userInfo.setPhone(responseObject.getString("phone"));
-            } else {
-                userInfo.setPhone(null); // 또는 기본값 설정
-            }
-            userInfo.setGender(responseObject.getString("gender"));
-            userInfo.setName(responseObject.getString("name"));
+
             return userInfo;
         } else {
             throw new IOException("Failed to get user info: " + responseCode);
@@ -98,7 +92,7 @@ public class NaverUserService {
 
     public void registerUser(NaverUserInfo userInfo) {
         NaverUser naverUser = naverUserRepository.findByNaverId(userInfo.getNaverId())
-                .orElse(new NaverUser(userInfo.getNaverId(), userInfo.getNickname(), userInfo.getName(),userInfo.getEmail(), userInfo.getGender(),userInfo.getPhone()));
+                .orElse(new NaverUser(userInfo.getNaverId(), userInfo.getNickname(), userInfo.getEmail()));
 
         naverUserRepository.save(naverUser);
 
@@ -107,14 +101,13 @@ public class NaverUserService {
             newUser = new User();
             newUser.setMemPw("0"); //비밀번호는 디폴트 0으로 (소셜로그인은 비밀번호 제공 x)
             newUser.setMemUserid(userInfo.getNaverId());
-
+            newUser.setMemName("0");
+            newUser.setMemSex("0");
+            newUser.setMemPhone("0");
             // 일단 0 OR default 값으로 설정하고 추후에 클라이언트 구현할 때 수정 필요
 
             //네이버에서 동의 항목에서 체크한 목록들
             newUser.setMemEmail(userInfo.getEmail()); // 이메일 추가
-            newUser.setMemName(userInfo.getName());
-            newUser.setMemSex(userInfo.getGender());
-            newUser.setMemPhone(userInfo.getPhone());
             newUser.setMemNickname(userInfo.getNickname());
             newUser.setMemRegisterDatetime(LocalDateTime.now());
             newUser.setNaverId(userInfo.getNaverId());  // 네이버 아이디
