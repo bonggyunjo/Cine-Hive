@@ -69,7 +69,7 @@
 
       <!-- 회원가입 단계 2 -->
       <div class="left-section" v-else-if="currentStep === 2">
-        <div class="step-indicator">
+        <div class="step-indicator2">
           {{ currentStep }} / 2
         </div>
         <h1 class="signup-title-h1">SIGN UP</h1>
@@ -630,6 +630,13 @@ export default {
 .step-indicator{
   position: relative;
   top:-30px;
+  font-weight: bolder;
+  font-size: 15px;
+  color: #333333;
+}
+.step-indicator2{
+  position: relative;
+  top:45px;
   font-weight: bolder;
   font-size: 15px;
   color: #333333;
