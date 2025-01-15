@@ -108,7 +108,7 @@ public class GoogleUserService {
             newUser.setMemNickname(userInfo.getNickname());
             newUser.setMem_register_datetime(LocalDateTime.now());
             newUser.setGoogleId(userInfo.getGoogleId());  // 구글 아이디
-            newUser.setMem_type("네이버");
+            newUser.setMem_type("구글");
             userRepository.save(newUser);
         }
     }

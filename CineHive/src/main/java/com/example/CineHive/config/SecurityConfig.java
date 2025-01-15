@@ -22,6 +22,8 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authz -> authz
+                        .requestMatchers("/movies",
+                                         "/now_playing").permitAll()
                         .requestMatchers(
                                 "/api/auth/kakao",
                                 "/api/auth/logout",
@@ -35,8 +37,7 @@ public class SecurityConfig {
                                 "/api/auth/google/callback",
                                 "/api/auth/google/success",
                                 "/register",
-                                "/login",
-                                "/now_playing"
+                                "/login"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
@@ -47,6 +48,7 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 
     @Bean
     public BCryptPasswordEncoder bCrpytPasswordEncoder() {
