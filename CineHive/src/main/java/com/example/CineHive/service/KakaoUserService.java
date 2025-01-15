@@ -108,28 +108,5 @@ public class KakaoUserService {
         KakaoUser socialUser = kakaouserRepository.findByKakaoId(userInfo.getKakaoId())
                 .orElse(new KakaoUser(userInfo.getKakaoId(), userInfo.getNickname(), userInfo.getEmail()));
         kakaouserRepository.save(socialUser);
-
-        // users 테이블에 사용자 정보 저장
-        User newUser = userRepository.findByKakaoId(userInfo.getKakaoId()).orElse(null);
-        UserDto userDto = new UserDto();
-        if (newUser == null) {
-            newUser = new User();
-            newUser.setMemPhone(userDto.getMemPhone());
-            newUser.setMemSex(userDto.getMemSex());
-            newUser.setMemName(userDto.getMemName());
-            newUser.setMemUserid(userDto.getKakaoId());
-            // 일단 0 OR default 값으로 설정하고 추후에 클라이언트 구현할 때 수정 필요
-
-
-
-            newUser.setMemEmail(userInfo.getEmail()); //이메일
-            newUser.setMemPw("0"); //비밀번호는 디폴트 0으로 (소셜로그인은 비밀번호 제공 x)
-            newUser.setMemNickname(userInfo.getNickname()); // 닉네임
-            newUser.setMemRegisterDatetime(LocalDateTime.now()); //날짜
-            newUser.setKakaoId(userInfo.getKakaoId());  // 카카오 아이디
-            newUser.setMemType("카카오");  //가입유형
-            userRepository.save(newUser);
         }
-    }
-
 }

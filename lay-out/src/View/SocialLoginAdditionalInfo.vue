@@ -62,18 +62,6 @@ export default {
         const response = await axios.get('http://localhost:8081/api/auth/kakao/success', { withCredentials: true });
         this.userInfo = response.data; // 사용자 정보 저장
 
-        // 사용자 존재 여부 확인
-        const userExistsResponse = await axios.get('http://localhost:8081/api/auth/check-user', {
-          params: { kakaoId: this.userInfo.kakaoId }
-        });
-
-        if (userExistsResponse.data.exists) { // 수정된 부분
-          // 사용자가 이미 가입한 경우 홈으로 리다이렉트
-          this.$router.push('/');
-        } else {
-          // 사용자가 가입하지 않은 경우 추가 정보 입력 필드 설정
-          this.memName = this.userInfo.nickname; // 닉네임을 memName에 설정
-        }
 
         console.log('사용자 정보:', this.userInfo);
       } catch (error) {
@@ -88,26 +76,36 @@ export default {
       }
     },
     async submitAdditionalInfo() {
-      const userData = {
-        memUserid: this.memUserid,
-        kakaoId: this.userInfo.kakaoId,
-        memNickname: this.userInfo.nickname,
-        memName: this.memName, // 클라이언트에서 입력받은 이름
-        memPhone: this.memPhone, // 클라이언트에서 입력받은 연락처
-        memSex: this.memSex, // 클라이언트에서 선택한 성별
-        memEmail: this.userInfo.email, // 카카오에서 가져온 이메일
-        genres: this.selectedGenres, // 선택한 장르
-        memPassword:'0'
-      };
-
       try {
-        const response = await axios.post('http://localhost:8081/register', userData);
-        alert(response.data); // 성공 메시지 표시
-        this.$router.push('/'); // 홈으로 리다이렉트
+        // 사용자 존재 여부 확인
+        const userExistsResponse = await axios.get('http://localhost:8081/api/auth/check-user', {
+          params: { kakaoId: this.userInfo.kakaoId }
+        });
+
+        if (!userExistsResponse.data) { // 사용자가 존재하지 않는 경우에만 추가 정보 등록
+          const userData = {
+            memUserid: this.memUserid,
+            kakaoId: this.userInfo.kakaoId,
+            memNickname: this.userInfo.nickname,
+            memName: this.memName, // 클라이언트에서 입력받은 이름
+            memPhone: this.memPhone, // 클라이언트에서 입력받은 연락처
+            memSex: this.memSex, // 클라이언트에서 선택한 성별
+            memEmail: this.userInfo.email, // 카카오에서 가져온 이메일
+            genres: this.selectedGenres, // 선택한 장르
+            memPassword: '0'
+          };
+
+          const response = await axios.post('http://localhost:8081/api/auth/kakao/register', userData);
+          alert(response.data); // 성공 메시지 표시
+          this.$router.push('/'); // 홈으로 리다이렉트
+        } else {
+          alert('사용자가 이미 존재합니다. 추가 정보 입력은 필요하지 않습니다.');
+          this.$router.push('/'); // 홈으로 리다이렉트
+        }
       } catch (error) {
         alert('정보 제출 중 오류가 발생했습니다.');
       }
-    },
+    }
   },
 };
 </script>

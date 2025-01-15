@@ -2,6 +2,8 @@ package com.example.CineHive.controller;
 
 import com.example.CineHive.dto.KakaoUserInfo;
 import com.example.CineHive.dto.UserDto;
+import com.example.CineHive.entity.User;
+import com.example.CineHive.repository.UserRepository;
 import com.example.CineHive.service.KakaoUserService;
 import com.example.CineHive.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 @Slf4j
 @RestController
@@ -25,6 +28,9 @@ public class KakaoUserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserRepository userRepository;
     @GetMapping("/kakao")
     public void kakaoLogin(HttpServletResponse response) throws IOException {
         String url = "https://kauth.kakao.com/oauth/authorize?client_id=" + kakaoUserService.getClientId() +
@@ -37,18 +43,29 @@ public class KakaoUserController {
         try {
             String accessToken = kakaoUserService.getAccessToken(code);
             KakaoUserInfo userInfo = kakaoUserService.getUserInfo(accessToken);
-            kakaoUserService.registerUser(userInfo);
 
-            HttpSession session = request.getSession();
-            session.setAttribute("user", userInfo);
+            // 사용자 존재 여부 확인
+            if (!userService.checkUserExists(userInfo.getKakaoId())) {
+                // 사용자가 가입하지 않은 경우
+                kakaoUserService.registerUser(userInfo); // 사용자 정보 저장
 
-            // 성공 후, 클라이언트의 추가 정보 입력 화면으로 리다이렉트
-            response.sendRedirect("http://localhost:8080/additional-info"); // Vue.js의 추가 정보 입력 URL
+                HttpSession session = request.getSession();
+                session.setAttribute("user", userInfo);
+
+                // 클라이언트의 추가 정보 입력 화면으로 리다이렉트
+                response.sendRedirect("http://localhost:8080/additional-info"); // Vue.js의 추가 정보 입력 URL
+            } else {
+                // 사용자가 이미 가입한 경우 홈으로 리다이렉트
+                HttpSession session = request.getSession();
+                session.setAttribute("user", userInfo); // 세션에 사용자 정보 저장
+                response.sendRedirect("http://localhost:8080/"); // 홈 화면으로 리다이렉트
+            }
         } catch (Exception e) {
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error during Kakao login process");
         }
     }
+
 
     @PostMapping("/session")
     public ResponseEntity<?> createSession(@RequestBody KakaoUserInfo userInfo, HttpServletRequest request) {
@@ -99,4 +116,22 @@ public class KakaoUserController {
         boolean exists = userService.checkUserExists(kakaoId);
         return ResponseEntity.ok(exists);
     }
+
+    @PostMapping("/kakao/register")
+    public ResponseEntity<String> registerUserDetails(@RequestBody UserDto userDto) {
+        User newUser = new User();
+        newUser.setMemEmail(userDto.getMemEmail());
+        newUser.setMemPw(userDto.getMemPassword());
+        newUser.setMemNickname(userDto.getMemNickname());
+        newUser.setMemName(userDto.getMemName());
+        newUser.setMemPhone(userDto.getMemPhone());
+        newUser.setMemSex(userDto.getMemSex());
+        newUser.setKakaoId(userDto.getKakaoId()); // 카카오 ID 추가
+        newUser.setMemRegisterDatetime(LocalDateTime.now());
+        newUser.setMemType("카카오"); // 가입 유형 설정
+
+        userRepository.save(newUser);
+        return ResponseEntity.ok("회원가입이 완료되었습니다.");
+    }
+
 }
