@@ -63,7 +63,7 @@ public class GoogleUserController {
             }
         }  catch (Exception e) {
             e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error during Kakao login process");
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error during google login process");
         }
     }
 
@@ -94,6 +94,7 @@ public class GoogleUserController {
         newUser.setGoogleId(userDto.getGoogleId()); // 카카오 ID 추가
         newUser.setMemRegisterDatetime(LocalDateTime.now());
         newUser.setMemType("구글"); // 가입 유형 설정
+        newUser.setGenres(userDto.getGenres());
 
         userRepository.save(newUser);
         return ResponseEntity.ok("회원가입이 완료되었습니다.");

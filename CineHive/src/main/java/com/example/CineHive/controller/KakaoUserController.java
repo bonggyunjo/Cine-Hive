@@ -131,6 +131,7 @@ public class KakaoUserController {
         newUser.setKakaoId(userDto.getKakaoId()); // 카카오 ID 추가
         newUser.setMemRegisterDatetime(LocalDateTime.now());
         newUser.setMemType("카카오"); // 가입 유형 설정
+        newUser.setGenres(userDto.getGenres());
 
         userRepository.save(newUser);
         return ResponseEntity.ok("회원가입이 완료되었습니다.");

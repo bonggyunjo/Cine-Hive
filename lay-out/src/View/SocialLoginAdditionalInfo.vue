@@ -94,7 +94,8 @@ export default {
               googleId: this.userInfo.googleId // 구글 ID 전송
             }
           });
-        } else {
+        }
+        if (this.loginType === 'kakao'){
           // 카카오 ID를 확인하는 경우
           userExistsResponse = await axios.get(`http://localhost:8081/api/auth/kakao/check-user`, {
             params: {
@@ -102,7 +103,14 @@ export default {
             }
           });
         }
-
+        if(this.loginType === 'naver'){
+          // 카카오 ID를 확인하는 경우
+          userExistsResponse = await axios.get(`http://localhost:8081/api/auth/naver/check-user`, {
+            params: {
+              naverId: this.userInfo.naverId // 카카오 ID 전송
+            }
+          });
+        }
         if (!userExistsResponse.data) {
           const userData = {
             memUserid: this.memUserid,
@@ -133,6 +141,7 @@ export default {
       } else {
         this.selectedGenres.splice(index, 1);
       }
+      console.log(this.selectedGenres); // 추가된 로그
     },
 
   },

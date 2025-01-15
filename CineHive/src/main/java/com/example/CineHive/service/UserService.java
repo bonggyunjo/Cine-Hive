@@ -85,4 +85,7 @@ public class UserService{
         return userRepository.findByGoogleId(googleId).isPresent();
     }
 
+    public boolean checkUserExistsNaver(String naverId) {
+        return userRepository.findByNaverId(naverId).isPresent();
+    }
 }

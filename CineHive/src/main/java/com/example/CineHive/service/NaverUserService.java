@@ -95,24 +95,5 @@ public class NaverUserService {
                 .orElse(new NaverUser(userInfo.getNaverId(), userInfo.getNickname(), userInfo.getEmail()));
 
         naverUserRepository.save(naverUser);
-
-        User newUser = userRepository.findByNaverId(userInfo.getNaverId()).orElse(null);
-        if (newUser == null) {
-            newUser = new User();
-            newUser.setMemPw("0"); //비밀번호는 디폴트 0으로 (소셜로그인은 비밀번호 제공 x)
-            newUser.setMemUserid(userInfo.getNaverId());
-            newUser.setMemName("0");
-            newUser.setMemSex("0");
-            newUser.setMemPhone("0");
-            // 일단 0 OR default 값으로 설정하고 추후에 클라이언트 구현할 때 수정 필요
-
-            //네이버에서 동의 항목에서 체크한 목록들
-            newUser.setMemEmail(userInfo.getEmail()); // 이메일 추가
-            newUser.setMemNickname(userInfo.getNickname());
-            newUser.setMemRegisterDatetime(LocalDateTime.now());
-            newUser.setNaverId(userInfo.getNaverId());  // 네이버 아이디
-            newUser.setMemType("네이버");
-            userRepository.save(newUser);
-        }
     }
 }
