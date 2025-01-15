@@ -6,6 +6,7 @@ import com.example.CineHive.entity.User;
 import com.example.CineHive.repository.UserRepository;
 import com.example.CineHive.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 import java.util.Optional;
-
+@Slf4j
 @RequiredArgsConstructor
 @Controller
 public class UserController {
@@ -27,26 +28,28 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody UserDto userDto) {
         try {
-            // 중복 체크
-            userService.checkDuplicateUserId(userDto.getMemUserid());
-            userService.checkDuplicateEmail(userDto.getMemEmail());
-            userService.checkDuplicateNickname(userDto.getMemNickname());
 
             // 사용자 등록 서비스 호출
             boolean isRegistered = userService.registerUser(userDto);
 
             if (isRegistered) {
                 // 사용자 등록 성공 시 HTTP 201 Created 응답
-                return ResponseEntity.status(201).body("성공적으로 회원가입했습니다!.");
+                return ResponseEntity.status(201).body("성공적으로 회원가입했습니다!");
             } else {
                 // 실패 시 HTTP 400 Bad Request 응답
-                return ResponseEntity.badRequest().body("회원가입 실패. 다시 시도해주세!");
+                return ResponseEntity.badRequest().body("회원가입 실패. 다시 시도해 주세요!");
             }
         } catch (IllegalArgumentException e) {
-            // 중복된 값이 있을 경우 오류 메시지 반환
+            // 중복된 값이 있을 경우 오류 메시지 반환 및 로그 출력
+            log.error("회원가입 중 오류 발생: {}", e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            // 일반적인 예외 처리 (선택 사항)
+            log.error("예기치 않은 오류 발생: {}", e.getMessage());
+            return ResponseEntity.status(500).body("서버 오류가 발생했습니다.");
         }
     }
+
 
 
 

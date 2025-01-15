@@ -78,5 +78,8 @@ public class UserService{
 
         return true;
     }
+    public boolean checkUserExists(String kakaoId) {
+        return userRepository.findByKakaoId(kakaoId).isPresent();
+    }
 
 }

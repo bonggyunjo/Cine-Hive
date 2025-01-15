@@ -5,9 +5,9 @@
       <div class="left-section" v-if="isLogin">
         <h1 class="login-title-h1">LOGIN</h1>
         <div class="login-buttons">
-          <img src="@/assets/Login/kakao.png" alt="Kakao Login" width="30" height="30" class="login-image">
-          <img src="@/assets/Login/google.png" alt="Google Login" width="30" height="30" class="login-image">
-          <img src="@/assets/Login/naver.png" alt="Naver Login" width="36" height="30" class="login-image">
+          <img @click="kakaoLogin" src="@/assets/Login/kakao.png" alt="Kakao Login" width="30" height="30" class="login-image">
+          <img @click="googleLogin" src="@/assets/Login/google.png" alt="Google Login" width="30" height="30" class="login-image">
+          <img @click="naverLogin" src="@/assets/Login/naver.png" alt="Naver Login" width="36" height="30" class="login-image">
         </div>
         <p class="or-use-your-account">or use your account</p>
         <div class="form-group">
@@ -45,9 +45,9 @@
 
         <h1 class="signup-title-h1">SIGN UP</h1>
         <div class="login-buttons">
-          <img src="@/assets/Login/kakao.png" alt="Kakao Login" width="30" height="30" class="login-image-sign-up">
-          <img src="@/assets/Login/google.png" alt="Google Login" width="30" height="30" class="login-image-sign-up">
-          <img src="@/assets/Login/naver.png" alt="Naver Login" width="36" height="30" class="login-image-sign-up">
+          <img @click="kakaoLogin" src="@/assets/Login/kakao.png" alt="Kakao Login" width="30" height="30" class="login-image-sign-up">
+          <img @click="googleLogin" src="@/assets/Login/google.png" alt="Google Login" width="30" height="30" class="login-image-sign-up">
+          <img @click="naverLogin" src="@/assets/Login/naver.png" alt="Naver Login" width="36" height="30" class="login-image-sign-up">
         </div>
         <div class="signup-prompt-1">
           <div class="form-group-signup">
@@ -294,6 +294,15 @@ export default {
         this.selectedGenres.splice(index, 1);
       }
     },
+    kakaoLogin() {
+      window.location.href = 'http://localhost:8081/api/auth/kakao'; // 서버의 카카오 로그인 URL로 리다이렉트
+    },
+    googleLogin() {
+      window.location.href = 'http://localhost:8081/api/auth/google'; // 서버의 카카오 로그인 URL로 리다이렉트
+    },
+    naverLogin() {
+      window.location.href = 'http://localhost:8081/api/auth/naver'; // 서버의 카카오 로그인 URL로 리다이렉트
+    },
   }
 }
 </script>
@@ -361,15 +370,21 @@ export default {
   top: -50px;
 }
 
+.login-image:hover{
+  cursor: pointer;
+  transform: scale(1.2);
+}
 .login-image-sign-up {
   margin: 0 10px;
   transition: transform 0.3s;
   position: relative;
 }
 
-.login-image:hover {
-  transform: scale(1.1);
+.login-image-sign-up:hover{
+  cursor: pointer;
+  transform: scale(1.2);
 }
+
 
 .or-use-your-account {
   margin: 10px 0;
@@ -420,7 +435,7 @@ export default {
   color: #393636;
   font-size: 12px;
   position: relative;
-  top: -10px;
+  top: 15px;
 }
 
 .signup-title {
@@ -433,6 +448,10 @@ export default {
   text-align: center;
   color: white;
   font-size: 11px;
+}
+.signup-prompt p{
+  position: relative;
+  top:30px;
 }
 
 .signup-button {

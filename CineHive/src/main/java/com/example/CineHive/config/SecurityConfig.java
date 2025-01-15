@@ -22,7 +22,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable()) // CSRF 비활성화 (테스트용)
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/login", "/register", "/checkuserId/**","/checknickname/**","/checkemail/**").permitAll() // 로그인과 회원가입은 누구나 접근 가능
+                        .requestMatchers("/login", "/register", "/checkuserId/**","/checknickname/**","/checkemail/**","/api/auth/check-user").permitAll() // 로그인과 회원가입은 누구나 접근 가능
                         .requestMatchers(
                                 "/api/auth/kakao",
                                 "/api/auth/logout",

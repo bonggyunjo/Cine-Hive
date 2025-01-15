@@ -1,6 +1,7 @@
 package com.example.CineHive.service;
 
 import com.example.CineHive.dto.KakaoUserInfo;
+import com.example.CineHive.dto.UserDto;
 import com.example.CineHive.entity.KakaoUser;
 import com.example.CineHive.entity.User;
 import com.example.CineHive.repository.KakaoUserRepository;
@@ -110,12 +111,13 @@ public class KakaoUserService {
 
         // users 테이블에 사용자 정보 저장
         User newUser = userRepository.findByKakaoId(userInfo.getKakaoId()).orElse(null);
+        UserDto userDto = new UserDto();
         if (newUser == null) {
             newUser = new User();
-            newUser.setMemPhone("0");
-            newUser.setMemSex("0");
-            newUser.setMemName("0");
-            newUser.setMemUserid(userInfo.getKakaoId());
+            newUser.setMemPhone(userDto.getMemPhone());
+            newUser.setMemSex(userDto.getMemSex());
+            newUser.setMemName(userDto.getMemName());
+            newUser.setMemUserid(userDto.getKakaoId());
             // 일단 0 OR default 값으로 설정하고 추후에 클라이언트 구현할 때 수정 필요
 
 

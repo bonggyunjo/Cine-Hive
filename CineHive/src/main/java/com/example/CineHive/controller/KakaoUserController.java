@@ -1,10 +1,13 @@
 package com.example.CineHive.controller;
 
 import com.example.CineHive.dto.KakaoUserInfo;
+import com.example.CineHive.dto.UserDto;
 import com.example.CineHive.service.KakaoUserService;
+import com.example.CineHive.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +15,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/auth")
 public class KakaoUserController {
@@ -19,7 +23,8 @@ public class KakaoUserController {
     @Autowired
     private KakaoUserService kakaoUserService;
 
-
+    @Autowired
+    private UserService userService;
     @GetMapping("/kakao")
     public void kakaoLogin(HttpServletResponse response) throws IOException {
         String url = "https://kauth.kakao.com/oauth/authorize?client_id=" + kakaoUserService.getClientId() +
@@ -28,7 +33,7 @@ public class KakaoUserController {
     }
 
     @GetMapping("/kakao/callback")
-    public ResponseEntity<?> kakaoCallback(@RequestParam String code, HttpServletRequest request) {
+    public void kakaoCallback(@RequestParam String code, HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             String accessToken = kakaoUserService.getAccessToken(code);
             KakaoUserInfo userInfo = kakaoUserService.getUserInfo(accessToken);
@@ -37,12 +42,11 @@ public class KakaoUserController {
             HttpSession session = request.getSession();
             session.setAttribute("user", userInfo);
 
-            // 성공시 사용자 정보를 JSON 형식으로 응답
-            // 나중에 vue 구현할 때 redirectView로 변경 필요
-            return ResponseEntity.ok(userInfo);
+            // 성공 후, 클라이언트의 추가 정보 입력 화면으로 리다이렉트
+            response.sendRedirect("http://localhost:8080/additional-info"); // Vue.js의 추가 정보 입력 URL
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(500).body("Error during Kakao login process");
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error during Kakao login process");
         }
     }
 
@@ -53,15 +57,21 @@ public class KakaoUserController {
         return ResponseEntity.ok("Session created successfully");
     }
 
+
     @GetMapping("/kakao/success")
     public ResponseEntity<?> successPage(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
+        log.info("Session exists: {}", session != null); // 세션 존재 여부 로그
+
         if (session != null) {
             KakaoUserInfo userInfo = (KakaoUserInfo) session.getAttribute("user");
+            log.info("User info in session: {}", userInfo); // 세션에 저장된 사용자 정보 로그
+
             if (userInfo != null) {
                 return ResponseEntity.ok(userInfo);
             }
         }
+        log.warn("Unauthorized access attempt"); // 인증 실패 로그
         return ResponseEntity.status(401).body("Unauthorized");
     }
 
@@ -84,4 +94,9 @@ public class KakaoUserController {
         return redirectView; // RedirectView 반환
     }
 
+    @GetMapping("/check-user")
+    public ResponseEntity<Boolean> checkUser(@RequestParam String kakaoId) {
+        boolean exists = userService.checkUserExists(kakaoId);
+        return ResponseEntity.ok(exists);
+    }
 }
