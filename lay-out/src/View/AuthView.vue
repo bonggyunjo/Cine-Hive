@@ -251,7 +251,8 @@ export default {
         memName: this.memName,
         memEmail: this.memEmail,
         memPassword: this.memPassword,
-        genres: this.selectedGenres
+        genres: this.selectedGenres,
+        loginType: ''
       };
       console.log('Sending User Data:', userData);
       try {
@@ -295,12 +296,15 @@ export default {
       }
     },
     kakaoLogin() {
+      this.loginType='kakao';
       window.location.href = 'http://localhost:8081/api/auth/kakao'; // 서버의 카카오 로그인 URL로 리다이렉트
     },
     googleLogin() {
+      this.loginType='google';
       window.location.href = 'http://localhost:8081/api/auth/google'; // 서버의 카카오 로그인 URL로 리다이렉트
     },
     naverLogin() {
+      this.loginType='naver';
       window.location.href = 'http://localhost:8081/api/auth/naver'; // 서버의 카카오 로그인 URL로 리다이렉트
     },
   }

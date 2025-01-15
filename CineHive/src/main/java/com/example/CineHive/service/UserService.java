@@ -81,5 +81,8 @@ public class UserService{
     public boolean checkUserExists(String kakaoId) {
         return userRepository.findByKakaoId(kakaoId).isPresent();
     }
+    public boolean checkUserExistsGoogle(String googleId) {
+        return userRepository.findByGoogleId(googleId).isPresent();
+    }
 
 }

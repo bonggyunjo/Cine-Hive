@@ -52,8 +52,8 @@ public class KakaoUserController {
                 HttpSession session = request.getSession();
                 session.setAttribute("user", userInfo);
 
-                // 클라이언트의 추가 정보 입력 화면으로 리다이렉트
-                response.sendRedirect("http://localhost:8080/additional-info"); // Vue.js의 추가 정보 입력 URL
+                // 클라이언트의 추가 정보 입력 화면으로 리다이렉트 (loginType을 쿼리 파라미터로 추가)
+                response.sendRedirect("http://localhost:8080/additional-info?loginType=kakao"); // 수정된 부분
             } else {
                 // 사용자가 이미 가입한 경우 홈으로 리다이렉트
                 HttpSession session = request.getSession();
@@ -65,6 +65,7 @@ public class KakaoUserController {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error during Kakao login process");
         }
     }
+
 
 
     @PostMapping("/session")
@@ -111,7 +112,7 @@ public class KakaoUserController {
         return redirectView; // RedirectView 반환
     }
 
-    @GetMapping("/check-user")
+    @GetMapping("/kakao/check-user")
     public ResponseEntity<Boolean> checkUser(@RequestParam String kakaoId) {
         boolean exists = userService.checkUserExists(kakaoId);
         return ResponseEntity.ok(exists);
@@ -120,6 +121,7 @@ public class KakaoUserController {
     @PostMapping("/kakao/register")
     public ResponseEntity<String> registerUserDetails(@RequestBody UserDto userDto) {
         User newUser = new User();
+        newUser.setMemUserid(userDto.getMemUserid());
         newUser.setMemEmail(userDto.getMemEmail());
         newUser.setMemPw(userDto.getMemPassword());
         newUser.setMemNickname(userDto.getMemNickname());

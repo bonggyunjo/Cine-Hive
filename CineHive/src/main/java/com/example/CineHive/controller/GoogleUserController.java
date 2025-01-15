@@ -1,19 +1,21 @@
 package com.example.CineHive.controller;
 
 import com.example.CineHive.dto.GoogleUserInfo;
+import com.example.CineHive.dto.UserDto;
+import com.example.CineHive.entity.User;
+import com.example.CineHive.repository.UserRepository;
 import com.example.CineHive.service.GoogleUserService;
+import com.example.CineHive.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -22,6 +24,11 @@ public class GoogleUserController {
     @Autowired
     private GoogleUserService googleUserService;
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private UserRepository userRepository;
     @GetMapping("/google")
     public void googleLoginRedirect(HttpServletResponse response) throws IOException {
         String redirectUrl = "https://accounts.google.com/o/oauth2/v2/auth?" +
@@ -37,21 +44,30 @@ public class GoogleUserController {
     }
 
     @GetMapping("/google/callback")
-    public ResponseEntity<?> googleCallback(@RequestParam String code, HttpServletRequest request) {
+    public void  googleCallback(@RequestParam String code, HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             String accessToken = googleUserService.getAccessToken(code);
             GoogleUserInfo userInfo = googleUserService.getUserInfo(accessToken);
+            if (!userService.checkUserExistsGoogle(userInfo.getGoogleId())) {
             googleUserService.registerUser(userInfo);
 
             HttpSession session = request.getSession();
             session.setAttribute("user", userInfo);
+                response.sendRedirect("http://localhost:8080/additional-info?loginType=google");
 
-            return ResponseEntity.ok(userInfo);
-        } catch (Exception e) {
+            }else {
+                // 사용자가 이미 가입한 경우 홈으로 리다이렉트
+                HttpSession session = request.getSession();
+                session.setAttribute("user", userInfo); // 세션에 사용자 정보 저장
+                response.sendRedirect("http://localhost:8080/"); // 홈 화면으로 리다이렉트
+            }
+        }  catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(500).body("Error processing the request");
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error during Kakao login process");
         }
     }
+
+
 
     @GetMapping("/google/success")
     public ResponseEntity<?> googleSuccessPage(HttpServletRequest request) {
@@ -64,4 +80,28 @@ public class GoogleUserController {
         }
         return ResponseEntity.status(401).body("Unauthorized");
     }
+
+    @PostMapping("/google/register")
+    public ResponseEntity<String> registerUserDetails(@RequestBody UserDto userDto) {
+        User newUser = new User();
+        newUser.setMemUserid(userDto.getMemUserid());
+        newUser.setMemEmail(userDto.getMemEmail());
+        newUser.setMemPw(userDto.getMemPassword());
+        newUser.setMemNickname(userDto.getMemNickname());
+        newUser.setMemName(userDto.getMemName());
+        newUser.setMemPhone(userDto.getMemPhone());
+        newUser.setMemSex(userDto.getMemSex());
+        newUser.setGoogleId(userDto.getGoogleId()); // 카카오 ID 추가
+        newUser.setMemRegisterDatetime(LocalDateTime.now());
+        newUser.setMemType("구글"); // 가입 유형 설정
+
+        userRepository.save(newUser);
+        return ResponseEntity.ok("회원가입이 완료되었습니다.");
+    }
+    @GetMapping("/google/check-user")
+    public ResponseEntity<Boolean> checkUser(@RequestParam String googleId) {
+        boolean exists = userService.checkUserExistsGoogle(googleId);
+        return ResponseEntity.ok(exists);
+    }
+
 }

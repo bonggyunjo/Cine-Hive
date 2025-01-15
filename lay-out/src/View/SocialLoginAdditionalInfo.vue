@@ -57,16 +57,19 @@ export default {
       memUserid: '',
       userInfo: null,
       selectedGenres: [],
-      memPassword: ''
+      memPassword: '',
+      loginType: '' // 초기값을 빈 문자열로 설정
     };
   },
   created() {
+    this.loginType = this.$route.query.loginType; // 쿼리 파라미터에서 loginType 초기화
     this.getUserInfo();
   },
   methods: {
     async getUserInfo() {
+      console.log('로그인 타입:', this.loginType); // 로그인 타입 출력
       try {
-        const response = await axios.get('http://localhost:8081/api/auth/kakao/success', { withCredentials: true });
+        const response = await axios.get(`http://localhost:8081/api/auth/${this.loginType}/success`, { withCredentials: true });
         this.userInfo = response.data;
         console.log('사용자 정보:', this.userInfo);
       } catch (error) {
@@ -82,14 +85,28 @@ export default {
     },
     async submitAdditionalInfo() {
       try {
-        const userExistsResponse = await axios.get('http://localhost:8081/api/auth/check-user', {
-          params: { kakaoId: this.userInfo.kakaoId }
-        });
+        let userExistsResponse;
+
+        // loginType이 google이면 구글 API를 호출
+        if (this.loginType === 'google') {
+          userExistsResponse = await axios.get(`http://localhost:8081/api/auth/google/check-user`, {
+            params: {
+              googleId: this.userInfo.googleId // 구글 ID 전송
+            }
+          });
+        } else {
+          // 카카오 ID를 확인하는 경우
+          userExistsResponse = await axios.get(`http://localhost:8081/api/auth/kakao/check-user`, {
+            params: {
+              kakaoId: this.userInfo.kakaoId // 카카오 ID 전송
+            }
+          });
+        }
 
         if (!userExistsResponse.data) {
           const userData = {
             memUserid: this.memUserid,
-            kakaoId: this.userInfo.kakaoId,
+            [this.loginType + 'Id']: this.userInfo[this.loginType + 'Id'], // 카카오 또는 구글 ID
             memNickname: this.userInfo.nickname,
             memName: this.memName,
             memPhone: this.memPhone,
@@ -98,8 +115,7 @@ export default {
             genres: this.selectedGenres,
             memPassword: '0'
           };
-
-          const response = await axios.post('http://localhost:8081/api/auth/kakao/register', userData);
+          const response = await axios.post(`http://localhost:8081/api/auth/${this.loginType}/register`, userData);
           alert(response.data);
           this.$router.push('/');
         } else {
@@ -109,7 +125,16 @@ export default {
       } catch (error) {
         alert('정보 제출 중 오류가 발생했습니다.');
       }
-    }
+    },
+    toggleGenre(genre) {
+      const index = this.selectedGenres.indexOf(genre);
+      if (index === -1) {
+        this.selectedGenres.push(genre);
+      } else {
+        this.selectedGenres.splice(index, 1);
+      }
+    },
+
   },
 };
 </script>
