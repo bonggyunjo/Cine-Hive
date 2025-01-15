@@ -22,6 +22,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable()) // CSRF 비활성화 (테스트용)
                 .authorizeHttpRequests(authz -> authz
+                        .requestMatchers("/login", "/register").permitAll() // 로그인과 회원가입은 누구나 접근 가능
                         .requestMatchers(
                                 "/api/auth/kakao",
                                 "/api/auth/logout",
@@ -44,15 +45,5 @@ public class SecurityConfig {
                 );
 
         return http.build();
-    }    @Bean
-    public FilterRegistrationBean<CorsFilter> corsFilter() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        config.setAllowedOrigins(Arrays.asList("http://localhost:8080")); // 클라이언트의 출처를 설정
-        config.setAllowedHeaders(Arrays.asList("*")); // 모든 헤더 허용
-        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // 허용할 HTTP 메서드 설정
-        source.registerCorsConfiguration("/**", config);
-        return new FilterRegistrationBean<>(new CorsFilter(source));
     }
 }

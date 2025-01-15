@@ -48,7 +48,7 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
         try {
-            boolean loginSuccess = userService.loginUser(loginRequest.getMem_userid(), loginRequest.getMem_password());
+            boolean loginSuccess = userService.loginUser(loginRequest.getMemUserid(), loginRequest.getMemPassword());
             if (loginSuccess) {
                 return ResponseEntity.ok("로그인 성공");
             } else {

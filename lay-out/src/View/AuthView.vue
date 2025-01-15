@@ -11,14 +11,15 @@
         </div>
         <p class="or-use-your-account">or use your account</p>
         <div class="form-group">
-          <input type="text" id="username" class="input-field" required />
+          <input type="text" id="username" class="input-field" v-model="memUserid" placeholder="아이디" required />
         </div>
         <div class="form-group">
-          <input type="password" id="password" class="input-field" required />
+          <input type="password" style="position: relative; top:-25px;" id="password" class="input-field" v-model="memPassword" placeholder="비밀번호" required />
         </div>
         <p class="forgot-password">비밀번호를 잃어버리셨나요?</p>
-        <button class="login-btn" @click="toggleForm">로그인</button>
+        <button class="login-btn" @click="login">로그인</button>
       </div>
+
 
       <div class="right-section" v-else>
         <h1 class="signup-title">CINEHIVE</h1>
@@ -38,6 +39,10 @@
       </div>
 
       <div class="left-section"  v-else-if="currentStep === 1">
+        <div class="step-indicator">
+          {{ currentStep }} / 3
+        </div>
+
         <h1 class="signup-title-h1">SIGN UP</h1>
         <div class="login-buttons">
           <img src="@/assets/Login/kakao.png" alt="Kakao Login" width="30" height="30" class="login-image-sign-up">
@@ -55,13 +60,16 @@
             <input type="password" id="new-password" class="input-field" placeholder="Password" v-model="memPassword" required />
             <span style="font-size:11px; color: #333333; position: relative; top:-15px;">비밀번호는 대,소문자, 특수 문자 포함 8자 이상으로 입력하세요.</span>
           </div>
+          <div v-if="passwordError" class="error-message" style="color: red;">
+            {{ passwordError }}
+          </div>
           <button class="signup-button" @click="nextStep">계속</button>
         </div>
       </div>
 
       <!-- 회원가입 단계 2 -->
       <div class="left-section" v-else-if="currentStep === 2">
-        <h1 class="signup-title-h1">회원가입</h1>
+        <h1 class="signup-title-h1">SIGN UP</h1>
         <div class="signup-prompt-1">
           <div class="form-group-signup">
             <input type="text" id="name" class="input-field" placeholder="이름" v-model="memName" required />
@@ -79,7 +87,7 @@
           </div>
           <div class="form-group-signup">
             <input type="text" id="nickname" minlength="4" class="input-field" placeholder="닉네임" v-model="memNickname" required />
-            <span style="font-size:11px; color: #333333; position: relative; top:-20px; left:-35px;">닉네임은 4글자 이상으로 입력하세요.</span>
+            <span style="font-size:11px; color: #333333; position: relative; top:-20px;">닉네임은 4글자 이상으로 입력하세요.</span>
           </div>
           <button class="signup-button" @click="goToGenreSelection">계속</button>
         </div>
@@ -129,10 +137,15 @@ export default {
       memUserid: '', // 로그인 아이디
       memEmail: '', // 회원가입 이메일
       memPassword: '', // 회원가입 비밀번호
-      selectedGenres: [] // 선택한 장르
+      selectedGenres: [], // 선택한 장르
+      passwordError: '' // 비밀번호 오류 메시지
     };
   },
   methods: {
+    validatePassword(password) {
+      const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+      return passwordPattern.test(password);
+    },
     toggleForm() {
       this.isLogin = !this.isLogin; // 로그인/회원가입 토글
       this.currentStep = 1; // 초기 단계로 리셋
@@ -148,6 +161,10 @@ export default {
           alert('빈칸을 입력해 주세요.'); // 입력 값이 비어있을 경우 경고
           return;
         }
+      }
+      if (!this.validatePassword(this.memPassword)) {
+        this.passwordError = '비밀번호 형식이 일치하지 않습니다.';
+        return;
       }
 
       this.currentStep++; // 다음 단계로 이동
@@ -190,16 +207,25 @@ export default {
         }
       }
     },
-    login() {
+
+    async login() {
       const loginData = {
-        username: this.username,
-        password: this.password
+        memUserid: this.memUserid,
+        memPassword: this.memPassword
       };
 
-      console.log('로그인 데이터:', loginData);
-      // API 호출 등 추가 처리
-    },
-    toggleGenre(genre) {
+      try {
+        const response = await axios.post('http://localhost:8081/login', loginData);
+        alert(response.data);
+        // 로그인 성공 후 추가 작업
+      } catch (error) {
+        if (error.response) {
+          alert(error.response.data);
+        } else {
+          alert('로그인 중 오류가 발생했습니다. 다시 시도해 주세요.');
+        }
+      }
+    },leGenre(genre) {
       const index = this.selectedGenres.indexOf(genre);
       if (index === -1) {
         this.selectedGenres.push(genre); // 장르 추가
@@ -333,7 +359,7 @@ export default {
   color: #393636;
   font-size: 12px;
   position: relative;
-  top: 20px;
+  top: -10px;
 }
 
 .signup-title {
@@ -359,6 +385,8 @@ export default {
   border: none;
   border-radius: 5px;
   transition: background-color 0.3s;
+  position: relative;
+  top:20px;
 }
 
 .signup-button:hover {
@@ -366,8 +394,6 @@ export default {
 }
 
 .login-btn {
-  position: relative;
-  top: 35px;
   width: 110px;
   height: 40px;
   background-color: #EB6015;
@@ -478,6 +504,16 @@ export default {
   position: relative;
   top:-70px;
   font-size: 13px;
+  color: #333333;
+}
+.error-message{
+  font-size:11.5px;
+}
+.step-indicator{
+  position: relative;
+  top:-30px;
+  font-weight: bolder;
+  font-size: 15px;
   color: #333333;
 }
 </style>

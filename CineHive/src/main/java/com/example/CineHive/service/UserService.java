@@ -61,9 +61,9 @@ public class UserService{
         }
     }
 
-    public boolean loginUser(String mem_userid, String mem_password) {
+    public boolean loginUser(String memUserid, String memPassword) {
         // 사용자 ID로 사용자 조회
-        Optional<User> existingUser = userRepository.findByMemUserid(mem_userid);
+        Optional<User> existingUser = userRepository.findByMemUserid(memUserid);
 
         if (existingUser.isEmpty()) {
             throw new IllegalArgumentException("존재하지 않는 사용자입니다.");
@@ -72,7 +72,7 @@ public class UserService{
         User user = existingUser.get();
 
         // 비밀번호 비교
-        if (!passwordEncoder.matches(mem_password, user.getMemPw())) {
+        if (!passwordEncoder.matches(memPassword, user.getMemPw())) {
             throw new IllegalArgumentException("비밀번호가 맞지 않습니다.");
         }
 
