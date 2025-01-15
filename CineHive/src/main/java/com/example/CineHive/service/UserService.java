@@ -3,6 +3,7 @@ package com.example.CineHive.service;
 import com.example.CineHive.dto.UserDto;
 import com.example.CineHive.entity.User;
 import com.example.CineHive.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,19 +21,19 @@ public class UserService{
         this.userRepository = userRepository;
     }
 
+    @Transactional
     public boolean registerUser(UserDto userDto) {
         User user= new User();
-        user.setMemEmail(userDto.getMem_email());
-        user.setMemUserid(userDto.getMem_userid());
-        user.setMem_pw(passwordEncoder.encode(userDto.getMem_password()));
-        user.setMem_name(userDto.getMem_name());
-        user.setMem_sex(userDto.getMem_sex());
-        user.setMem_phone(userDto.getMem_phone());
-        user.setMemNickname(userDto.getMem_nickname());
-        user.setMem_type(userDto.getMem_type());
-        user.setMem_register_datetime(LocalDateTime.now());
-        user.setMem_gener(userDto.getMem_gener());
-
+        user.setMemEmail(userDto.getMemEmail());
+        user.setMemUserid(userDto.getMemUserid());
+        user.setMemPw(passwordEncoder.encode(userDto.getMemPassword()));
+        user.setMemName(userDto.getMemName());
+        user.setMemSex(userDto.getMemSex());
+        user.setMemPhone(userDto.getMemPhone());
+        user.setMemNickname(userDto.getMemNickname());
+        user.setMemRegisterDatetime(LocalDateTime.now());
+        user.setGenres(userDto.getGenres());
+        user.setMemType("일반");
         // 사용자 정보 저장
         userRepository.save(user);
 
@@ -60,9 +61,9 @@ public class UserService{
         }
     }
 
-    public boolean loginUser(String mem_userid, String mem_password) {
+    public boolean loginUser(String memUserid, String memPassword) {
         // 사용자 ID로 사용자 조회
-        Optional<User> existingUser = userRepository.findByMemUserid(mem_userid);
+        Optional<User> existingUser = userRepository.findByMemUserid(memUserid);
 
         if (existingUser.isEmpty()) {
             throw new IllegalArgumentException("존재하지 않는 사용자입니다.");
@@ -71,12 +72,20 @@ public class UserService{
         User user = existingUser.get();
 
         // 비밀번호 비교
-        if (!passwordEncoder.matches(mem_password, user.getMem_pw())) {
+        if (!passwordEncoder.matches(memPassword, user.getMemPw())) {
             throw new IllegalArgumentException("비밀번호가 맞지 않습니다.");
         }
 
-        // 로그인 성공 처리 (예: 세션 생성, 토큰 발급 등)
         return true;
     }
+    public boolean checkUserExists(String kakaoId) {
+        return userRepository.findByKakaoId(kakaoId).isPresent();
+    }
+    public boolean checkUserExistsGoogle(String googleId) {
+        return userRepository.findByGoogleId(googleId).isPresent();
+    }
 
+    public boolean checkUserExistsNaver(String naverId) {
+        return userRepository.findByNaverId(naverId).isPresent();
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.CineHive.service;
 
 import com.example.CineHive.dto.KakaoUserInfo;
+import com.example.CineHive.dto.UserDto;
 import com.example.CineHive.entity.KakaoUser;
 import com.example.CineHive.entity.User;
 import com.example.CineHive.repository.KakaoUserRepository;
@@ -79,7 +80,7 @@ public class KakaoUserService {
                 JSONObject jsonObject = new JSONObject(responseBody);
                 KakaoUserInfo userInfo = new KakaoUserInfo();
                 userInfo.setKakaoId(userInfo.getKakaoId());
-                userInfo.setKakaoId(String.valueOf(jsonObject.getLong("id"))); 
+                userInfo.setKakaoId(String.valueOf(jsonObject.getLong("id")));
                 JSONObject properties = jsonObject.getJSONObject("properties");
                 userInfo.setNickname(properties.getString("nickname"));
 
@@ -107,28 +108,5 @@ public class KakaoUserService {
         KakaoUser socialUser = kakaouserRepository.findByKakaoId(userInfo.getKakaoId())
                 .orElse(new KakaoUser(userInfo.getKakaoId(), userInfo.getNickname(), userInfo.getEmail()));
         kakaouserRepository.save(socialUser);
-
-        // users 테이블에 사용자 정보 저장
-        User newUser = userRepository.findByKakaoId(userInfo.getKakaoId()).orElse(null);
-        if (newUser == null) {
-            newUser = new User();
-            newUser.setMem_gener(0);
-            newUser.setMem_phone("0");
-            newUser.setMem_sex("0");
-            newUser.setMem_name("0");
-            newUser.setMemUserid(userInfo.getKakaoId());
-            // 일단 0 OR default 값으로 설정하고 추후에 클라이언트 구현할 때 수정 필요
-
-
-
-            newUser.setMemEmail(userInfo.getEmail()); //이메일
-            newUser.setMem_pw("0"); //비밀번호는 디폴트 0으로 (소셜로그인은 비밀번호 제공 x)
-            newUser.setMemNickname(userInfo.getNickname()); // 닉네임
-            newUser.setMem_register_datetime(LocalDateTime.now()); //날짜
-            newUser.setKakaoId(userInfo.getKakaoId());  // 카카오 아이디
-            newUser.setMem_type("카카오");  //가입유형
-            userRepository.save(newUser);
         }
-    }
-
 }
