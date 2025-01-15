@@ -5,16 +5,19 @@ import com.example.CineHive.repository.MovieRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class MovieService {
     private final String apiKey = "d119fb469de12ae18b9fd948a485c7db";
+    private final String Bearer_key="eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkMTE5ZmI0NjlkZTEyYWUxOGI5ZmQ5NDhhNDg1YzdkYiIsIm5iZiI6MTczMzQ5MTMxMC45ODQsInN1YiI6IjY3NTJmYTZlODBlNWI4ZjBhNzU2M2NiZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.JoaKcxfdBOrUFiPGq8z3OkfKEJvQhBtyUJFOiP4_WIk";
 
     private final WebClient webClient;
 
