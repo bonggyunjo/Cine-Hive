@@ -46,13 +46,13 @@
         </div>
         <div class="signup-prompt-1">
           <div class="form-group-signup">
-            <input type="text" id="new-username" class="input-field" placeholder="id" required />
+            <input type="text" id="new-username" class="input-field" placeholder="id" v-model="username" required />
           </div>
           <div class="form-group-signup">
-            <input type="email" id="email" class="input-field" placeholder="email" required />
+            <input type="email" id="email" class="input-field" placeholder="email" v-model="email" required />
           </div>
           <div class="form-group-signup">
-            <input type="password" id="new-password" class="input-field" placeholder="Password" required />
+            <input type="password" id="new-password" class="input-field" placeholder="Password" v-model="password" required />
             <span style="font-size:11px; color: #333333; position: relative; top:-15px;">비밀번호는 대,소문자, 특수 문자 포함 8자 이상으로 입력하세요.</span>
           </div>
           <button class="signup-button" @click="nextStep">계속</button>
@@ -114,6 +114,8 @@
   </div>
 </template>
 <script>
+import axios from 'axios';
+
 export default {
   name: 'AuthComponent',
   data() {
@@ -125,9 +127,8 @@ export default {
       nickname: '', // 닉네임
       name: '', // 이름
       username: '', // 로그인 아이디
-      password: '', // 로그인 비밀번호
       email: '', // 회원가입 이메일
-      newPassword: '', // 회원가입 비밀번호
+      password: '', // 회원가입 비밀번호
       selectedGenres: [] // 선택한 장르
     };
   },
@@ -138,7 +139,7 @@ export default {
     },
     nextStep() {
       if (this.currentStep === 1) {
-        if (!this.username || !this.email || !this.newPassword) {
+        if (!this.username || !this.email || !this.password) {
           alert('빈칸을 입력해 주세요.'); // 입력 값이 비어있을 경우 경고
           return;
         }
@@ -159,10 +160,9 @@ export default {
 
       this.currentStep = 3; // 장르 선택 단계로 이동
     },
-    submitForm() {
-      // 추가적인 검증 (예: 장르 선택 여부)
+    async submitForm() {
       if (this.selectedGenres.length === 0) {
-        alert('최소 하나의 장르를 선택해야 합니다.'); // 장르가 선택되지 않았을 경우 경고
+        alert('최소 하나의 장르를 선택해야 합니다.');
         return;
       }
 
@@ -172,12 +172,22 @@ export default {
         nickname: this.nickname,
         name: this.name,
         email: this.email,
-        password: this.newPassword,
-        genres: this.selectedGenres
+        password: this.password,
+        genreIds: this.selectedGenres // 선택한 장르 ID를 포함
       };
-
-      console.log('회원가입 데이터:', userData);
-      // API 호출 등 추가 처리
+      console.log('Sending User Data:', userData); // 전송할 데이터 확인
+      try {
+        const response = await axios.post('http://localhost:8081/register', userData);
+        alert(response.data); // 성공 메시지 표시
+      } catch (error) {
+        if (error.response) {
+          alert(error.response.data); // 에러 메시지 표시
+          console.log('Sending User Data:', userData); // userData 확인
+        } else {
+          console.log('Sending User Data:', userData); // userData 확인
+          alert('회원가입 중 오류가 발생했습니다. 다시 시도해 주세요.');
+        }
+      }
     },
     login() {
       const loginData = {
@@ -199,6 +209,7 @@ export default {
   }
 }
 </script>
+
 
 <style scoped>
 #login-container {

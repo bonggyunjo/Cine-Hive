@@ -45,9 +45,6 @@ public class User {
     private LocalDateTime mem_register_datetime;
 
     @Column(nullable = false)
-    private int mem_gener;
-
-    @Column(nullable = false)
     private String mem_type;
 
     @Column(name = "kakao_id", nullable = true)

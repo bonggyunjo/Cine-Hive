@@ -31,8 +31,7 @@ public class UserService{
         user.setMemNickname(userDto.getMem_nickname());
         user.setMem_type(userDto.getMem_type());
         user.setMem_register_datetime(LocalDateTime.now());
-        user.setMem_gener(userDto.getMem_gener());
-
+        user.setMem_type("일반");
         // 사용자 정보 저장
         userRepository.save(user);
 

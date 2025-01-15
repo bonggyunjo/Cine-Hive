@@ -94,7 +94,6 @@ public class GoogleUserService {
         User newUser = userRepository.findByGoogleId(userInfo.getGoogleId()).orElse(null);
         if (newUser == null) {
             newUser = new User();
-            newUser.setMem_gener(0);
             newUser.setMem_pw("0"); //비밀번호는 디폴트 0으로 (소셜로그인은 비밀번호 제공 x)
             newUser.setMem_name("0");
             newUser.setMem_sex("0");

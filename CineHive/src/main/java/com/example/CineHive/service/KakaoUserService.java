@@ -79,7 +79,7 @@ public class KakaoUserService {
                 JSONObject jsonObject = new JSONObject(responseBody);
                 KakaoUserInfo userInfo = new KakaoUserInfo();
                 userInfo.setKakaoId(userInfo.getKakaoId());
-                userInfo.setKakaoId(String.valueOf(jsonObject.getLong("id"))); 
+                userInfo.setKakaoId(String.valueOf(jsonObject.getLong("id")));
                 JSONObject properties = jsonObject.getJSONObject("properties");
                 userInfo.setNickname(properties.getString("nickname"));
 
@@ -112,7 +112,6 @@ public class KakaoUserService {
         User newUser = userRepository.findByKakaoId(userInfo.getKakaoId()).orElse(null);
         if (newUser == null) {
             newUser = new User();
-            newUser.setMem_gener(0);
             newUser.setMem_phone("0");
             newUser.setMem_sex("0");
             newUser.setMem_name("0");
