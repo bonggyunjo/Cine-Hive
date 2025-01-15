@@ -22,9 +22,9 @@ public class UserController {
     public ResponseEntity<String> registerUser(@RequestBody UserDto userDto) {
         try {
             // 중복 체크
-            userService.checkDuplicateUserId(userDto.getMem_userid());
-            userService.checkDuplicateEmail(userDto.getMem_email());
-            userService.checkDuplicateNickname(userDto.getMem_nickname());
+            userService.checkDuplicateUserId(userDto.getMemUserid());
+            userService.checkDuplicateEmail(userDto.getMemEmail());
+            userService.checkDuplicateNickname(userDto.getMemNickname());
 
             // 사용자 등록 서비스 호출
             boolean isRegistered = userService.registerUser(userDto);

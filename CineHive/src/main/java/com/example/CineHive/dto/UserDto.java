@@ -7,14 +7,13 @@ import lombok.Setter;
 @Setter
 public class UserDto {
     private Long mem_id;
-    private String mem_userid;
-    private String mem_password;
-    private String mem_name;
-    private String mem_email;
-    private String mem_phone;
-    private String mem_nickname;
-    private String mem_sex;
-    private String mem_type;
-    private String mem_register_datetime;
-    private int mem_gener;
+    private String memUserid;
+    private String memPassword;
+    private String memName;
+    private String memEmail;
+    private String memPhone;
+    private String memNickname;
+    private String memSex;
+    private String memType;
+    private String memRegisterDatetime;
 }

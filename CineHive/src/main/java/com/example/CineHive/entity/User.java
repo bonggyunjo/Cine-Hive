@@ -24,28 +24,28 @@ public class User {
     private String memUserid;
 
     @Column
-    private String mem_pw;
+    private String memPw;
 
     @Column(nullable = false)
     private String memEmail;
 
     @Column
-    private String mem_name;
+    private String memName;
 
     @Column(nullable = false)
     private String memNickname;
 
     @Column
-    private String mem_sex;
+    private String memSex;
 
     @Column
-    private String mem_phone;
+    private String memPhone;
 
     @Column(nullable = false)
-    private LocalDateTime mem_register_datetime;
+    private LocalDateTime memRegisterDatetime;
 
     @Column(nullable = false)
-    private String mem_type;
+    private String memType;
 
     @Column(name = "kakao_id", nullable = true)
     private String kakaoId; // 카카오 ID
@@ -58,7 +58,7 @@ public class User {
 
     @PrePersist //필드를 자동으로 현재 시간으로 설정
     public void prePersist() {
-        this.mem_register_datetime = LocalDateTime.now();
+        this.memRegisterDatetime = LocalDateTime.now();
     }
 
 

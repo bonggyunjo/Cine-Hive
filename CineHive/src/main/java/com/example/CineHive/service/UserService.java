@@ -22,16 +22,15 @@ public class UserService{
 
     public boolean registerUser(UserDto userDto) {
         User user= new User();
-        user.setMemEmail(userDto.getMem_email());
-        user.setMemUserid(userDto.getMem_userid());
-        user.setMem_pw(passwordEncoder.encode(userDto.getMem_password()));
-        user.setMem_name(userDto.getMem_name());
-        user.setMem_sex(userDto.getMem_sex());
-        user.setMem_phone(userDto.getMem_phone());
-        user.setMemNickname(userDto.getMem_nickname());
-        user.setMem_type(userDto.getMem_type());
-        user.setMem_register_datetime(LocalDateTime.now());
-        user.setMem_type("일반");
+        user.setMemEmail(userDto.getMemEmail());
+        user.setMemUserid(userDto.getMemUserid());
+        user.setMemPw(passwordEncoder.encode(userDto.getMemPassword()));
+        user.setMemName(userDto.getMemName());
+        user.setMemSex(userDto.getMemSex());
+        user.setMemPhone(userDto.getMemPhone());
+        user.setMemNickname(userDto.getMemNickname());
+        user.setMemRegisterDatetime(LocalDateTime.now());
+        user.setMemType("일반");
         // 사용자 정보 저장
         userRepository.save(user);
 
@@ -70,7 +69,7 @@ public class UserService{
         User user = existingUser.get();
 
         // 비밀번호 비교
-        if (!passwordEncoder.matches(mem_password, user.getMem_pw())) {
+        if (!passwordEncoder.matches(mem_password, user.getMemPw())) {
             throw new IllegalArgumentException("비밀번호가 맞지 않습니다.");
         }
 

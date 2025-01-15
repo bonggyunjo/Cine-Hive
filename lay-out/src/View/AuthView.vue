@@ -46,13 +46,13 @@
         </div>
         <div class="signup-prompt-1">
           <div class="form-group-signup">
-            <input type="text" id="new-username" class="input-field" placeholder="id" v-model="username" required />
+            <input type="text" id="new-username" class="input-field" placeholder="id" v-model="memUserid" required />
           </div>
           <div class="form-group-signup">
-            <input type="email" id="email" class="input-field" placeholder="email" v-model="email" required />
+            <input type="email" id="email" class="input-field" placeholder="email" v-model="memEmail" required />
           </div>
           <div class="form-group-signup">
-            <input type="password" id="new-password" class="input-field" placeholder="Password" v-model="password" required />
+            <input type="password" id="new-password" class="input-field" placeholder="Password" v-model="memPassword" required />
             <span style="font-size:11px; color: #333333; position: relative; top:-15px;">비밀번호는 대,소문자, 특수 문자 포함 8자 이상으로 입력하세요.</span>
           </div>
           <button class="signup-button" @click="nextStep">계속</button>
@@ -64,10 +64,10 @@
         <h1 class="signup-title-h1">회원가입</h1>
         <div class="signup-prompt-1">
           <div class="form-group-signup">
-            <input type="text" id="name" class="input-field" placeholder="이름" v-model="name" required />
+            <input type="text" id="name" class="input-field" placeholder="이름" v-model="memName" required />
           </div>
           <div class="form-group-signup">
-            <select id="gender" class="input-field" v-model="gender">
+            <select id="gender" class="input-field" v-model="memSex">
               <option value="" disabled selected>성별</option>
               <option value="male">남성</option>
               <option value="female">여성</option>
@@ -75,10 +75,10 @@
             </select>
           </div>
           <div class="form-group-signup">
-            <input type="text" id="contact" class="input-field" placeholder="연락처" v-model="contact" required />
+            <input type="text" id="contact" class="input-field" placeholder="연락처" v-model="memPhone" required />
           </div>
           <div class="form-group-signup">
-            <input type="text" id="nickname" minlength="4" class="input-field" placeholder="닉네임" v-model="nickname" required />
+            <input type="text" id="nickname" minlength="4" class="input-field" placeholder="닉네임" v-model="memNickname" required />
             <span style="font-size:11px; color: #333333; position: relative; top:-20px; left:-35px;">닉네임은 4글자 이상으로 입력하세요.</span>
           </div>
           <button class="signup-button" @click="goToGenreSelection">계속</button>
@@ -122,13 +122,13 @@ export default {
     return {
       isLogin: true, // 로그인 상태
       currentStep: 1, // 현재 단계 (1: 회원가입 단계 1, 2: 회원가입 단계 2, 3: 장르 선택)
-      gender: '', // 성별
-      contact: '', // 연락처
-      nickname: '', // 닉네임
-      name: '', // 이름
-      username: '', // 로그인 아이디
-      email: '', // 회원가입 이메일
-      password: '', // 회원가입 비밀번호
+      memSex: '', // 성별
+      memPhone: '', // 연락처
+      memNickname: '', // 닉네임
+      memName: '', // 이름
+      memUserid: '', // 로그인 아이디
+      memEmail: '', // 회원가입 이메일
+      memPassword: '', // 회원가입 비밀번호
       selectedGenres: [] // 선택한 장르
     };
   },
@@ -139,12 +139,12 @@ export default {
     },
     nextStep() {
       if (this.currentStep === 1) {
-        if (!this.username || !this.email || !this.password) {
+        if (!this.memUserid || !this.memEmail || !this.memPassword) {
           alert('빈칸을 입력해 주세요.'); // 입력 값이 비어있을 경우 경고
           return;
         }
       } else if (this.currentStep === 2) {
-        if (!this.name || !this.gender || !this.contact || !this.nickname) {
+        if (!this.memName || !this.memSex || !this.memPhone || !this.memNickname) {
           alert('빈칸을 입력해 주세요.'); // 입력 값이 비어있을 경우 경고
           return;
         }
@@ -153,7 +153,7 @@ export default {
       this.currentStep++; // 다음 단계로 이동
     },
     goToGenreSelection() {
-      if (!this.name || !this.gender || !this.contact || !this.nickname) {
+      if (!this.memName || !this.memSex || !this.memPhone || !this.memNickname) {
         alert('모든 필드를 입력하세요.'); // 입력 값이 비어있을 경우 경고
         return;
       }
@@ -167,12 +167,13 @@ export default {
       }
 
       const userData = {
-        gender: this.gender,
-        contact: this.contact,
-        nickname: this.nickname,
-        name: this.name,
-        email: this.email,
-        password: this.password,
+        memUserid:this.memUserid,
+        memSex: this.memSex,
+        memPhone: this.memPhone,
+        memNickname: this.memNickname,
+        memName: this.memName,
+        memEmail: this.memEmail,
+        memPassword: this.memPassword,
         genreIds: this.selectedGenres // 선택한 장르 ID를 포함
       };
       console.log('Sending User Data:', userData); // 전송할 데이터 확인
