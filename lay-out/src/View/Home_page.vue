@@ -1,5 +1,18 @@
 <template>
   <body>
+  <header>
+    <h1>CINEHIVE</h1>
+
+    <!-- 검색창 -->
+    <div class="search-bar">
+      <input
+          type="text"
+          v-model="searchQuery"
+          placeholder="영화 제목을 검색하세요..."
+      />
+      <button @click="searchMovies">검색</button>
+    </div>
+  </header>
   <div class="movie-container">
     <h1>CINEHIVE</h1>
 
