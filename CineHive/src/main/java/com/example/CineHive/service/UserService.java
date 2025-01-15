@@ -3,6 +3,7 @@ package com.example.CineHive.service;
 import com.example.CineHive.dto.UserDto;
 import com.example.CineHive.entity.User;
 import com.example.CineHive.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,6 +21,7 @@ public class UserService{
         this.userRepository = userRepository;
     }
 
+    @Transactional
     public boolean registerUser(UserDto userDto) {
         User user= new User();
         user.setMemEmail(userDto.getMemEmail());
@@ -30,6 +32,7 @@ public class UserService{
         user.setMemPhone(userDto.getMemPhone());
         user.setMemNickname(userDto.getMemNickname());
         user.setMemRegisterDatetime(LocalDateTime.now());
+        user.setGenres(userDto.getGenres());
         user.setMemType("일반");
         // 사용자 정보 저장
         userRepository.save(user);
@@ -73,7 +76,6 @@ public class UserService{
             throw new IllegalArgumentException("비밀번호가 맞지 않습니다.");
         }
 
-        // 로그인 성공 처리 (예: 세션 생성, 토큰 발급 등)
         return true;
     }
 

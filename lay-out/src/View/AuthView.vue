@@ -174,7 +174,7 @@ export default {
         memName: this.memName,
         memEmail: this.memEmail,
         memPassword: this.memPassword,
-        genreIds: this.selectedGenres // 선택한 장르 ID를 포함
+        genres: this.selectedGenres // 선택한 장르 ID를 포함
       };
       console.log('Sending User Data:', userData); // 전송할 데이터 확인
       try {

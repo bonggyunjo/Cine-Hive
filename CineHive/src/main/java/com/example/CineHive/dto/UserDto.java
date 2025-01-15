@@ -3,6 +3,8 @@ package com.example.CineHive.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class UserDto {
@@ -16,4 +18,5 @@ public class UserDto {
     private String memSex;
     private String memType;
     private String memRegisterDatetime;
+    private List<String> genres; // 추가된 장르 필드
 }
