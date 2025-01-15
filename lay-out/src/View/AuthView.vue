@@ -24,7 +24,7 @@
       <div class="right-section" v-else>
         <h1 class="signup-title">CINEHIVE</h1>
         <div class="signup-prompt">
-          <p>로그인하시겠습니까?</p>
+          <p>계정이 있으신가요?</p>
           <button class="signup-button1" @click="toggleForm">로그인</button>
         </div>
       </div>
@@ -51,13 +51,13 @@
         </div>
         <div class="signup-prompt-1">
           <div class="form-group-signup">
-            <input type="text" id="new-username" class="input-field" placeholder="id" v-model="memUserid" required />
+            <input type="text" id="new-username" class="input-field" placeholder="아이디" v-model="memUserid" required />
           </div>
           <div class="form-group-signup">
-            <input type="email" id="email" class="input-field" placeholder="email" v-model="memEmail" required />
+            <input type="email" id="email" class="input-field" placeholder="이메일" v-model="memEmail" required />
           </div>
           <div class="form-group-signup">
-            <input type="password" id="new-password" class="input-field" placeholder="Password" v-model="memPassword" required />
+            <input type="password" id="new-password" class="input-field" placeholder="비밀번호" v-model="memPassword" required />
             <span style="font-size:11px; color: #333333; position: relative; top:-15px;">비밀번호는 대,소문자, 특수 문자 포함 8자 이상으로 입력하세요.</span>
           </div>
           <div v-if="passwordError" class="error-message" style="color: red;">
@@ -86,8 +86,21 @@
             </select>
           </div>
           <div class="form-group-signup">
-            <input type="text" id="contact" class="input-field" placeholder="연락처" v-model="memPhone" required />
+            <input
+                type="text"
+                id="contact"
+                class="input-field"
+                placeholder="연락처"
+                v-model="memPhone"
+                @input="formatPhoneNumber"
+                @blur="validatePhone"
+                required
+            />
+            <div v-if="phoneError" class="error-message" style="color: red;">
+              {{ phoneError }}
+            </div>
           </div>
+
           <div class="form-group-signup">
             <input type="text" id="nickname" minlength="4" class="input-field" placeholder="닉네임" v-model="memNickname" required />
             <span style="font-size:11px; color: #333333; position: relative; top:-20px;">닉네임은 4글자 이상으로 입력하세요.</span>
@@ -135,7 +148,9 @@ export default {
       memEmail: '', // 회원가입 이메일
       memPassword: '', // 회원가입 비밀번호
       selectedGenres: [], // 선택한 장르
-      passwordError: '' // 비밀번호 오류 메시지
+      passwordError: '', // 비밀번호 오류 메시지
+      phoneError: '', // 전화번호 오류 메시지
+      isPhoneValid: false // 전화번호 유효성 상태
     };
   },
   methods: {
@@ -146,6 +161,19 @@ export default {
     validatePassword(password) {
       const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
       return passwordPattern.test(password);
+    },
+    validatePhone() {
+      const phonePattern = /^\d{3}-\d{4}-\d{4}$/;
+      if (!phonePattern.test(this.memPhone)) {
+        this.phoneError = '전화번호 형식이 올바르지 않습니다.';
+        this.isPhoneValid = false; // 유효하지 않음
+      } else {
+        this.phoneError = '';
+        this.isPhoneValid = true; // 유효함
+      }
+    },
+    formatPhoneNumber() {
+      this.memPhone = this.memPhone.replace(/\D/g, '').replace(/(\d{3})(\d{4})(\d+)/, '$1-$2-$3');
     },
     toggleForm() {
       this.isLogin = !this.isLogin;
@@ -248,6 +276,11 @@ export default {
         alert('이미 존재하는 닉네임입니다.');
         return;
       }
+      if (!this.isPhoneValid) {
+        alert('전화번호 형식이 올바르지 않습니다. (예: 010-1234-5678)');
+        return; // 함수 종료
+      }
+
       const userData = {
         memUserid: this.memUserid,
         memSex: this.memSex,
@@ -324,6 +357,7 @@ export default {
   justify-content: center;
   align-items: center;
   background-color: #393636;
+
 }
 
 .box-container {
@@ -461,6 +495,7 @@ export default {
 .signup-prompt p{
   position: relative;
   top:30px;
+  font-size: 12.5px;
 }
 
 .signup-button {

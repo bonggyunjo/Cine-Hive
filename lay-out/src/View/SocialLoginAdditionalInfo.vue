@@ -2,13 +2,12 @@
   <div id="add-info">
   <div id="additional-info-container" class="container">
     <h1 class="signup-title">CINEHIVE</h1>
-    <p class="add-info-title">회원 가입을 위해 추가 정보를 입력해 주세요.</p>
     <form @submit.prevent="submitAdditionalInfo" class="form">
       <div class="form-group-signup">
-        <input type="email" id="email" class="input-field" placeholder="이메일" v-model="memUserid" required />
+        <input type="text" id="text" class="input-field" placeholder="아이디" v-model="memUserid" />
       </div>
       <div class="form-group-signup">
-        <input type="text" id="name" class="input-field" placeholder="이름" v-model="memName" required />
+        <input type="text" id="name" class="input-field" placeholder="이름" v-model="memName" />
       </div>
       <div class="form-group-signup">
         <select id="gender" class="input-field" v-model="memSex">
@@ -19,7 +18,18 @@
         </select>
       </div>
       <div class="form-group-signup">
-        <input type="text" id="contact" class="input-field" placeholder="연락처" v-model="memPhone" required />
+        <input
+            type="text"
+            id="contact"
+            class="input-field"
+            placeholder="연락처"
+            v-model="memPhone"
+            @input="formatPhoneNumber"
+            @blur="validatePhone"
+        />
+        <div v-if="phoneError" class="error-message" style="color: red;">
+          {{ phoneError }}
+        </div>
       </div>
       <label style="position: relative; left:-150px; font-size: 13px; font-weight: bolder">Preferred Genres</label>
       <div class="genre-images-container">
@@ -58,7 +68,9 @@ export default {
       userInfo: null,
       selectedGenres: [],
       memPassword: '',
-      loginType: '' // 초기값을 빈 문자열로 설정
+      loginType: '', // 초기값을 빈 문자열로 설정
+      phoneError: '', // 전화번호 오류 메시지
+      isPhoneValid: false // 전화번호 유효성 상태
     };
   },
   created() {
@@ -66,6 +78,19 @@ export default {
     this.getUserInfo();
   },
   methods: {
+    validatePhone() {
+      const phonePattern = /^\d{3}-\d{4}-\d{4}$/;
+      if (!phonePattern.test(this.memPhone)) {
+        this.phoneError = '전화번호 형식이 올바르지 않습니다.';
+        this.isPhoneValid = false; // 유효하지 않음
+      } else {
+        this.phoneError = '';
+        this.isPhoneValid = true; // 유효함
+      }
+    },
+    formatPhoneNumber() {
+      this.memPhone = this.memPhone.replace(/\D/g, '').replace(/(\d{3})(\d{4})(\d+)/, '$1-$2-$3');
+    },
     async getUserInfo() {
       console.log('로그인 타입:', this.loginType); // 로그인 타입 출력
       try {
@@ -83,7 +108,35 @@ export default {
         this.$router.push('/login');
       }
     },
+
     async submitAdditionalInfo() {
+      if (!this.memUserid) {
+        alert('아이디를 입력해 주세요.');
+        return;
+      }
+      if (!this.memName) {
+        alert('이름을 입력해 주세요.');
+        return;
+      }
+      if (!this.memSex) {
+        alert('성별을 선택해 주세요.');
+        return;
+      }
+      if (!this.memPhone) {
+        alert('연락처를 입력해 주세요.');
+        return;
+      }
+      if (!this.selectedGenres.length) {
+        alert('최소 하나의 장르를 선택해 주세요.');
+        return;
+      }
+
+      // 전화번호 유효성 검사
+      this.validatePhone();
+      if (!this.isPhoneValid) {
+        alert('전화번호 형식이 올바르지 않습니다. (예: 010-1234-5678)');
+        return; // 전화번호가 유효하지 않은 경우 종료
+      }
       try {
         let userExistsResponse;
 
@@ -219,7 +272,7 @@ h1 {
   color: #F50000;
   font-size: 25px;
   position: relative;
-  top:-100px;
+  top:-60px;
 }
 .add-info-title {
   position: relative;
@@ -302,4 +355,9 @@ h1 {
   outline: none;
 }
 
+.error-message{
+  font-size: 13px;
+  position: relative;
+  top:-40px;
+}
 </style>
