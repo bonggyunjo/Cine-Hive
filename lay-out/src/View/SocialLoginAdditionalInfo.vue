@@ -1,40 +1,47 @@
 <template>
-  <div id="additional-info-container">
-    <h1>추가 정보 입력</h1>
-    <form @submit.prevent="submitAdditionalInfo">
-      <div>
-        <input type="email" v-model="memUserid" placeholder="이메일" required />
+  <div id="add-info">
+  <div id="additional-info-container" class="container">
+    <h1 class="signup-title">CINEHIVE</h1>
+    <p class="add-info-title">회원 가입을 위해 추가 정보를 입력해 주세요.</p>
+    <form @submit.prevent="submitAdditionalInfo" class="form">
+      <div class="form-group-signup">
+        <input type="email" id="email" class="input-field" placeholder="이메일" v-model="memUserid" required />
       </div>
-      <div>
-        <input type="text" v-model="memName" placeholder="이름" required />
+      <div class="form-group-signup">
+        <input type="text" id="name" class="input-field" placeholder="이름" v-model="memName" required />
       </div>
-      <div>
-        <select v-model="memSex" required>
+      <div class="form-group-signup">
+        <select id="gender" class="input-field" v-model="memSex">
           <option value="" disabled selected>성별</option>
           <option value="male">남성</option>
           <option value="female">여성</option>
           <option value="other">기타</option>
         </select>
       </div>
-      <div>
-        <input type="text" v-model="memPhone" placeholder="연락처" required />
+      <div class="form-group-signup">
+        <input type="text" id="contact" class="input-field" placeholder="연락처" v-model="memPhone" required />
       </div>
-      <div>
-        <label>관심 장르를 선택하세요:</label>
-        <div class="genre-checkboxes">
-          <label>
-            <input type="checkbox" value="드라마" v-model="selectedGenres" /> 드라마
-          </label>
-          <label>
-            <input type="checkbox" value="애니메이션" v-model="selectedGenres" /> 애니메이션
-          </label>
-          <label>
-            <input type="checkbox" value="영화" v-model="selectedGenres" /> 영화
-          </label>
+      <label style="position: relative; left:-150px; font-size: 13px; font-weight: bolder">Preferred Genres</label>
+      <div class="genre-images-container">
+        <div class="genre-item" @click="toggleGenre('드라마')">
+          <img :src="require('@/assets/selectGenre/드라마.jpg')" alt="드라마" class="genre-image" width="120" height="110">
+          <span class="genre-label">드라마</span>
+          <div v-if="selectedGenres.includes('드라마')" class="checkmark">✔</div>
+        </div>
+        <div class="genre-item" @click="toggleGenre('애니메이션')">
+          <img :src="require('@/assets/selectGenre/애니메이션.jpg')" alt="애니메이션" class="genre-image" width="140" height="110">
+          <span class="genre-label">애니메이션</span>
+          <div v-if="selectedGenres.includes('애니메이션')" class="checkmark">✔</div>
+        </div>
+        <div class="genre-item" @click="toggleGenre('영화')">
+          <img :src="require('@/assets/selectGenre/영화.png')" alt="영화" class="genre-image" width="110" height="145">
+          <span class="genre-label">영화</span>
+          <div v-if="selectedGenres.includes('영화')" class="checkmark">✔</div>
         </div>
       </div>
-      <button type="submit" :disabled="!userInfo">회원가입</button>
+      <button type="submit" :disabled="!userInfo" class="submit-btn">회원가입</button>
     </form>
+  </div>
   </div>
 </template>
 
@@ -47,22 +54,20 @@ export default {
       memName: '',
       memSex: '',
       memPhone: '',
-      memUserid:'',
-      userInfo: null, // 카카오 사용자 정보를 저장할 변수
-      selectedGenres: [], // 선택한 장르를 저장할 배열
-      memPassword:''
+      memUserid: '',
+      userInfo: null,
+      selectedGenres: [],
+      memPassword: ''
     };
   },
   created() {
-    this.getUserInfo(); // 컴포넌트가 생성될 때 사용자 정보 가져오기
+    this.getUserInfo();
   },
   methods: {
     async getUserInfo() {
       try {
         const response = await axios.get('http://localhost:8081/api/auth/kakao/success', { withCredentials: true });
-        this.userInfo = response.data; // 사용자 정보 저장
-
-
+        this.userInfo = response.data;
         console.log('사용자 정보:', this.userInfo);
       } catch (error) {
         if (error.response) {
@@ -72,35 +77,34 @@ export default {
           console.error('요청 실패:', error);
           alert('서버와 연결할 수 없습니다. 다시 시도해주세요.');
         }
-        this.$router.push('/login'); // 로그인 페이지로 리다이렉트
+        this.$router.push('/login');
       }
     },
     async submitAdditionalInfo() {
       try {
-        // 사용자 존재 여부 확인
         const userExistsResponse = await axios.get('http://localhost:8081/api/auth/check-user', {
           params: { kakaoId: this.userInfo.kakaoId }
         });
 
-        if (!userExistsResponse.data) { // 사용자가 존재하지 않는 경우에만 추가 정보 등록
+        if (!userExistsResponse.data) {
           const userData = {
             memUserid: this.memUserid,
             kakaoId: this.userInfo.kakaoId,
             memNickname: this.userInfo.nickname,
-            memName: this.memName, // 클라이언트에서 입력받은 이름
-            memPhone: this.memPhone, // 클라이언트에서 입력받은 연락처
-            memSex: this.memSex, // 클라이언트에서 선택한 성별
-            memEmail: this.userInfo.email, // 카카오에서 가져온 이메일
-            genres: this.selectedGenres, // 선택한 장르
+            memName: this.memName,
+            memPhone: this.memPhone,
+            memSex: this.memSex,
+            memEmail: this.userInfo.email,
+            genres: this.selectedGenres,
             memPassword: '0'
           };
 
           const response = await axios.post('http://localhost:8081/api/auth/kakao/register', userData);
-          alert(response.data); // 성공 메시지 표시
-          this.$router.push('/'); // 홈으로 리다이렉트
+          alert(response.data);
+          this.$router.push('/');
         } else {
           alert('사용자가 이미 존재합니다. 추가 정보 입력은 필요하지 않습니다.');
-          this.$router.push('/'); // 홈으로 리다이렉트
+          this.$router.push('/');
         }
       } catch (error) {
         alert('정보 제출 중 오류가 발생했습니다.');
@@ -111,8 +115,157 @@ export default {
 </script>
 
 <style scoped>
-.genre-checkboxes {
+#add-info{
+  background-color: #393636;
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+}
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 130px;
+  background-color: #393636;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(20, 1, 20, 50);
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.form {
   display: flex;
   flex-direction: column;
 }
+
+.input-group input,
+.input-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.input-group select {
+  cursor: pointer;
+}
+
+
+.genre-checkboxes label {
+  margin-bottom: 5px;
+}
+
+.submit-btn {
+  margin-top: 10px;
+  background-color: #d95a15;
+  width: 140px;
+  height: 50px;
+  font-size: 13px;
+  font-weight: bolder;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+  position: relative;
+  top:40px;
+  margin: auto;
+}
+.submit-btn:hover{
+  background-color: peru;
+  cursor: pointer;
+}
+
+.signup-title {
+  margin-bottom: 20px;
+  color: #F50000;
+  font-size: 25px;
+  position: relative;
+  top:-100px;
+}
+.add-info-title {
+  position: relative;
+  top: -80px;
+  font-size: 14px;
+  color: black;
+  text-align: center;
+  animation: fadeIn 0.5s ease-in-out; /* 애니메이션 추가 */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px); /* 위에서 아래로 떨어지는 효과 */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.genre-label {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #555;
+}
+
+.genre-images-container {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.genre-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.3s;
+  margin: 10px;
+}
+
+.genre-item:hover {
+  transform: scale(1.05);
+}
+
+.genre-image {
+  border-radius: 10px;
+}
+
+.genre-label {
+  margin-top: 10px;
+  font-size: 13.5px;
+  color: white;
+  text-align: center;
+}
+
+.form-group-signup {
+  margin-bottom: 30px;
+  width: 60%;
+  position: relative;
+  margin: auto;
+}
+.input-field {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f0f8ff;
+  color: #333;
+  transition: border-color 0.3s;
+  font-size: 13px;
+  margin-bottom: 30px;
+  position: relative;
+  top: -20px;
+}
+
+.input-field:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
 </style>

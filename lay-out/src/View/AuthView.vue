@@ -484,9 +484,11 @@ export default {
 }
 .signup-button1:hover {
   background-color: #333;
+  cursor: pointer;
 }
 .signup-button:hover {
   background-color: #333;
+  cursor: pointer;
 }
 
 .login-btn {
@@ -504,6 +506,7 @@ export default {
 
 .login-btn:hover {
   background-color: #d95a15;
+  cursor: pointer;
 }
 
 .signup-prompt-1 {
