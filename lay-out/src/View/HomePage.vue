@@ -1,6 +1,16 @@
 <template>
 
 <div id="homepage">
+  <div class="main-image">
+    <img src="@/assets/home/mainImageS2.jpg">
+    <img src="@/assets/home/mainImage.jpg">
+    <img src="@/assets/home/mainImageS3.jpg">
+    <div class="main-text">
+      <p>다양한 이야기들이 한자리에,</p>
+      <p>이곳에서 진정한 감동과 재미를 느끼고,</p>
+      <p>잊지 못할 순간들을 경험해보세요.</p>
+    </div>
+  </div>
   <!--  영화 검색 하는 부분 component 폴더 안에 Header에 영화 검색 있으니 확인 바람 ( 확인 후 밑에 영화 검색 코드 지워줘 )
   <h1>CINEHIVE</h1>
 
@@ -96,6 +106,81 @@ export default {
   background-color : black;
   color: white;
 }
+
+.main-image{
+  position: relative;
+  top:100px;
+}
+.main-image img{
+  opacity: 0.3;
+}
+.main-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+  font-size: 28px;
+  font-weight: bolder;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  line-height: 2.2;
+  white-space: pre-wrap;
+
+  /* 애니메이션 효과 */
+  opacity: 0; /* 처음에는 투명 */
+  transform: translate(-50%, -60%); /* 약간 위쪽에서 시작 */
+  animation: fadeInMove 2s ease-out forwards; /* 애니메이션 적용 */
+}
+
+@keyframes fadeInMove {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -60%); /* 시작 위치 */
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%); /* 최종 위치 */
+  }
+}
+
+.bounce {
+  display: inline-block; /* 블록 형태로 설정 */
+  animation: bounce 0.5s ease forwards; /* 애니메이션 적용 */
+}
+
+@keyframes bounce {
+  0% {
+    transform: translateY(20px); /* 아래에서 시작 */
+    opacity: 0;
+  }
+  50% {
+    transform: translateY(-10px); /* 위로 튀어오름 */
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0); /* 원래 위치로 돌아옴 */
+  }
+}
+
+/* 각 문장에 대한 애니메이션 지연 적용 */
+.main-text p {
+  animation: fadeIn 0.5s forwards;
+  opacity: 0; /* 처음에는 투명 */
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.main-text p:nth-child(1) { animation-delay: 0.1s; }
+.main-text p:nth-child(2) { animation-delay: 0.3s; }
+.main-text p:nth-child(3) { animation-delay: 0.5s; }
 
 h1 {
   color: red; /* 제목을 빨간색으로 변경 */

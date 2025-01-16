@@ -5,9 +5,9 @@
       <div class="left-section" v-if="isLogin">
         <h1 class="login-title-h1">LOGIN</h1>
         <div class="login-buttons">
-          <img @click="kakaoLogin" src="@/assets/Login/kakao.png" alt="Kakao Login" width="30" height="30" class="login-image">
-          <img @click="googleLogin" src="@/assets/Login/google.png" alt="Google Login" width="30" height="30" class="login-image">
-          <img @click="naverLogin" src="@/assets/Login/naver.png" alt="Naver Login" width="36" height="30" class="login-image">
+          <img @click="kakaoLogin" src="../assets/Login/kakao.png" alt="Kakao Login" width="35" height="35" class="login-image">
+          <img @click="googleLogin" src="@/assets/Login/google.png" alt="Google Login" width="35" height="35" class="login-image">
+          <img @click="naverLogin" src="../assets/Login/naver.png" alt="Naver Login" width="41" height="36" class="login-image">
         </div>
         <p class="or-use-your-account">or use your account</p>
         <div class="form-group">
@@ -45,9 +45,9 @@
 
         <h1 class="signup-title-h1">SIGN UP</h1>
         <div class="login-buttons">
-          <img @click="kakaoLogin" src="@/assets/Login/kakao.png" alt="Kakao Login" width="30" height="30" class="login-image-sign-up">
+          <img @click="kakaoLogin" src="../assets/Login/kakao.png" alt="Kakao Login" width="30" height="30" class="login-image-sign-up">
           <img @click="googleLogin" src="@/assets/Login/google.png" alt="Google Login" width="30" height="30" class="login-image-sign-up">
-          <img @click="naverLogin" src="@/assets/Login/naver.png" alt="Naver Login" width="36" height="30" class="login-image-sign-up">
+          <img @click="naverLogin" src="../assets/Login/naver.png" alt="Naver Login" width="36" height="30" class="login-image-sign-up">
         </div>
         <div class="signup-prompt-1">
           <div class="form-group-signup">
@@ -58,7 +58,7 @@
           </div>
           <div class="form-group-signup">
             <input type="password" id="new-password" class="input-field" placeholder="비밀번호" v-model="memPassword" required />
-            <span style="font-size:11px; color: #333333; position: relative; top:-15px;">비밀번호는 대,소문자, 특수 문자 포함 8자 이상으로 입력하세요.</span>
+            <span style="font-size:11px; color: #333333; position: relative; top:-15px;">대소문자, 특수 문자 포함 8자 이상으로 입력하세요.</span>
           </div>
           <div v-if="passwordError" class="error-message" style="color: red;">
             {{ passwordError }}
@@ -382,7 +382,7 @@ export default {
   height: 60%;
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* 그림자 효과를 더 강조 */
 }
 
 .left-section, .right-section {
@@ -452,7 +452,7 @@ export default {
   font-weight: bolder;
   color: #393636;
   position: relative;
-  top: -10px;
+  top: 10px;
 }
 
 .form-group {
@@ -494,7 +494,7 @@ export default {
   color: #393636;
   font-size: 12px;
   position: relative;
-  top: 15px;
+  top: -15px;
 }
 
 .signup-title {
@@ -556,12 +556,10 @@ export default {
   height: 40px;
   background-color: #EB6015;
   border: none;
-  border-radius: 20px;
+  border-radius: 18px;
   color: white;
   font-weight: bolder;
   transition: background-color 0.3s;
-  position: relative;
-  top:30px;
 }
 
 .login-btn:hover {

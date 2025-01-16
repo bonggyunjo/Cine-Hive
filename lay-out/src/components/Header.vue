@@ -15,17 +15,15 @@
       </nav>
       <div class="search-bar">
         <input type="text" placeholder="search..." />
-        <button class="search-button">🔍</button>
       </div>
       <div class="login-area">
-        <!-- 로그인 상태에 따라 링크 변경 -->
         <template v-if="isLoggedIn">
           <span @click="logout" class="logout-link">Logout</span>
           <span>myPage</span>
         </template>
         <template v-else>
           <router-link to="/auth" class="login-link">Login</router-link>
-          <span>회원이 아니신가요?</span>
+          <router-link to="/auth" style="text-decoration: none"><span>회원이 아니신가요?</span></router-link>
         </template>
       </div>
     </div>
@@ -33,29 +31,27 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'; // mapState 임포트
+import { mapState } from 'vuex';
 
 export default {
   name: 'HeaderComponent',
   computed: {
-    ...mapState(['isLoggedIn']), // Vuex 상태 가져오기
+    ...mapState(['isLoggedIn']),
   },
   methods: {
-    // 로그아웃 메서드
     logout() {
-      this.$store.dispatch('logout'); // Vuex 액션 호출
-      localStorage.removeItem('token'); // 로컬 스토리지에서 토큰 제거
-
-      // 현재 경로가 홈이 아닐 경우에만 리다이렉트
+      this.$store.dispatch('logout');
+      localStorage.removeItem('token');
       if (this.$route.path !== '/') {
-        this.$router.push('/'); // 홈으로 리다이렉트
+        this.$router.push('/');
       }
     },
   }
-}
+};
 </script>
 
 <style scoped>
+
 header {
   background-color: black;
   padding: 20px;
@@ -66,99 +62,136 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .site-title {
   flex: 1;
   color: #F50000;
   font-size: 22px;
-}
+  margin-left: 10px;
+  position: absolute;
 
-.nav {
-  position: relative;
-  left: -180px;
 }
 
 .nav ul {
   list-style: none;
   display: flex;
-  gap: 30px;
+  gap: 20px;
   margin: 0;
-  padding: 0 0 0 20px;
+  padding: 0;
   color: white;
-  font-size: 14.5px;
+  font-size: 14px;
+  margin-left: 230px;
 }
 
 .search-bar {
   flex: 1;
-  text-align: center;
-  position: relative;
+  text-align: left;
+  margin: 0 20px;
 }
 
 .search-bar input {
-  border: none;
+  width: 100%;
+  max-width: 750px;
   padding: 10px;
-  width: 450px;
-  border-radius: 5px; /* 전체 모서리 둥글게 */
-  outline: none; /* 포커스 시 테두리 제거 */
+  border: none;
+  border-radius: 5px;
   background-color: #1a1a1a;
-  color: white; /* 글자 색상 */
-  transition: border-color 0.3s; /* 테두리 색상 변화 애니메이션 */
-  position: relative;
-  left: -150px;
+  color: white;
+  outline: none;
+  transition: border-color 0.3s;
 }
 
 .search-bar input::placeholder {
-  color: #ccc; /* 플레이스홀더 색상 */
+  color: #ccc;
 }
 
 .search-bar input:focus {
-  border-color: #F50000; /* 포커스 시 테두리 색상 변화 */
-}
-
-.search-button {
-  padding: 9px 13.5px; /* 버튼 패딩 */
-  border: none;
-  border-radius: 5px; /* 전체 모서리 둥글게 */
-  color: white; /* 버튼 글자 색상 */
-  cursor: pointer; /* 커서 변경 */
-  transition: background-color 0.3s, transform 0.2s; /* 배경 색상 변화 애니메이션 */
-  position: relative;
-  left: -140px;
-}
-
-.search-button:hover {
-  transform: scale(1.05); /* 호버 시 버튼 확대 효과 */
+  border-color: #F50000;
 }
 
 .login-area {
   display: flex;
   align-items: center;
-  gap: 30px;
-  position: relative;
-  left: -90px;
-  font-size: 15px;
+  gap: 15px;
 }
 
-.login-link {
-  color: white; /* 링크 색상 */
-  text-decoration: none; /* 밑줄 제거 */
-  cursor: pointer; /* 커서 변경 */
+.login-link,
+.logout-link {
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
 }
 
-.login-link:hover {
-  color: #F50000; /* 호버 시 색상 변화 */
+.login-link:hover,
+.logout-link:hover {
+  color: #F50000;
 }
-.logout-link{
-  color: white; /* 링크 색상 */
-  text-decoration: none; /* 밑줄 제거 */
-  cursor: pointer; /* 커서 변경 */
-}
-.logout-link:hover{
-  color: #F50000; /* 호버 시 색상 변화 */
-}
+
 .login-area span {
   color: white;
-  font-size: 13.5px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.login-area span:hover{
+  color: #F50000;
+}
+
+@media (max-width: 768px) {
+  .header-container {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px;
+  }
+
+  .site-title {
+    font-size: 18px;
+    margin: 10px 0;
+  }
+
+  .nav ul {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin: 10px 0;
+  }
+
+  .search-bar {
+    width: 100%;
+    margin: 10px 0;
+  }
+
+  .login-area {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+
+@media (max-width: 480px) {
+  .header-container {
+    text-align: center;
+  }
+
+  .site-title {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+
+  .nav ul {
+    display: none;
+  }
+
+  .search-bar {
+    width: 100%;
+  }
+
+  .login-area {
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    position: relative;
+  }
 }
 </style>
