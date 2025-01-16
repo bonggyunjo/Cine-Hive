@@ -18,22 +18,46 @@
         <button class="search-button">🔍</button>
       </div>
       <div class="login-area">
-        <router-link to="/auth" class="login-link">Login</router-link>
-        <span>회원이 아니신가요?</span>
+        <!-- 로그인 상태에 따라 링크 변경 -->
+        <template v-if="isLoggedIn">
+          <span @click="logout" class="logout-link">Logout</span>
+          <span>myPage</span>
+        </template>
+        <template v-else>
+          <router-link to="/auth" class="login-link">Login</router-link>
+          <span>회원이 아니신가요?</span>
+        </template>
       </div>
     </div>
   </header>
 </template>
 
 <script>
+import { mapState } from 'vuex'; // mapState 임포트
+
 export default {
   name: 'HeaderComponent',
+  computed: {
+    ...mapState(['isLoggedIn']), // Vuex 상태 가져오기
+  },
+  methods: {
+    // 로그아웃 메서드
+    logout() {
+      this.$store.dispatch('logout'); // Vuex 액션 호출
+      localStorage.removeItem('token'); // 로컬 스토리지에서 토큰 제거
+
+      // 현재 경로가 홈이 아닐 경우에만 리다이렉트
+      if (this.$route.path !== '/') {
+        this.$router.push('/'); // 홈으로 리다이렉트
+      }
+    },
+  }
 }
 </script>
 
 <style scoped>
 header {
-  background-color : black;
+  background-color: black;
   padding: 20px;
   text-align: center;
 }
@@ -112,7 +136,7 @@ header {
   align-items: center;
   gap: 30px;
   position: relative;
-  left:-90px;
+  left: -90px;
   font-size: 15px;
 }
 
@@ -125,7 +149,14 @@ header {
 .login-link:hover {
   color: #F50000; /* 호버 시 색상 변화 */
 }
-
+.logout-link{
+  color: white; /* 링크 색상 */
+  text-decoration: none; /* 밑줄 제거 */
+  cursor: pointer; /* 커서 변경 */
+}
+.logout-link:hover{
+  color: #F50000; /* 호버 시 색상 변화 */
+}
 .login-area span {
   color: white;
   font-size: 13.5px;

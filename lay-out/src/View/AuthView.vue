@@ -133,6 +133,7 @@
 </template>
 <script>
 import axios from 'axios';
+import { mapState } from 'vuex';
 
 export default {
   name: 'AuthComponent',
@@ -153,7 +154,11 @@ export default {
       isPhoneValid: false // 전화번호 유효성 상태
     };
   },
+  computed: {
+    ...mapState(['isLoggedIn']), // Vuex 상태 가져오기
+  },
   methods: {
+
     validateEmail(email) {
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       return emailPattern.test(email);
@@ -315,8 +320,19 @@ export default {
 
       try {
         const response = await axios.post('http://localhost:8081/login', loginData);
-        alert(response.data);
-        // 로그인 성공 후 추가 작업
+        console.log(response.data);
+
+        // 로그인 성공 시 사용자 정보를 스토어에 저장
+        const user = { userid: this.memUserid }; // 사용자 정보를 필요에 따라 조정
+        this.$store.dispatch('login', user); // Vuex 스토어에 로그인 상태 저장
+
+        // 상태 확인
+        console.log(this.isLoggedIn); // Vuex 상태 확인 (computed 속성 사용)
+
+        // 메인 화면으로 리다이렉트
+        if (this.$route.path !== '/') {
+          this.$router.push('/'); // 메인 화면으로 이동
+        }
       } catch (error) {
         if (error.response) {
           alert(error.response.data);
