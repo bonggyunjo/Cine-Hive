@@ -1,9 +1,9 @@
 <template>
-  <body>
-  <header>
-    <h1>CINEHIVE</h1>
 
-    <!-- 검색창 -->
+<div id="homepage">
+  <!--  영화 검색 하는 부분 component 폴더 안에 Header에 영화 검색 있으니 확인 바람 ( 확인 후 밑에 영화 검색 코드 지워줘 )
+  <h1>CINEHIVE</h1>
+
     <div class="search-bar">
       <input
           type="text"
@@ -12,19 +12,8 @@
       />
       <button @click="searchMovies">검색</button>
     </div>
-  </header>
+-->
   <div class="movie-container">
-    <h1>CINEHIVE</h1>
-
-    <!-- 검색창 -->
-    <div class="search-bar">
-      <input
-          type="text"
-          v-model="searchQuery"
-          placeholder="영화 제목을 검색하세요..."
-      />
-      <button @click="searchMovies">검색</button>
-    </div>
 
     <!-- 영화 포스터 -->
     <div class="movie-slider">
@@ -58,7 +47,7 @@
       </div>
     </div>
   </div>
-  </body>
+</div>
 </template>
 
 <script>
@@ -102,10 +91,9 @@ export default {
 
 <style scoped>
 /* 전체 화면 검은색 배경 */
-html, body {
-  height: 100%;
-  margin: 0;
-  background-color: black;
+#homepage{
+  height: 900px;
+  background-color : black;
   color: white;
 }
 
@@ -116,12 +104,10 @@ h1 {
 
 /* 영화 포스터 슬라이드 */
 .movie-container {
-  padding: 20px;
   display: flex;
   justify-content: center;  /* 가로 중앙 정렬 */
   align-items: center;      /* 세로 중앙 정렬 */
-  flex-direction: column;   /* 수직 배치 */
-  height: 100%;             /* 부모 컨테이너가 화면 전체를 차지하도록 */
+  flex-direction: column;   /* 수직 배치 */   /* 부모 컨테이너가 화면 전체를 차지하도록 */
 }
 
 .movie-slider {
@@ -169,7 +155,7 @@ h1 {
 .movie-modal-content button {
   margin-top: 20px;
   padding: 10px;
-  background-color: #444;
+  background-color : #1a1a1a;
   border: none;
   color: white;
   cursor: pointer;
@@ -200,7 +186,7 @@ h1 {
   padding: 10px;
   display: flex;
   justify-content: center;
-  background-color: black; /* 검색창 배경색 */
+  background-color : black;
   position: sticky; /* 상단 고정 */
   top: 0;
   z-index: 100;

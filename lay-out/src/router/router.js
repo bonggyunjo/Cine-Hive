@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Home from '@/View/Home_page.vue';
+import Home from '@/View/HomePage.vue';
 import AuthView from "@/View/AuthView.vue";
 import SocialLoginAdditionalInfo from "@/View/SocialLoginAdditionalInfo.vue"
 
