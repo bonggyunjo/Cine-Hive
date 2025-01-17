@@ -155,7 +155,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['isLoggedIn']), // Vuex 상태 가져오기
+    ...mapState(['isLoggedIn', 'user']), // Vuex 상태 가져오기
   },
   methods: {
 
@@ -320,27 +320,36 @@ export default {
 
       try {
         const response = await axios.post('http://localhost:8081/login', loginData);
-        console.log(response.data);
+        console.log('API Response:', response.data); // API 응답 확인
 
-        // 로그인 성공 시 사용자 정보를 스토어에 저장
-        const user = { userid: this.memUserid }; // 사용자 정보를 필요에 따라 조정
-        this.$store.dispatch('login', user); // Vuex 스토어에 로그인 상태 저장
+        if (response.data.user) { // user가 포함되어 있는지 확인
+          const user = {
+            userid: response.data.user.memUserid, // 서버에서 받은 userid
+            preferredGenres: response.data.user.memPassword // 서버에서 받은 선호 장르
+          };
 
-        // 상태 확인
-        console.log(this.isLoggedIn); // Vuex 상태 확인 (computed 속성 사용)
+          // Vuex 스토어에 로그인 상태 저장
+          this.$store.commit('SET_LOGIN', { isLoggedIn: true, user });
 
-        // 메인 화면으로 리다이렉트
-        if (this.$route.path !== '/') {
-          this.$router.push('/'); // 메인 화면으로 이동
+          // 상태 확인
+          console.log('User from store after commit:', this.$store.state.user);
+
+          // 메인 화면으로 리다이렉트
+          if (this.$route.path !== '/') {
+            this.$router.push('/');
+          }
+        } else {
+          alert('로그인 실패: 사용자 정보가 없습니다.');
         }
       } catch (error) {
         if (error.response) {
-          alert(error.response.data);
+          alert(error.response.data.message || '로그인 중 오류가 발생했습니다.');
         } else {
           alert('로그인 중 오류가 발생했습니다. 다시 시도해 주세요.');
         }
       }
     },
+
     toggleGenre(genre) {
       const index = this.selectedGenres.indexOf(genre);
       if (index === -1) {

@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 @Slf4j
@@ -55,18 +56,25 @@ public class UserController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<Map<String, Object>> login(@RequestBody LoginRequest loginRequest) {
         try {
             boolean loginSuccess = userService.loginUser(loginRequest.getMemUserid(), loginRequest.getMemPassword());
             if (loginSuccess) {
-                return ResponseEntity.ok("로그인 성공");
+                // 사용자 정보를 가져와서 응답 생성
+                User user = userRepository.findByMemUserid(loginRequest.getMemUserid()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+                Map<String, Object> response = new HashMap<>();
+                response.put("message", "로그인 성공");
+                response.put("user", new LoginRequest(user.getMemUserid(), user.getGenres().toString())); // 사용자 정보 추가
+
+                return ResponseEntity.ok(response);
             } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 실패");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "로그인 실패"));
             }
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", e.getMessage()));
         }
     }
+
 
     @GetMapping("/checkuserId/{memUserid}")
     public ResponseEntity<Boolean> checkUserId(@PathVariable(value="memUserid") String memUserid) {

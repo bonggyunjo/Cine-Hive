@@ -10,10 +10,13 @@ export default new Vuex.Store({
     },
     mutations: {
         SET_LOGIN(state, payload) {
+            console.log('Payload received in SET_LOGIN:', payload); // 추가된 로그
             state.isLoggedIn = payload.isLoggedIn;
             state.user = payload.user; // 사용자 정보를 저장
+            console.log('User set in store:', state.user);
         },
     },
+
     actions: {
         login({ commit }, user) {
             commit('SET_LOGIN', { isLoggedIn: true, user });

@@ -11,6 +11,8 @@
       <p>잊지 못할 순간들을 경험해보세요.</p>
     </div>
   </div>
+
+
   <!--  영화 검색 하는 부분 component 폴더 안에 Header에 영화 검색 있으니 확인 바람 ( 확인 후 밑에 영화 검색 코드 지워줘 )
   <h1>CINEHIVE</h1>
 
@@ -24,7 +26,7 @@
     </div>
 -->
   <div class="movie-container">
-
+    <button @click="displayPreferredGenres" style="position: relative; top:200px;">선호 장르 표시</button>
     <!-- 영화 포스터 -->
     <div class="movie-slider">
       <div
@@ -62,6 +64,7 @@
 
 <script>
 import axios from 'axios';
+import { mapState } from 'vuex';
 
 export default {
   data() {
@@ -70,6 +73,9 @@ export default {
       selectedMovie: null, // 선택된 영화 정보
       searchQuery: "", // 검색어
     };
+  },
+  computed: {
+    ...mapState(['user']), // Vuex 상태 가져오기
   },
   methods: {
     // 영화 데이터 가져오기
@@ -91,6 +97,12 @@ export default {
     closeMovieDetails() {
       this.selectedMovie = null;
     },
+
+    displayPreferredGenres() {
+      if (this.user) {
+        console.log('선호 장르:', this.user.preferredGenres);
+      }
+    }
   },
   // 컴포넌트가 로드될 때 영화 데이터를 자동으로 가져옴
   mounted() {
