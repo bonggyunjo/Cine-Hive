@@ -13,9 +13,11 @@
   </div>
 
 
-  <!--  영화 검색 하는 부분 component 폴더 안에 Header에 영화 검색 있으니 확인 바람 ( 확인 후 밑에 영화 검색 코드 지워줘 )
-  <h1>CINEHIVE</h1>
 
+
+
+  <!--  영화 검색 하는 부분 component/Header.vue에 header 만들었으니 확인 바람 ( 확인 후 밑에 영화 검색 코드 지워줘 )
+  <h1>CINEHIVE</h1>
     <div class="search-bar">
       <input
           type="text"
@@ -112,7 +114,7 @@ export default {
 </script>
 
 <style scoped>
-/* 전체 화면 검은색 배경 */
+
 #homepage{
   height: 900px;
   background-color : black;
@@ -138,47 +140,44 @@ export default {
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
   line-height: 2.2;
   white-space: pre-wrap;
-
-  /* 애니메이션 효과 */
-  opacity: 0; /* 처음에는 투명 */
-  transform: translate(-50%, -60%); /* 약간 위쪽에서 시작 */
-  animation: fadeInMove 2s ease-out forwards; /* 애니메이션 적용 */
+  opacity: 0;
+  transform: translate(-50%, -60%);
+  animation: fadeInMove 2s ease-out forwards;
 }
 
 @keyframes fadeInMove {
   0% {
     opacity: 0;
-    transform: translate(-50%, -60%); /* 시작 위치 */
+    transform: translate(-50%, -60%);
   }
   100% {
     opacity: 1;
-    transform: translate(-50%, -50%); /* 최종 위치 */
+    transform: translate(-50%, -50%);
   }
 }
 
 .bounce {
-  display: inline-block; /* 블록 형태로 설정 */
-  animation: bounce 0.5s ease forwards; /* 애니메이션 적용 */
+  display: inline-block;
+  animation: bounce 0.5s ease forwards;
 }
 
 @keyframes bounce {
   0% {
-    transform: translateY(20px); /* 아래에서 시작 */
-    opacity: 0;
+    transform: translateY(20px);
   }
   50% {
-    transform: translateY(-10px); /* 위로 튀어오름 */
+    transform: translateY(-10px);
     opacity: 1;
   }
   100% {
-    transform: translateY(0); /* 원래 위치로 돌아옴 */
+    transform: translateY(0);
   }
 }
 
-/* 각 문장에 대한 애니메이션 지연 적용 */
+
 .main-text p {
   animation: fadeIn 0.5s forwards;
-  opacity: 0; /* 처음에는 투명 */
+  opacity: 0;
 }
 
 @keyframes fadeIn {
@@ -195,29 +194,28 @@ export default {
 .main-text p:nth-child(3) { animation-delay: 0.5s; }
 
 h1 {
-  color: red; /* 제목을 빨간색으로 변경 */
+  color: red;
   text-align: center;
 }
 
-/* 영화 포스터 슬라이드 */
 .movie-container {
   display: flex;
-  justify-content: center;  /* 가로 중앙 정렬 */
-  align-items: center;      /* 세로 중앙 정렬 */
-  flex-direction: column;   /* 수직 배치 */   /* 부모 컨테이너가 화면 전체를 차지하도록 */
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .movie-slider {
   display: flex;
-  flex-wrap: wrap; /* 줄 바꿈이 가능하게 */
-  justify-content: center;  /* 포스터들을 가로로 중앙 정렬 */
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 10px;
   margin-bottom: 20px;
 }
 
 .movie-poster img {
   width: 200px;
-  height: 300px; /* 세로 크기도 고정 */
+  height: 300px;
   cursor: pointer;
   transition: transform 0.3s;
 }
@@ -241,7 +239,7 @@ h1 {
 }
 
 .movie-modal-content {
-  background-color: rgba(0, 0, 0, 0.8); /* 투명한 검정 배경 */
+  background-color: rgba(0, 0, 0, 0.8);
   padding: 20px;
   border-radius: 8px;
   max-width: 600px;
