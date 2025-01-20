@@ -1,7 +1,9 @@
 package com.example.CineHive.service;
 
 import com.example.CineHive.entity.Movie;
+import com.example.CineHive.entity.PMovie;
 import com.example.CineHive.repository.MovieRepository;
+import com.example.CineHive.repository.PMovieRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,9 @@ public class MovieService {
 
     @Autowired
     private MovieRepository movieRepository;
+
+    @Autowired
+    private PMovieRepository pmovieRepository;
     private final ObjectMapper objectMapper;
 
 
@@ -91,4 +96,58 @@ public class MovieService {
             System.out.println("응답이 없습니다.");
         }
     }
+
+    @Transactional
+    public void savePopularMoviesToDatabase() {
+        String response = webClient.get()
+                .uri("https://api.themoviedb.org/3/movie/popular?language=" + "ko" + "&page=" + "1" + "&api_key=" + apiKey)
+                .header("Accept", "application/json")
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();  // block()을 사용하여 응답을 기다립니다.
+
+        if (response != null) {
+            try {
+                JsonNode rootNode = objectMapper.readTree(response);
+                JsonNode moviesNode = rootNode.path("results");
+                JsonNode datesNode = rootNode.path("dates");
+
+                for (JsonNode movieNode : moviesNode) {
+                    Long movieId = movieNode.get("id").asLong();
+
+                    // 영화가 이미 존재하는지 확인
+                    if (!pmovieRepository.existsById(movieId)) {
+                        PMovie movie = new PMovie();
+                        movie.setId(movieId);
+                        movie.setTitle(movieNode.get("title").asText());
+                        String overviewText = movieNode.get("overview").asText();
+                        movie.setOverview(overviewText);
+                        movie.setPosterPath(movieNode.get("poster_path").asText());
+                        movie.setReleaseDate(movieNode.get("release_date").asText());
+                        movie.setBackdropPath(movieNode.get("backdrop_path").asText());
+                        movie.setGenreIds(objectMapper.convertValue(movieNode.get("genre_ids"), List.class));  // List로 변환
+                        movie.setVoteAverage(movieNode.get("vote_average").asDouble());
+                        movie.setVoteCount(movieNode.get("vote_count").asInt());
+                        movie.setPopularity(movieNode.get("popularity").asDouble());
+                        movie.setAdult(movieNode.get("adult").asBoolean());
+
+                        // Dates 필드 처리
+                        PMovie.Dates dates = new PMovie.Dates();
+                        dates.setMaximum(datesNode.path("maximum").asText());
+                        dates.setMinimum(datesNode.path("minimum").asText());
+                        movie.setDates(dates);
+
+                        // 데이터베이스에 저장
+                        pmovieRepository.save(movie);
+                        System.out.println("Saved movie: " + movie.getTitle());
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("응답이 없습니다.");
+        }
+    }
+
 }
