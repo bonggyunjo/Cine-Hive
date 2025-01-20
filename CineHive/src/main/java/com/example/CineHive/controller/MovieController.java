@@ -37,7 +37,14 @@ public class MovieController {
     @GetMapping("/popular_movie")
     public ResponseEntity<?> getPopularMovies() {
         System.out.println("Request received for popular movies");
-        movieService.savePopularMoviesToDatabase();  // 매개변수로 language와 page 전달
+        movieService.saveTopRatedMoviesToDatabase();  // 매개변수로 language와 page 전달
+        return ResponseEntity.ok().body("성공적으로 데이터를 저장했습니다!");
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> searchMovies(@RequestParam String query) {
+        System.out.println("Request received for searching movies");
+        movieService.searchMovies(query);
         return ResponseEntity.ok().body("성공적으로 데이터를 저장했습니다!");
     }
 }

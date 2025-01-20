@@ -9,10 +9,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriUtils;
 import reactor.core.publisher.Mono;
 
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +37,7 @@ public class MovieService {
         this.webClient = webClientBuilder.baseUrl("https://api.themoviedb.org/3").build();
         this.objectMapper = objectMapper;
     }
+
 
     public Mono<String> getMoviesFromTMDB() {
         return webClient.get()
@@ -98,9 +101,9 @@ public class MovieService {
     }
 
     @Transactional
-    public void savePopularMoviesToDatabase() {
+    public void saveTopRatedMoviesToDatabase() {
         String response = webClient.get()
-                .uri("https://api.themoviedb.org/3/movie/popular?language=" + "ko" + "&page=" + "1" + "&api_key=" + apiKey)
+                .uri("https://api.themoviedb.org/3/movie/top_rated?language=" + "ko" + "&page=" + "1" + "&api_key=" + apiKey)
                 .header("Accept", "application/json")
                 .retrieve()
                 .bodyToMono(String.class)
@@ -150,4 +153,52 @@ public class MovieService {
         }
     }
 
+
+    public void searchMovies(String query) {
+        String response = webClient.get()
+                .uri("https://api.themoviedb.org/3/search/movie?query="
+                        + UriUtils.encode(query, StandardCharsets.UTF_8)
+                        + "&api_key=" + apiKey
+                        + "&include_adult=true&language=ko&page=1")
+                .header("Accept", "application/json")
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();  // block()을 사용하여 응답을 기다립니다.
+
+        if (response != null) {
+            try {
+                JsonNode rootNode = objectMapper.readTree(response);
+                JsonNode moviesNode = rootNode.path("results");
+
+                for (JsonNode movieNode : moviesNode) {
+                    Long movieId = movieNode.get("id").asLong();
+
+                    // 영화가 이미 존재하는지 확인
+                    if (!movieRepository.existsById(movieId)) {
+                        Movie movie = new Movie();
+                        movie.setId(movieId);
+                        movie.setTitle(movieNode.get("title").asText());
+                        String overviewText = movieNode.get("overview").asText();
+                        movie.setOverview(overviewText);
+                        movie.setPosterPath(movieNode.get("poster_path").asText());
+                        movie.setReleaseDate(movieNode.get("release_date").asText());
+                        movie.setBackdropPath(movieNode.get("backdrop_path").asText());
+                        movie.setGenreIds(objectMapper.convertValue(movieNode.get("genre_ids"), List.class));  // List로 변환
+                        movie.setVoteAverage(movieNode.get("vote_average").asDouble());
+                        movie.setVoteCount(movieNode.get("vote_count").asInt());
+                        movie.setPopularity(movieNode.get("popularity").asDouble());
+                        movie.setAdult(movieNode.get("adult").asBoolean());
+
+                        // 데이터베이스에 저장
+                        movieRepository.save(movie);
+                        System.out.println("Saved movie: " + movie.getTitle());
+                    }
+                }
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("응답이 없습니다.");
+        }
+    }
 }

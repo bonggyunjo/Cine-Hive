@@ -13,20 +13,6 @@
   </div>
 
 
-
-
-
-  <!--  영화 검색 하는 부분 component/Header.vue에 header 만들었으니 확인 바람 ( 확인 후 밑에 영화 검색 코드 지워줘 )
-  <h1>CINEHIVE</h1>
-    <div class="search-bar">
-      <input
-          type="text"
-          v-model="searchQuery"
-          placeholder="영화 제목을 검색하세요..."
-      />
-      <button @click="searchMovies">검색</button>
-    </div>
--->
   <div class="movie-container">
     <button @click="displayPreferredGenres" style="position: relative; top:200px;">선호 장르 표시</button>
     <!-- 영화 포스터 -->
