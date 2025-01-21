@@ -1,10 +1,12 @@
 <template>
   <header>
     <div class="header-container">
-      <h1 class="site-title">CINEHIVE</h1>
+      <router-link to="/" class="site-title">CINEHIVE</router-link>
       <nav class="nav">
         <ul>
-          <li>Home</li>
+          <li>
+            <router-link to="/" class="nav-link">Home</router-link>
+          </li>
           <li>Animation</li>
           <li>Movie</li>
           <li>Drama</li>
@@ -84,6 +86,16 @@ export default {
 </script>
 
 <style scoped>
+
+.site-title {
+  text-decoration: none;
+  color: inherit; /* 색상도 기본으로 유지 */
+}
+
+.nav-link {
+  text-decoration: none;
+  color: inherit; /* 색상 기본 유지 */
+}
 
 header {
   background-color: black;
