@@ -21,6 +21,7 @@ public class MovieController {
     @Autowired
     private MovieRepository movieRepository;
 
+
     @GetMapping("/now_playing")
     public ResponseEntity<?> getNowPlayingMovies() {
         System.out.println("Request received for now playing movies");
@@ -44,7 +45,8 @@ public class MovieController {
     @GetMapping("/search")
     public ResponseEntity<?> searchMovies(@RequestParam String query) {
         System.out.println("Request received for searching movies");
-        movieService.searchMovies(query);
-        return ResponseEntity.ok().body("성공적으로 데이터를 저장했습니다!");
+        List<Movie> searchResults = movieService.searchMovies(query);  // 검색 결과 받기
+        return ResponseEntity.ok().body(searchResults);  // 검색 결과를 클라이언트로 반환
     }
+
 }

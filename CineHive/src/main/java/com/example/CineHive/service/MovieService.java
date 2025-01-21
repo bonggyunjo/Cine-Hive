@@ -50,7 +50,7 @@ public class MovieService {
     @Transactional
     public void saveMoviesToDatabase() {
         String response = webClient.get()
-                .uri("https://api.themoviedb.org/3/movie/now_playing?language=" + "ko" + "&page=" + "2" + "&api_key=" + apiKey)
+                .uri("https://api.themoviedb.org/3/movie/now_playing?language=" + "ko" + "&page=" + "1" + "&api_key=" + apiKey)
                 .header("Accept", "application/json")
                 .retrieve()
                 .bodyToMono(String.class)
@@ -154,7 +154,7 @@ public class MovieService {
     }
 
 
-    public void searchMovies(String query) {
+    public List<Movie> searchMovies(String query) {
         String response = webClient.get()
                 .uri("https://api.themoviedb.org/3/search/movie?query="
                         + UriUtils.encode(query, StandardCharsets.UTF_8)
@@ -165,6 +165,7 @@ public class MovieService {
                 .bodyToMono(String.class)
                 .block();  // block()을 사용하여 응답을 기다립니다.
 
+        List<Movie> movies = new ArrayList<>();
         if (response != null) {
             try {
                 JsonNode rootNode = objectMapper.readTree(response);
@@ -172,33 +173,38 @@ public class MovieService {
 
                 for (JsonNode movieNode : moviesNode) {
                     Long movieId = movieNode.get("id").asLong();
+                    Movie movie = new Movie();
+                    movie.setId(movieId);
+                    movie.setTitle(movieNode.get("title").asText());
+                    movie.setOverview(movieNode.get("overview").asText());
+                    movie.setPosterPath(movieNode.get("poster_path").asText());
+                    movie.setReleaseDate(movieNode.get("release_date").asText());
+                    movie.setBackdropPath(movieNode.get("backdrop_path").asText());
+                    movie.setGenreIds(objectMapper.convertValue(movieNode.get("genre_ids"), List.class));  // List로 변환
+                    movie.setVoteAverage(movieNode.get("vote_average").asDouble());
+                    movie.setVoteCount(movieNode.get("vote_count").asInt());
+                    movie.setPopularity(movieNode.get("popularity").asDouble());
+                    movie.setAdult(movieNode.get("adult").asBoolean());
 
-                    // 영화가 이미 존재하는지 확인
+                    // 영화가 데이터베이스에 존재하지 않으면 저장
                     if (!movieRepository.existsById(movieId)) {
-                        Movie movie = new Movie();
-                        movie.setId(movieId);
-                        movie.setTitle(movieNode.get("title").asText());
-                        String overviewText = movieNode.get("overview").asText();
-                        movie.setOverview(overviewText);
-                        movie.setPosterPath(movieNode.get("poster_path").asText());
-                        movie.setReleaseDate(movieNode.get("release_date").asText());
-                        movie.setBackdropPath(movieNode.get("backdrop_path").asText());
-                        movie.setGenreIds(objectMapper.convertValue(movieNode.get("genre_ids"), List.class));  // List로 변환
-                        movie.setVoteAverage(movieNode.get("vote_average").asDouble());
-                        movie.setVoteCount(movieNode.get("vote_count").asInt());
-                        movie.setPopularity(movieNode.get("popularity").asDouble());
-                        movie.setAdult(movieNode.get("adult").asBoolean());
-
-                        // 데이터베이스에 저장
                         movieRepository.save(movie);
-                        System.out.println("Saved movie: " + movie.getTitle());
+                        System.out.println("Saved new movie: " + movie.getTitle());
+                    } else {
+                        System.out.println("Movie already exists: " + movie.getTitle());
                     }
+
+                    // 데이터베이스와 상관없이 항상 리스트에 추가
+                    movies.add(movie);
                 }
-            }catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
             System.out.println("응답이 없습니다.");
         }
+        return movies;
     }
+
+
 }

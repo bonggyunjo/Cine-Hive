@@ -14,7 +14,13 @@
         </ul>
       </nav>
       <div class="search-bar">
-        <input type="text" placeholder="search..." />
+        <input
+            type="text"
+            v-model="searchQuery"
+            placeholder="search..."
+            @keyup.enter="searchMovies"
+        />
+        <button @click="searchMovies">검색</button>
       </div>
       <div class="login-area">
         <template v-if="isLoggedIn">
@@ -31,10 +37,16 @@
 </template>
 
 <script>
+import axios from 'axios';
 import { mapState } from 'vuex';
 
 export default {
   name: 'HeaderComponent',
+  data() {
+    return {
+      searchQuery: "", // 검색어
+    };
+  },
   computed: {
     ...mapState(['isLoggedIn']),
   },
@@ -46,7 +58,28 @@ export default {
         this.$router.push('/');
       }
     },
-  }
+    async searchMovies() {
+      if (!this.searchQuery.trim()) {
+        alert("검색어를 입력하세요!");
+        return;
+      }
+
+      try {
+        // 서버로 검색어를 보내고 결과를 받음
+        const response = await axios.get('http://localhost:8081/search', {
+          params: { query: this.searchQuery }
+        });
+
+        // 받은 데이터를 SearchPage로 전달
+        this.$router.push({
+          path: '/search',
+          query: { q: this.searchQuery, results: JSON.stringify(response.data) }
+        });
+      } catch (error) {
+        console.error("검색 중 오류가 발생했습니다:", error);
+      }
+    },
+  },
 };
 </script>
 

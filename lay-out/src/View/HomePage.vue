@@ -59,7 +59,7 @@ export default {
     return {
       movies: [],
       selectedMovie: null, // 선택된 영화 정보
-      searchQuery: "", // 검색어
+       // 검색어
     };
   },
   computed: {
@@ -101,8 +101,10 @@ export default {
 
 <style scoped>
 
+
 #homepage{
   height: 900px;
+  flex: 1;
   background-color : black;
   color: white;
 }
@@ -110,6 +112,7 @@ export default {
 .main-image{
   position: relative;
   top:100px;
+  margin-bottom: 150px;
 }
 .main-image img{
   opacity: 0.3;
