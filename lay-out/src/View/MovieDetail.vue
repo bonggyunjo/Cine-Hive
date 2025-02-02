@@ -6,7 +6,14 @@
         <p>{{ movie.overview || '설명 없음' }}</p>
         <p>평점: {{ movie.voteAverage }}</p>
         <p>출시일: {{ movie.releaseDate }}</p>
-        <button @click="goBack">뒤로 가기</button>
+        <div class="movie-actions">
+          <button @click="goBack">뒤로 가기</button>
+          <button @click="addToList">내 리스트에 추가</button>
+        </div>
+        <div class="movie-info">
+          <p>출연: {{ movie.cast || '정보 없음' }}</p>
+          <p>감독: {{ movie.director || '정보 없음' }}</p>
+        </div>
       </div>
     </div>
   </div>
@@ -38,6 +45,10 @@ export default {
     goBack() {
       this.$router.go(-1); // 뒤로 가기
     },
+    addToList() {
+      // 내 리스트에 추가하는 로직
+      console.log('내 리스트에 추가:', this.movie.title);
+    },
   },
 };
 </script>
@@ -65,17 +76,26 @@ export default {
   text-align: center;
 }
 
-.movie-content button {
+.movie-actions {
   margin-top: 20px;
+}
+
+.movie-actions button {
   padding: 10px;
   background-color: #1a1a1a;
   border: none;
   color: white;
   cursor: pointer;
   border-radius: 5px;
+  margin: 5px;
 }
 
-.movie-content button:hover {
+.movie-actions button:hover {
   background-color: #555;
+}
+
+.movie-info {
+  margin-top: 20px;
+  text-align: left;
 }
 </style>
