@@ -320,12 +320,12 @@ export default {
 
       try {
         const response = await axios.post('http://localhost:8081/login', loginData);
-        console.log('API Response:', response.data); // API 응답 확인
+          console.log('API Response:', response.data); // API 응답 확인
 
         if (response.data.user) { // user가 포함되어 있는지 확인
           const user = {
             userid: response.data.user.memUserid, // 서버에서 받은 userid
-            preferredGenres: response.data.user.memPassword // 서버에서 받은 선호 장르
+            preferredGenres: response.data.user.genres // 서버에서 받은 선호 장르
           };
 
           // Vuex 스토어에 로그인 상태 저장
