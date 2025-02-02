@@ -52,6 +52,4 @@ public class Movie {
         private String minimum;
     }
 
-    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Actor> actors; // 출연진
 }
