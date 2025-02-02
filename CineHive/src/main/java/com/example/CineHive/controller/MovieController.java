@@ -6,12 +6,10 @@ import com.example.CineHive.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class MovieController {
@@ -47,6 +45,17 @@ public class MovieController {
         System.out.println("Request received for searching movies");
         List<Movie> searchResults = movieService.searchMovies(query);  // 검색 결과 받기
         return ResponseEntity.ok().body(searchResults);  // 검색 결과를 클라이언트로 반환
+    }
+
+    @GetMapping("/movies/{id}") //
+    @ResponseBody
+    public ResponseEntity<Movie> getMovieById(@PathVariable Long id) {
+        Optional<Movie> movieOptional = movieRepository.findById(id);
+        if (movieOptional.isPresent()) {
+            return ResponseEntity.ok(movieOptional.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 }

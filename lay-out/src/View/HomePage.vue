@@ -1,53 +1,31 @@
 <template>
-
-<div id="homepage">
-  <div class="main-image">
-    <img src="@/assets/home/mainImageS2.jpg">
-    <img src="@/assets/home/mainImage.jpg">
-    <img src="@/assets/home/mainImageS3.jpg">
-    <div class="main-text">
-      <p>다양한 이야기들이 한자리에,</p>
-      <p>이곳에서 진정한 감동과 재미를 느끼고,</p>
-      <p>잊지 못할 순간들을 경험해보세요.</p>
-    </div>
-  </div>
-
-
-  <div class="movie-container">
-    <button @click="displayPreferredGenres" style="position: relative; top:200px;">선호 장르 표시</button>
-    <!-- 영화 포스터 -->
-    <div class="movie-slider">
-      <div
-          class="movie-poster"
-          v-for="movie in movies"
-          :key="movie.id"
-          @click="openMovieDetails(movie)"
-      >
-        <img :src="'https://image.tmdb.org/t/p/w300' + movie.posterPath" alt="movie poster" />
+  <div id="homepage">
+    <div class="main-image">
+      <img src="@/assets/home/mainImageS2.jpg">
+      <img src="@/assets/home/mainImage.jpg">
+      <img src="@/assets/home/mainImageS3.jpg">
+      <div class="main-text">
+        <p>다양한 이야기들이 한자리에,</p>
+        <p>이곳에서 진정한 감동과 재미를 느끼고,</p>
+        <p>잊지 못할 순간들을 경험해보세요.</p>
       </div>
     </div>
 
-    <!-- 영화 정보 모달 -->
-    <div v-if="selectedMovie" class="movie-modal" @click.self="closeMovieDetails">
-      <!-- 배경 이미지 추가 -->
-      <div
-          class="movie-modal-backdrop"
-          :style="{
-            backgroundImage: 'url(https://image.tmdb.org/t/p/original' + selectedMovie.backdropPath + ')',
-          }"
-      >
-        <!-- 모달 컨텐츠 -->
-        <div class="movie-modal-content">
-          <h2>{{ selectedMovie.title }}</h2>
-          <p>{{ selectedMovie.overview || '설명 없음' }}</p>
-          <p>평점: {{ selectedMovie.voteAverage }}</p>
-          <p>출시일: {{ selectedMovie.releaseDate }}</p>
-          <button @click="closeMovieDetails">닫기</button>
+    <div class="movie-container">
+      <button @click="displayPreferredGenres" style="position: relative; top:200px;">선호 장르 표시</button>
+      <!-- 영화 포스터 -->
+      <div class="movie-slider">
+        <div
+            class="movie-poster"
+            v-for="movie in movies"
+            :key="movie.id"
+            @click="goToMovieDetail(movie.id)"
+        >
+          <img :src="'https://image.tmdb.org/t/p/w300' + movie.posterPath" alt="movie poster" />
         </div>
       </div>
     </div>
   </div>
-</div>
 </template>
 
 <script>
@@ -58,47 +36,34 @@ export default {
   data() {
     return {
       movies: [],
-      selectedMovie: null, // 선택된 영화 정보
-       // 검색어
     };
   },
   computed: {
-    ...mapState(['user']), // Vuex 상태 가져오기
+    ...mapState(['user']),
   },
   methods: {
-    // 영화 데이터 가져오기
     async fetchMovies() {
-      axios.get('http://localhost:8081/movies')
-          .then(response => {
-            this.movies = response.data;
-            console.log(response.data); // 받아온 데이터로 movies 배열 채우기
-          })
-          .catch(error => {
-            console.error('영화 데이터를 가져오는 중 오류가 발생했습니다:', error);
-          });
+      try {
+        const response = await axios.get('http://localhost:8081/movies');
+        this.movies = response.data;
+      } catch (error) {
+        console.error('영화 데이터를 가져오는 중 오류가 발생했습니다:', error);
+      }
     },
-    // 영화 클릭 시 상세 정보 모달 표시
-    openMovieDetails(movie) {
-      this.selectedMovie = movie;
+    goToMovieDetail(movieId) {
+      this.$router.push({ name: 'MovieDetail', params: { id: movieId } });
     },
-    // 영화 정보 모달 닫기
-    closeMovieDetails() {
-      this.selectedMovie = null;
-    },
-
     displayPreferredGenres() {
       if (this.user) {
         console.log('선호 장르:', this.user.preferredGenres);
       }
-    }
+    },
   },
-  // 컴포넌트가 로드될 때 영화 데이터를 자동으로 가져옴
   mounted() {
     this.fetchMovies();
   },
 };
 </script>
-
 <style scoped>
 
 
