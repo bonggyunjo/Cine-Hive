@@ -34,17 +34,17 @@
       <label style="position: relative; left:-150px; font-size: 13px; font-weight: bolder">Preferred Genres</label>
       <div class="genre-images-container">
         <div class="genre-item" @click="toggleGenre('드라마')">
-          <img :src="require('@/assets/selectGenre/드라마.jpg')" alt="드라마" class="genre-image" width="120" height="110">
+          <img :src="require('@/assets/selectGenre/drama.jpg')" alt="드라마" class="genre-image" width="120" height="110">
           <span class="genre-label">드라마</span>
           <div v-if="selectedGenres.includes('드라마')" class="checkmark">✔</div>
         </div>
         <div class="genre-item" @click="toggleGenre('애니메이션')">
-          <img :src="require('@/assets/selectGenre/애니메이션.jpg')" alt="애니메이션" class="genre-image" width="140" height="110">
+          <img :src="require('@/assets/selectGenre/Animation.jpg')" alt="애니메이션" class="genre-image" width="140" height="110">
           <span class="genre-label">애니메이션</span>
           <div v-if="selectedGenres.includes('애니메이션')" class="checkmark">✔</div>
         </div>
         <div class="genre-item" @click="toggleGenre('영화')">
-          <img :src="require('@/assets/selectGenre/영화.png')" alt="영화" class="genre-image" width="110" height="145">
+          <img :src="require('@/assets/selectGenre/movie.png')" alt="영화" class="genre-image" width="110" height="145">
           <span class="genre-label">영화</span>
           <div v-if="selectedGenres.includes('영화')" class="checkmark">✔</div>
         </div>
