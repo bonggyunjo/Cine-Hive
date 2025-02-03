@@ -29,17 +29,10 @@ public class Drama {
     private double popularity;
     private boolean adult;
     private String originalLanguage;
-    private Dates dates;
 
     @ElementCollection
     private List<Integer> genreIds;
 
     // Dates embeddable class for nested dates information
-    @Embeddable
-    @Getter
-    @Setter
-    public static class Dates {
-        private String maximum;
-        private String minimum;
-    }
+
 }

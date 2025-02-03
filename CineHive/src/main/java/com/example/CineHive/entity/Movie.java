@@ -27,33 +27,15 @@ public class Movie {
     private String overview;
 
     private String posterPath;
-
     private String backdropPath;
-
     private String releaseDate;
-
     @ElementCollection
     private List<Integer> genreIds;
-
     private double voteAverage;
-
     private int voteCount;
-
     private double popularity;
-
     private boolean adult;
 
-    @Embedded
-    private Dates dates;
-
-    // Dates embeddable class for nested dates information
-    @Embeddable
-    @Getter
-    @Setter
-    public static class Dates {
-        private String maximum;
-        private String minimum;
-    }
 
     //출연진 정보
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -59,7 +59,7 @@ public class MovieController {
         return ResponseEntity.ok().body(response);  // 검색 결과를 클라이언트로 반환
     }
 
-    @GetMapping("/movies/{id}") //
+    @GetMapping("/movies/{id}")
     @ResponseBody
     public ResponseEntity<Movie> getMovieById(@PathVariable Long id) {
         Optional<Movie> movieOptional = movieRepository.findById(id);

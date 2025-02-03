@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriUtils;
-import reactor.core.publisher.Mono;
+
 
 import org.springframework.stereotype.Service;
 
@@ -36,7 +36,7 @@ public class MovieService {
     private MovieRepository movieRepository;
 
     @Autowired
-    private TopMovieRepository pmovieRepository;
+    private TopMovieRepository topmovieRepository;
     private final ObjectMapper objectMapper;
 
 
@@ -68,7 +68,6 @@ public class MovieService {
             try {
                 JsonNode rootNode = objectMapper.readTree(response);
                 JsonNode moviesNode = rootNode.path("results");
-                JsonNode datesNode = rootNode.path("dates");
 
                 for (JsonNode movieNode : moviesNode) {
                     Long movieId = movieNode.get("id").asLong();
@@ -81,20 +80,12 @@ public class MovieService {
                         String overviewText = movieNode.get("overview").asText();
                         movie.setOverview(overviewText);
                         movie.setPosterPath(movieNode.get("poster_path").asText());
-                        movie.setReleaseDate(movieNode.get("release_date").asText());
                         movie.setBackdropPath(movieNode.get("backdrop_path").asText());
                         movie.setGenreIds(objectMapper.convertValue(movieNode.get("genre_ids"), List.class));  // List로 변환
                         movie.setVoteAverage(movieNode.get("vote_average").asDouble());
                         movie.setVoteCount(movieNode.get("vote_count").asInt());
                         movie.setPopularity(movieNode.get("popularity").asDouble());
                         movie.setAdult(movieNode.get("adult").asBoolean());
-
-                        // Dates 필드 처리
-                        Movie.Dates dates = new Movie.Dates();
-                        dates.setMaximum(datesNode.path("maximum").asText());
-                        dates.setMinimum(datesNode.path("minimum").asText());
-                        movie.setDates(dates);
-
 
                         // 비디오 정보 가져오기 (첫 번째 비디오만)
                         Video video = movieVideoService.getFirstVideoForMovie(movieId);
@@ -133,20 +124,19 @@ public class MovieService {
             try {
                 JsonNode rootNode = objectMapper.readTree(response);
                 JsonNode moviesNode = rootNode.path("results");
-                JsonNode datesNode = rootNode.path("dates");
+
 
                 for (JsonNode movieNode : moviesNode) {
                     Long movieId = movieNode.get("id").asLong();
 
                     // 영화가 이미 존재하는지 확인
-                    if (!pmovieRepository.existsById(movieId)) {
+                    if (!topmovieRepository.existsById(movieId)) {
                         TopMovie movie = new TopMovie();
                         movie.setId(movieId);
                         movie.setTitle(movieNode.get("title").asText());
                         String overviewText = movieNode.get("overview").asText();
                         movie.setOverview(overviewText);
                         movie.setPosterPath(movieNode.get("poster_path").asText());
-                        movie.setReleaseDate(movieNode.get("release_date").asText());
                         movie.setBackdropPath(movieNode.get("backdrop_path").asText());
                         movie.setGenreIds(objectMapper.convertValue(movieNode.get("genre_ids"), List.class));  // List로 변환
                         movie.setVoteAverage(movieNode.get("vote_average").asDouble());
@@ -154,14 +144,10 @@ public class MovieService {
                         movie.setPopularity(movieNode.get("popularity").asDouble());
                         movie.setAdult(movieNode.get("adult").asBoolean());
 
-                        // Dates 필드 처리
-                        TopMovie.Dates dates = new TopMovie.Dates();
-                        dates.setMaximum(datesNode.path("maximum").asText());
-                        dates.setMinimum(datesNode.path("minimum").asText());
-                        movie.setDates(dates);
+
 
                         // 데이터베이스에 저장
-                        pmovieRepository.save(movie);
+                        topmovieRepository.save(movie);
                         System.out.println("Saved movie: " + movie.getTitle());
                     }
                 }
@@ -198,7 +184,6 @@ public class MovieService {
                     movie.setTitle(movieNode.get("title").asText());
                     movie.setOverview(movieNode.get("overview").asText());
                     movie.setPosterPath(movieNode.get("poster_path").asText());
-                    movie.setReleaseDate(movieNode.get("release_date").asText());
                     movie.setBackdropPath(movieNode.get("backdrop_path").asText());
                     movie.setGenreIds(objectMapper.convertValue(movieNode.get("genre_ids"), List.class));  // List로 변환
                     movie.setVoteAverage(movieNode.get("vote_average").asDouble());
@@ -268,7 +253,6 @@ public class MovieService {
                         drama.setPosterPath(dramaNode.get("poster_path").asText());
                     }
 
-                    drama.setFirstAirDate(dramaNode.get("first_air_date").asText());
                     drama.setBackdropPath(dramaNode.get("backdrop_path").asText());
                     drama.setGenreIds(objectMapper.convertValue(dramaNode.get("genre_ids"), List.class));  // List로 변환
                     drama.setVoteAverage(dramaNode.get("vote_average").asDouble());
