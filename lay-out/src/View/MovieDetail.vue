@@ -17,14 +17,14 @@
           <div class="info-item">
             <span class="info-label">출연진</span>
             <div class="actors-list">
-              <span v-for="actor in movie.actors" :key="actor.id" class="actor-item">
+              <span v-for="actor in movie.actors.slice(0, 5)" :key="actor.id" class="actor-item">
                 {{ actor.name }}
               </span>
             </div>
           </div>
           <div class="info-item">
             <span class="info-label">감독</span>
-            <!-- 감독 정보 추가 -->
+            <p class="info-text">{{ movie.director ? movie.director.name : '정보 없음' }}</p>
           </div>
           <div class="info-item">
             <span class="info-label">출시일</span>
@@ -47,6 +47,7 @@
             class="trailer-iframe"
         ></iframe>
       </div>
+
     </div>
     <div class="action-buttons">
       <button class="action-button" @click="viewReviews">감상평 보기</button>
@@ -57,10 +58,10 @@
     <div class="bottom-section">
       <h3 class="section-title">바로가기</h3>
       <div class="streaming-services">
-        <img class="streaming-logo" src="../assets/movieDetailLogo/wiki.png" alt="Wiki" />
-        <img class="streaming-logo" src="../assets/movieDetailLogo/bing.png" alt="Bing" />
-        <img class="streaming-logo" src="../assets/movieDetailLogo/netflix.png" alt="Netflix" />
-        <img class="streaming-logo" src="../assets/movieDetailLogo/tiving.png" alt="Tiving" />
+        <img class="streaming-logo" src="../assets/movieDetailLogo/bing.png" alt="Wave" @click="goToLink('https://www.watcha.com')" />
+        <img class="streaming-logo" src="../assets/movieDetailLogo/wiki.png" alt="Watcha" @click="goToLink('https://www.wavve.com')" />
+        <img class="streaming-logo" src="../assets/movieDetailLogo/netflix.png" alt="Netflix" @click="goToLink('https://www.netflix.com')" />
+        <img class="streaming-logo" src="../assets/movieDetailLogo/tiving.png" alt="Tiving" @click="goToLink('https://www.tving.com')" />
         <!-- 추가 스트리밍 서비스 이미지 -->
       </div>
     </div>
@@ -94,6 +95,9 @@ export default {
     },
     goBack() {
       window.location.href = '/'; // 페이지를 새로 고침
+    },
+    goToLink(url) {
+      window.open(url, '_blank'); // 새 탭에서 링크 열기
     }
   }
 }
@@ -208,9 +212,11 @@ export default {
 
 .actors-list {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: row; /* 가로로 나열 */
+  flex-wrap: wrap; /* 여러 줄로 나올 수 있도록 */
   gap: 10px; /* 출연진 간격 */
 }
+
 
 .actor-item {
   background-color: rgba(255, 255, 255, 0.1);
@@ -223,7 +229,6 @@ export default {
 .actor-item:hover {
   background-color: rgba(255, 255, 255, 0.3);
 }
-
 .trailer-section {
   display: flex;
   flex-direction: column;
