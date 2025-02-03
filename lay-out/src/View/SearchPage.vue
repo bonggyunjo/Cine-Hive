@@ -72,11 +72,7 @@ export default {
     },
     // 영화 포스터 클릭 시 상세 정보 모달 열기
     openMovieDetails(movie) {
-      this.selectedMovie = movie;
-    },
-    // 모달 닫기
-    closeMovieDetails() {
-      this.selectedMovie = null;
+      this.$router.push({ name: 'MovieDetail', params: { id: movie.id } });
     },
     // 검색 버튼 클릭 시 새로운 검색어로 URL 갱신
     searchMovies() {

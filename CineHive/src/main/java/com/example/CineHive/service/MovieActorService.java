@@ -31,7 +31,7 @@ public class MovieActorService {
     @Transactional
     public void saveMovieCredits(Long movieId) {
         String response = webClient.get()
-                .uri("/movie/" + movieId + "/credits?api_key=" + apiKey)
+                .uri("/movie/" + movieId + "/credits?api_key=" + apiKey +"&language=ko")
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();

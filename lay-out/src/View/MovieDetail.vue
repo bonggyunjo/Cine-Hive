@@ -13,15 +13,21 @@
           </div>
           <div class="info-item">
             <h4>출연진</h4>
+            <ul>
+              <li v-for="actor in movie.actors" :key="actor.id">
+                {{ actor.name }} (역: {{ actor.role }})
+              </li>
+            </ul>
           </div>
           <div class="info-item">
             <h4>감독</h4>
+            <!-- 감독 정보 추가 -->
           </div>
           <div class="info-item">
             <h4>출시일</h4>
             <p>{{ movie.releaseDate }}</p>
           </div>
-          <div class="info-item" >
+          <div class="info-item">
             <h5>줄거리</h5>
             <p>{{ movie.overview || '설명 없음' }}</p>
           </div>
@@ -44,6 +50,7 @@
     </div>
   </div>
 </template>
+
 
 <script>
 import axios from 'axios';

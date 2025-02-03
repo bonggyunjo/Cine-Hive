@@ -196,6 +196,7 @@ public class MovieService {
                     if (!movieRepository.existsById(movieId)) {
                         movieRepository.save(movie);
                         System.out.println("Saved new movie: " + movie.getTitle());
+                        movieActorService.saveMovieCredits(movieId);
                     } else {
                         System.out.println("Movie already exists: " + movie.getTitle());
                     }
