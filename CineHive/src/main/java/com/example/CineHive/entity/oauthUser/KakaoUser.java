@@ -1,5 +1,6 @@
-package com.example.CineHive.entity;
+package com.example.CineHive.entity.oauthUser;
 
+import com.example.CineHive.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
