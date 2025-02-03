@@ -1,12 +1,12 @@
 package com.example.CineHive.service;
 
-import com.example.CineHive.entity.Drama;
-import com.example.CineHive.entity.Movie;
-import com.example.CineHive.entity.TopMovie;
+import com.example.CineHive.entity.Video.Drama;
+import com.example.CineHive.entity.Video.Movie;
+import com.example.CineHive.entity.Video.TopMovie;
 import com.example.CineHive.entity.credit.Video;
-import com.example.CineHive.repository.MovieAndDrama.DramaRepository;
-import com.example.CineHive.repository.MovieAndDrama.MovieRepository;
-import com.example.CineHive.repository.MovieAndDrama.TopMovieRepository;
+import com.example.CineHive.repository.Videos.DramaRepository;
+import com.example.CineHive.repository.Videos.MovieRepository;
+import com.example.CineHive.repository.Videos.TopMovieRepository;
 import com.example.CineHive.service.movieCreditService.MovieActorService;
 import com.example.CineHive.service.movieCreditService.MovieDirectorService;
 import com.example.CineHive.service.movieCreditService.MovieVideoService;
@@ -179,11 +179,17 @@ public class MovieService {
 
                 for (JsonNode movieNode : moviesNode) {
                     Long movieId = movieNode.get("id").asLong();
+                    String posterPath = movieNode.get("poster_path").asText();
+
+                    if(posterPath==null || posterPath.isEmpty()){
+                        continue;
+                    }
                     Movie movie = new Movie();
                     movie.setId(movieId);
                     movie.setTitle(movieNode.get("title").asText());
                     movie.setOverview(movieNode.get("overview").asText());
-                    movie.setPosterPath(movieNode.get("poster_path").asText());
+                    movie.setPosterPath(posterPath);
+
                     movie.setBackdropPath(movieNode.get("backdrop_path").asText());
                     movie.setGenreIds(objectMapper.convertValue(movieNode.get("genre_ids"), List.class));  // List로 변환
                     movie.setVoteAverage(movieNode.get("vote_average").asDouble());
@@ -244,14 +250,17 @@ public class MovieService {
 
                 for (JsonNode dramaNode : dramasNode) {
                     Long dramaId = dramaNode.get("id").asLong();
+                    String posterPath = dramaNode.get("poster_path").asText();
                     Drama drama = new Drama();
                     drama.setId(dramaId);
                     drama.setName(dramaNode.get("name").asText());
                     drama.setOverview(dramaNode.get("overview").asText());
 
-                    if(dramaNode.has("poster_path")&&!dramaNode.get("poster_path").isNull()){
-                        drama.setPosterPath(dramaNode.get("poster_path").asText());
+                    // 포스터 이미지가 없으면 다음 데이터로 넘어감
+                    if(posterPath==null || posterPath.isEmpty()){
+                        continue;
                     }
+                    drama.setPosterPath(posterPath);
 
                     drama.setBackdropPath(dramaNode.get("backdrop_path").asText());
                     drama.setGenreIds(objectMapper.convertValue(dramaNode.get("genre_ids"), List.class));  // List로 변환
