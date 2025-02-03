@@ -10,16 +10,16 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PMovieDto {
+public class TopMovieDto {
     private DatesDTO dates;
     private int page;
-    private List<PMovieDTO> results;
+    private List<TopMovieDTO> results;
 
     public static class DatesDTO {
         private String maximum;
         private String minimum;
     }
-    public static class PMovieDTO {
+    public static class TopMovieDTO {
         private long id;
         private String title;
         private String overview;

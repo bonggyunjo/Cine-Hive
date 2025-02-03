@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -14,8 +13,8 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "Pmovie")
-public class PMovie {
+@Table(name = "Topmovie")
+public class TopMovie {
     @Id
     private Long id;
 

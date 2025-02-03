@@ -1,4 +1,4 @@
-package com.example.CineHive.repository;
+package com.example.CineHive.repository.MovieAndDrama;
 
 import com.example.CineHive.entity.Movie;
 import org.springframework.data.jpa.repository.JpaRepository;
