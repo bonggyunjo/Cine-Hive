@@ -1,7 +1,7 @@
 package com.example.CineHive.service;
 
-import com.example.CineHive.entity.Video.Movie;
-import com.example.CineHive.entity.Video.TopMovie;
+import com.example.CineHive.entity.VideoType.Movie;
+import com.example.CineHive.entity.VideoType.TopMovie;
 import com.example.CineHive.entity.credit.Video;
 import com.example.CineHive.repository.Videos.MovieRepository;
 import com.example.CineHive.repository.Videos.TopMovieRepository;
@@ -92,7 +92,6 @@ public class MovieService {
                         // 데이터베이스에 저장
                         movieRepository.save(movie);
                         System.out.println("Saved movie: " + movie.getTitle());
-
                         // 배우 정보 저장
                         movieActorService.saveMovieCredits(movieId);
                         //감독 정보 저장
@@ -128,22 +127,24 @@ public class MovieService {
 
                     // 영화가 이미 존재하는지 확인
                     if (!topmovieRepository.existsById(movieId)) {
-                        TopMovie movie = new TopMovie();
-                        movie.setId(movieId);
-                        movie.setTitle(movieNode.get("title").asText());
+                        TopMovie topmovie = new TopMovie();
+                        topmovie.setId(movieId);
+                        topmovie.setTitle(movieNode.get("title").asText());
                         String overviewText = movieNode.get("overview").asText();
-                        movie.setOverview(overviewText);
-                        movie.setPosterPath(movieNode.get("poster_path").asText());
-                        movie.setBackdropPath(movieNode.get("backdrop_path").asText());
-                        movie.setGenreIds(objectMapper.convertValue(movieNode.get("genre_ids"), List.class));  // List로 변환
-                        movie.setVoteAverage(movieNode.get("vote_average").asDouble());
-                        movie.setVoteCount(movieNode.get("vote_count").asInt());
-                        movie.setPopularity(movieNode.get("popularity").asDouble());
-                        movie.setAdult(movieNode.get("adult").asBoolean());
+                        topmovie.setOverview(overviewText);
+                        topmovie.setPosterPath(movieNode.get("poster_path").asText());
+                        topmovie.setBackdropPath(movieNode.get("backdrop_path").asText());
+                        topmovie.setGenreIds(objectMapper.convertValue(movieNode.get("genre_ids"), List.class));  // List로 변환
+                        topmovie.setVoteAverage(movieNode.get("vote_average").asDouble());
+                        topmovie.setVoteCount(movieNode.get("vote_count").asInt());
+                        topmovie.setPopularity(movieNode.get("popularity").asDouble());
+                        topmovie.setAdult(movieNode.get("adult").asBoolean());
+
 
                         // 데이터베이스에 저장
-                        topmovieRepository.save(movie);
-                        System.out.println("Saved movie: " + movie.getTitle());
+                        topmovieRepository.save(topmovie);
+                        System.out.println("Saved movie: " + topmovie.getTitle());
+
                     }
                 }
             } catch (Exception e) {

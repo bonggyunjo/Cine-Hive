@@ -26,7 +26,28 @@
       </div>
 
       <h2 class="top-movies">역대 평점 영화</h2>
+      <div class="top-slider">
+        <div
+            class="movie-poster"
+            v-for="movie in topmovies"
+            :key="movie.id"
+            @click="goToMovieDetail(movie.id)"
+        >
+          <img :src="'https://image.tmdb.org/t/p/w300' + movie.posterPath" alt="movie poster" />
+        </div>
+      </div>
 
+      <h2>선호 장르</h2>
+      <div class="prefer-slide">
+        <div
+            class="movie-poster"
+            v-for="movie in prefer"
+            :key="movie.id"
+            @click="goToMovieDetail(movie.id)"
+        >
+          <img :src="'https://image.tmdb.org/t/p/w300' + movie.posterPath" alt="movie poster" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -39,6 +60,8 @@ export default {
   data() {
     return {
       movies: [],
+      topmovies: [],
+      prefer: [],
     };
   },
   computed: {
@@ -53,22 +76,35 @@ export default {
         console.error('영화 데이터를 가져오는 중 오류가 발생했습니다:', error);
       }
     },
+
+    async fetchTopmovies(){
+      try {
+        const response1 = await axios.get('http://localhost:8081/get_topmovies');
+        this.topmovies = response1.data;
+      } catch (error) {
+        console.error('영화 데이터를 가져오는 중 오류가 발생했습니다:', error);
+      }
+    },
+
     goToMovieDetail(movieId) {
       this.$router.push({ name: 'MovieDetail', params: { id: movieId } });
-    },
-    displayPreferredGenres() {
-      if (this.user) {
-        console.log('선호 장르:', this.user.preferredGenres);
-      }
     },
   },
   mounted() {
     this.fetchMovies();
+    this.fetchTopmovies();
   },
 };
 </script>
 <style scoped>
 
+.popular-movies,
+.top-movies{
+  position: relative;
+  bottom: 10px;
+  left: 0.5%;
+  text-align: left;
+}
 
 #homepage{
   height: 900px;
@@ -161,13 +197,13 @@ h1 {
   align-items: center;
   flex-direction: column;
 }
-
+.top-slider,
 .movie-slider {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 100px;
 }
 
 .movie-poster img {
