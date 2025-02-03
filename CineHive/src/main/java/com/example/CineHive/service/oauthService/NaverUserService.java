@@ -1,7 +1,7 @@
 
-package com.example.CineHive.service;
+package com.example.CineHive.service.oauthService;
 
-import com.example.CineHive.dto.NaverUserInfo;
+import com.example.CineHive.dto.oauthInfo.NaverUserInfo;
 import com.example.CineHive.entity.NaverUser;
 import com.example.CineHive.repository.NaverUserRepository;
 import com.example.CineHive.repository.UserRepository;
@@ -9,11 +9,10 @@ import lombok.Getter;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import com.example.CineHive.entity.User; // 사용자 정의 User 클래스
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.time.LocalDateTime;
 import java.util.Scanner;
 
 

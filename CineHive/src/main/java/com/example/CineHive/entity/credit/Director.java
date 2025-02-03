@@ -1,4 +1,4 @@
-package com.example.CineHive.entity;
+package com.example.CineHive.entity.credit;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

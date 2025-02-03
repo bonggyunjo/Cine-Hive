@@ -1,5 +1,6 @@
-package com.example.CineHive.entity;
+package com.example.CineHive.entity.credit;
 
+import com.example.CineHive.entity.Movie;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

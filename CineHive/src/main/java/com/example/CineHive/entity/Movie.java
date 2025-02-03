@@ -1,11 +1,13 @@
 package com.example.CineHive.entity;
 
+import com.example.CineHive.entity.credit.Actor;
+import com.example.CineHive.entity.credit.Director;
+import com.example.CineHive.entity.credit.Video;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;

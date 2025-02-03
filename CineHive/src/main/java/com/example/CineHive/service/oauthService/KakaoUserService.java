@@ -1,9 +1,7 @@
-package com.example.CineHive.service;
+package com.example.CineHive.service.oauthService;
 
-import com.example.CineHive.dto.KakaoUserInfo;
-import com.example.CineHive.dto.UserDto;
+import com.example.CineHive.dto.oauthInfo.KakaoUserInfo;
 import com.example.CineHive.entity.KakaoUser;
-import com.example.CineHive.entity.User;
 import com.example.CineHive.repository.KakaoUserRepository;
 import com.example.CineHive.repository.UserRepository;
 import lombok.Getter;
@@ -16,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
-import java.time.LocalDateTime;
 
 @Service
 public class KakaoUserService {

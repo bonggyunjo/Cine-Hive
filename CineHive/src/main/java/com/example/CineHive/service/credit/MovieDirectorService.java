@@ -1,6 +1,6 @@
-package com.example.CineHive.service;
+package com.example.CineHive.service.credit;
 
-import com.example.CineHive.entity.Director;
+import com.example.CineHive.entity.credit.Director;
 import com.example.CineHive.entity.Movie;
 import com.example.CineHive.repository.DirectorRepository;
 import com.example.CineHive.repository.MovieRepository;

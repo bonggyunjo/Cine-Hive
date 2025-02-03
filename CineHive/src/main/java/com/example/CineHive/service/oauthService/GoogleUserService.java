@@ -1,8 +1,7 @@
-package com.example.CineHive.service;
+package com.example.CineHive.service.oauthService;
 
-import com.example.CineHive.dto.GoogleUserInfo;
+import com.example.CineHive.dto.oauthInfo.GoogleUserInfo;
 import com.example.CineHive.entity.GoogleUser;
-import com.example.CineHive.entity.User;
 import com.example.CineHive.repository.GoogleUserRepository;
 import com.example.CineHive.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -16,7 +15,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import java.io.IOException;
-import java.time.LocalDateTime;
+
 @Service
 public class GoogleUserService {
 

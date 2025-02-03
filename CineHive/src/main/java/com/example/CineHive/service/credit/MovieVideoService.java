@@ -1,13 +1,10 @@
-package com.example.CineHive.service;
+package com.example.CineHive.service.credit;
 
 import com.example.CineHive.dto.MovieVideoDto;
-import com.example.CineHive.entity.Video;
+import com.example.CineHive.entity.credit.Video;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class MovieVideoService {
