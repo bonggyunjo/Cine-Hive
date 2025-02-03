@@ -1,4 +1,4 @@
-package com.example.CineHive.dto;
+package com.example.CineHive.dto.VideoDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,15 +6,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TopMovieDto {
-    private int page;
-    private List<TopMovieDTO> results;
+public class MovieDto {
+    private List<MovieDTO> results;
 
-    public static class TopMovieDTO {
+    public static class MovieDTO {
         private long id;
         private String title;
         private String overview;
@@ -26,5 +26,5 @@ public class TopMovieDto {
         private int voteCount;
         private double popularity;
         private boolean adult;
-        }
+    }
 }

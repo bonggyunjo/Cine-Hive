@@ -1,6 +1,6 @@
-package com.example.CineHive.repository.MovieAndDrama;
+package com.example.CineHive.repository.Videos;
 
-import com.example.CineHive.entity.Movie;
+import com.example.CineHive.entity.Video.Movie;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,4 +1,4 @@
-package com.example.CineHive.entity;
+package com.example.CineHive.entity.Video;
 
 import com.example.CineHive.entity.credit.Actor;
 import com.example.CineHive.entity.credit.Director;
