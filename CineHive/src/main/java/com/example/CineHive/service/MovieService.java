@@ -38,6 +38,8 @@ public class MovieService {
     private MovieActorService movieActorService;
     @Autowired
     private MovieVideoService movieVideoService;
+    @Autowired
+    private MovieDirectorService movieDirectorService;
 
 
     public MovieService(WebClient.Builder webClientBuilder, ObjectMapper objectMapper) {
@@ -104,8 +106,10 @@ public class MovieService {
                         movieRepository.save(movie);
                         System.out.println("Saved movie: " + movie.getTitle());
 
-                        // 크레딧 정보 저장 호출
+                        // 배우 정보 저장
                         movieActorService.saveMovieCredits(movieId);
+                        //감독 정보 저장
+                        movieDirectorService.saveMovieDirectors(movieId);
 
                     }
                 }
@@ -215,7 +219,11 @@ public class MovieService {
                     if (!movieRepository.existsById(movieId)) {
                         movieRepository.save(movie);
                         System.out.println("Saved new movie: " + movie.getTitle());
+                        //배우 정보
                         movieActorService.saveMovieCredits(movieId);
+                        //감독 정보
+                        movieDirectorService.saveMovieDirectors(movieId);
+
                     } else {
                         System.out.println("Movie already exists: " + movie.getTitle());
                     }

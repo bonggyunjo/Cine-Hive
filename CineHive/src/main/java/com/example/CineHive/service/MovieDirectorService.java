@@ -2,6 +2,7 @@ package com.example.CineHive.service;
 
 import com.example.CineHive.entity.Director;
 import com.example.CineHive.entity.Movie;
+import com.example.CineHive.repository.DirectorRepository;
 import com.example.CineHive.repository.MovieRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
-public class MovieDriectorService {
+public class MovieDirectorService {
     @Value("${tmdb.api.key}")
     private String apiKey;
 
@@ -24,7 +25,10 @@ public class MovieDriectorService {
     @Autowired
     private ObjectMapper objectMapper;
 
-    public MovieDriectorService(WebClient.Builder webClientBuilder) {
+    @Autowired
+    private DirectorRepository directorRepository;
+
+    public MovieDirectorService(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder.baseUrl("https://api.themoviedb.org/3").build();
     }
 
@@ -66,4 +70,5 @@ public class MovieDriectorService {
             System.out.println("응답이 없습니다.");
         }
     }
+
 }
