@@ -2,16 +2,31 @@
   <div id="searchpage">
     <h1>검색 결과</h1>
 
-    <div v-if="searchResults.length">
-      <div class="movie-slider">
+    <div v-if="movies.length || dramas.length">
+      <div class="movie-slider" v-if="movies.length">
+        <h2>영화</h2>
         <div
             class="movie-poster"
-            v-for="movie in searchResults"
+            v-for="movie in movies"
             :key="movie.id"
             @click="openMovieDetails(movie)"
         >
           <img :src="getImageUrl(movie.posterPath)" alt="movie poster" />
+          <p>{{ movie.title }}</p>
         </div>
+      </div>
+
+
+      <div class="drama-slider" v-if="dramas.length">
+        <h2>드라마</h2>
+        <div
+            class="drama-poster"
+            v-for="drama in dramas"
+            :key="drama.id"
+            @click="openDramaDetails(drama)"
+        >
+          <img :src="getImageUrl(drama.posterPath)" alt="drama poster" />
+          <p>{{ drama.name }}</p>
       </div>
     </div>
 
@@ -36,6 +51,25 @@
         </div>
       </div>
     </div>
+
+
+    <div v-if="selectedDrama" class="drama-modal" @click.self="closeDramaDetails">
+      <div
+          class="drama-modal-backdrop"
+          :style="{
+          backgroundImage: 'url(https://image.tmdb.org/t/p/original' + selectedDrama.backdropPath + ')',
+        }"
+      >
+        <div class="drama-modal-content">
+          <h2>{{ selectedDrama.name }}</h2>
+          <p>{{ selectedDrama.overview || '설명 없음' }}</p>
+          <p>평점: {{ selectedDrama.voteAverage }}</p>
+          <p>출시일: {{ selectedDrama.releaseDate }}</p>
+          <button @click="closeDramaDetails">닫기</button>
+          </div>
+      </div>
+      </div>
+  </div>
   </div>
 </template>
 
@@ -44,8 +78,10 @@ export default {
   data() {
     return {
       searchQuery: this.$route.query.q,  // 검색어
-      searchResults: [],  // 검색된 영화 결과
+      movies: [],  // 검색된 영화 결과
+      dramas: [],  // 검색된 드라마 결과
       selectedMovie: null,  // 선택된 영화
+      selectedDrama: null,  // 선택된 드라마
     };
   },
   mounted() {
@@ -61,31 +97,36 @@ export default {
   methods: {
     // 영화 검색 결과 가져오기
     fetchSearchResults() {
-      const results = this.$route.query.results;
-      if (results) {
-        this.searchResults = JSON.parse(results);  // JSON 문자열을 객체로 변환
+
+      const moviesData = this.$route.query.movies;
+      const dramasData = this.$route.query.dramas;
+
+      if (moviesData) {
+        this.movies = JSON.parse(moviesData);  // JSON 문자열을 객체로 변환
+      }
+      if(dramasData){
+        this.dramas = JSON.parse(dramasData);
       }
     },
     // 영화의 포스터 이미지를 올바른 URL로 변환
     getImageUrl(path) {
-      return path ? `https://image.tmdb.org/t/p/w500${path}` : '';
+      return path ? `https://image.tmdb.org/t/p/w500${path}` : '/default-poster.jpg';
     },
     // 영화 포스터 클릭 시 상세 정보 모달 열기
     openMovieDetails(movie) {
       this.$router.push({ name: 'MovieDetail', params: { id: movie.id } });
     },
+    // 드라마 포스터 클릭 시 상세 정보 모달 열기
+    openDramaDetails(drama) {
+      this.$router.push({ name: 'DramaDetail', params: { id: drama.id } });
+    },
     // 검색 버튼 클릭 시 새로운 검색어로 URL 갱신
-    searchMovies() {
-      if (!this.searchQuery.trim()) {
-        alert("검색어를 입력하세요!");
-        return;
-      }
-      // 검색 결과를 새로운 URL로 갱신
-      this.$router.replace({
-        path: '/search',
-        query: { q: this.searchQuery, results: JSON.stringify(this.searchResults) }
-      });
-    }
+    closeMovieDetails() {
+      this.selectedMovie = null;
+    },
+    closeDramaDetails() {
+      this.selectedDrama = null;
+    },
   }
 };
 </script>
@@ -98,6 +139,7 @@ export default {
   color: white;
 }
 
+.drama-slider,
 .movie-slider {
   display: flex;
   flex-wrap: wrap;
@@ -106,10 +148,12 @@ export default {
   margin-bottom: 20px;
 }
 
+.drama-poster img:hover,
 .movie-poster img:hover {
   transform: scale(1.1);
 }
 
+.drama-poster img,
 .movie-poster img {
   width: 200px;
   height: 300px;
@@ -117,7 +161,8 @@ export default {
   transition: transform 0.3s;
 }
 
-/* 영화 정보 모달 */
+/* 정보 모달 */
+.drama-modal,
 .movie-modal {
   position: fixed;
   top: 0;
@@ -130,7 +175,7 @@ export default {
   align-items: center;
   z-index: 1000;
 }
-
+.drama-modal-backdrop,
 .movie-modal-backdrop {
   position: fixed;
   top: 0;
@@ -146,6 +191,7 @@ export default {
   z-index: 1000;
 }
 
+.drama-modal-content,
 .movie-modal-content {
   background-color: rgba(0, 0, 0, 0.8);
   padding: 20px;
@@ -155,6 +201,7 @@ export default {
   color: white;
 }
 
+.drama-modal-content button,
 .movie-modal-content button {
   margin-top: 20px;
   padding: 10px;
@@ -163,16 +210,6 @@ export default {
   color: white;
   cursor: pointer;
   border-radius: 5px;
-}
-.search-bar {
-  width: 100%;
-  padding: 10px;
-  display: flex;
-  justify-content: center;
-  background-color: black;
-  position: sticky;
-  top: 0;
-  z-index: 100;
 }
 
 .search-bar input {

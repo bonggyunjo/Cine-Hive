@@ -73,10 +73,17 @@ export default {
           params: { query: this.searchQuery }
         });
 
+        const movies = response.data.movies;
+        const dramas = response.data.dramas;
+
         // 받은 데이터를 SearchPage로 전달
         this.$router.push({
           path: '/search',
-          query: { q: this.searchQuery, results: JSON.stringify(response.data) }
+          query: {
+            q: this.searchQuery,
+            movies: JSON.stringify(movies),
+            dramas: JSON.stringify(dramas)
+          },
         });
       } catch (error) {
         console.error("검색 중 오류가 발생했습니다:", error);
