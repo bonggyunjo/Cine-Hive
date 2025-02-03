@@ -66,4 +66,6 @@ public class Movie {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "movie_id")
     private List<Video> videos;
+
+
 }

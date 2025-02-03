@@ -95,9 +95,11 @@ public class MovieService {
                         movie.setDates(dates);
 
 
-                        List<Video> videos = movieVideoService.getVideosForMovie(movieId);
-                        movie.setVideos(videos); // 비디오 정보를 영화 객체에 설정
-
+                        // 비디오 정보 가져오기 (첫 번째 비디오만)
+                        Video video = movieVideoService.getFirstVideoForMovie(movieId);
+                        if (video != null) {
+                            movie.setVideos(List.of(video)); // 비디오 정보를 리스트로 설정
+                        }
                         // 데이터베이스에 저장
                         movieRepository.save(movie);
                         System.out.println("Saved movie: " + movie.getTitle());
@@ -201,6 +203,14 @@ public class MovieService {
                     movie.setPopularity(movieNode.get("popularity").asDouble());
                     movie.setAdult(movieNode.get("adult").asBoolean());
 
+                    // 비디오 정보 가져오기 (첫 번째 비디오만)
+                    Video video = movieVideoService.getFirstVideoForMovie(movieId);
+                    if (video != null) {
+                        movie.setVideos(List.of(video)); // 비디오 정보를 리스트로 설정
+                    } else {
+                        movie.setVideos(new ArrayList<>()); // 비디오가 없으면 빈 리스트 설정
+                    }
+
                     // 영화가 데이터베이스에 존재하지 않으면 저장
                     if (!movieRepository.existsById(movieId)) {
                         movieRepository.save(movie);
@@ -221,6 +231,7 @@ public class MovieService {
         }
         return movies;
     }
+
 
 
 }

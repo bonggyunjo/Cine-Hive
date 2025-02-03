@@ -22,22 +22,20 @@ public class MovieVideoService {
         this.restTemplate = restTemplate;
     }
 
-    public List<Video> getVideosForMovie(Long movieId) {
-        String url = BASE_URL + movieId + "/videos?api_key=" + apiKey; // 수정된 부분
+    public Video getFirstVideoForMovie(Long movieId) {
+        String url = BASE_URL + movieId + "/videos?api_key=" + apiKey;
         MovieVideoDto videoResponse = restTemplate.getForObject(url, MovieVideoDto.class);
 
-        if (videoResponse != null && videoResponse.getResults() != null) {
-            return videoResponse.getResults().stream()
-                    .map(videoResult -> {
-                        Video video = new Video();
-                        video.setVideoKey(videoResult.getKey());
-                        video.setName(videoResult.getName());
-                        video.setSite(videoResult.getSite());
-                        video.setType(videoResult.getType());
-                        return video;
-                    })
-                    .collect(Collectors.toList());
+        if (videoResponse != null && videoResponse.getResults() != null && !videoResponse.getResults().isEmpty()) {
+            // 첫 번째 비디오만 반환
+            Video video = new Video();
+            video.setVideoKey(videoResponse.getResults().get(0).getKey());
+            video.setName(videoResponse.getResults().get(0).getName());
+            video.setSite(videoResponse.getResults().get(0).getSite());
+            video.setType(videoResponse.getResults().get(0).getType());
+            return video;
         }
-        return List.of(); // 비디오가 없으면 빈 리스트 반환
+        return null; // 비디오가 없으면 null 반환
     }
+
 }

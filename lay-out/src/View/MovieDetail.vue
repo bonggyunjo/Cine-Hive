@@ -1,5 +1,6 @@
 <template>
   <div class="movie-detail">
+
     <div class="movie-backdrop">
       <div class="movie-poster">
         <img :src="'https://image.tmdb.org/t/p/original' + movie.posterPath" alt="포스터"/>
@@ -23,8 +24,6 @@
               </span>
             </div>
           </div>
-
-
           <div class="info-item">
             <span>감독</span>
             <!-- 감독 정보 추가 -->
@@ -39,6 +38,17 @@
           </div>
         </div>
       </div>
+      <div class="trailer-section" v-if="movie.videos && movie.videos.length > 0">
+        <iframe
+            width="560"
+            height="315"
+            :src="'https://www.youtube.com/embed/' + movie.videos[0].videoKey"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+        ></iframe>
+      </div>
+
     </div>
     <div class="action-buttons">
       <button @click="viewReviews">감상평 보기</button>
@@ -220,4 +230,19 @@ export default {
   margin-bottom: 10px;
   font-size: 14px;
 }
+
+.trailer-section {
+  display: flex;
+  flex-direction: column; /* 세로 방향으로 정렬 */
+  align-items: flex-end; /* 오른쪽 정렬 */
+  margin-top: 20px; /* 위쪽 여백 추가 */
+  position: relative;
+  left:10%;
+  top:-40px;
+}
+
+.trailer-section h3 {
+  margin-bottom: 10px; /* 제목 아래 여백 */
+}
+
 </style>
