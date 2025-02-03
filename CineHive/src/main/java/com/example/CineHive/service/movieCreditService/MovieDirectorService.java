@@ -1,7 +1,7 @@
 package com.example.CineHive.service.movieCreditService;
 
 import com.example.CineHive.entity.credit.Director;
-import com.example.CineHive.entity.Video.Movie;
+import com.example.CineHive.entity.VideoType.Movie;
 import com.example.CineHive.repository.DirectorRepository;
 import com.example.CineHive.repository.Videos.MovieRepository;
 import com.fasterxml.jackson.databind.JsonNode;

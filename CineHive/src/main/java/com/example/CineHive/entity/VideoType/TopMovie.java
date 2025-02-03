@@ -1,5 +1,7 @@
-package com.example.CineHive.entity.Video;
+package com.example.CineHive.entity.VideoType;
 
+import com.example.CineHive.entity.credit.Director;
+import com.example.CineHive.entity.credit.Video;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,17 +40,5 @@ public class TopMovie {
     private double popularity;
 
     private boolean adult;
-
-    @Embedded
-    private Dates dates;
-
-    // Dates embeddable class for nested dates information
-    @Embeddable
-    @Getter
-    @Setter
-    public static class Dates {
-        private String maximum;
-        private String minimum;
-    }
 
 }
