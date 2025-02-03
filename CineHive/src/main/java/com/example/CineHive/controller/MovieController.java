@@ -1,9 +1,9 @@
 package com.example.CineHive.controller;
 
-import com.example.CineHive.entity.Drama;
-import com.example.CineHive.entity.Movie;
-import com.example.CineHive.repository.MovieAndDrama.DramaRepository;
-import com.example.CineHive.repository.MovieAndDrama.MovieRepository;
+import com.example.CineHive.entity.Video.Drama;
+import com.example.CineHive.entity.Video.Movie;
+import com.example.CineHive.repository.Videos.DramaRepository;
+import com.example.CineHive.repository.Videos.MovieRepository;
 import com.example.CineHive.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +33,7 @@ public class MovieController {
         return ResponseEntity.ok().body("성공적으로 데이터를 저장했습니다!");
     }
 
+    //데이터베이스에 있는 영화를 그냥 다 가져오는 것(homepage.vue 열면 바로 실행)
     @GetMapping("/movies")
     @ResponseBody
     public List<Movie> getAllMovies() {
