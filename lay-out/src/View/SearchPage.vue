@@ -1,6 +1,6 @@
 <template>
   <div id="searchpage">
-    <div v-if="movies.length || dramas.length">
+    <div v-if="movies.length || dramas.length || animations.length">
       <h2 class="movie-title">영화</h2>
       <div class="movie-slider" v-if="movies.length">
 
