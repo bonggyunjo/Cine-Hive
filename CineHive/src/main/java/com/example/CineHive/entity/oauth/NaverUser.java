@@ -1,4 +1,4 @@
-package com.example.CineHive.entity.oauthUser;
+package com.example.CineHive.entity.oauth;
 
 import com.example.CineHive.entity.User;
 import jakarta.persistence.*;
@@ -12,22 +12,21 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "kakao_users")
-public class KakaoUser {
+@Table(name = "naver_users")
+public class NaverUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "kakao_id", unique = true)
-    private String kakaoId; //카카오 고유 아이디
-
+    @Column(name = "naver_id", unique = true)
+    private String naverId; //네이버 고유 아이디
 
     @Column(length = 50)
-    private String nickname;
+    private String nickname; //별명
 
     @Column(name = "mem_userid", nullable = false)
-    private String memUserId;
+    private String memUserId; //이메일
 
     @Column(name = "user_id")
     private Long userId; // users 테이블의 외래 키
@@ -37,8 +36,8 @@ public class KakaoUser {
     @JoinColumn(name = "user_id", referencedColumnName = "mem_id", insertable = false, updatable = false)
     private User user;
 
-    public KakaoUser(String kakaoId, String nickname, String memUserId) {
-        this.kakaoId = kakaoId;
+    public NaverUser(String naverId, String nickname, String memUserId) {
+        this.naverId = naverId;
         this.nickname = nickname;
         this.memUserId = memUserId; // 추가된 필드 초기화
     }

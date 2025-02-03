@@ -1,6 +1,6 @@
 package com.example.CineHive.repository;
 
-import com.example.CineHive.entity.oauthUser.NaverUser;
+import com.example.CineHive.entity.oauth.NaverUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

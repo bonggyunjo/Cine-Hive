@@ -1,7 +1,7 @@
 package com.example.CineHive.service.oauthService;
 
 import com.example.CineHive.dto.oauthInfo.GoogleUserInfo;
-import com.example.CineHive.entity.oauthUser.GoogleUser;
+import com.example.CineHive.entity.oauth.GoogleUser;
 import com.example.CineHive.repository.GoogleUserRepository;
 import com.example.CineHive.repository.UserRepository;
 import org.springframework.stereotype.Service;
