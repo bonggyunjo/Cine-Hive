@@ -2,6 +2,7 @@ package com.example.CineHive.service;
 
 import com.example.CineHive.entity.Movie;
 import com.example.CineHive.entity.PMovie;
+import com.example.CineHive.entity.Video;
 import com.example.CineHive.repository.MovieRepository;
 import com.example.CineHive.repository.PMovieRepository;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -35,6 +36,9 @@ public class MovieService {
 
     @Autowired
     private MovieActorService movieActorService;
+    @Autowired
+    private MovieVideoService movieVideoService;
+
 
     public MovieService(WebClient.Builder webClientBuilder, ObjectMapper objectMapper) {
         this.webClient = webClientBuilder.baseUrl("https://api.themoviedb.org/3").build();
@@ -90,12 +94,17 @@ public class MovieService {
                         dates.setMinimum(datesNode.path("minimum").asText());
                         movie.setDates(dates);
 
+
+                        List<Video> videos = movieVideoService.getVideosForMovie(movieId);
+                        movie.setVideos(videos); // 비디오 정보를 영화 객체에 설정
+
                         // 데이터베이스에 저장
                         movieRepository.save(movie);
                         System.out.println("Saved movie: " + movie.getTitle());
 
                         // 크레딧 정보 저장 호출
                         movieActorService.saveMovieCredits(movieId);
+
                     }
                 }
             } catch (Exception e) {

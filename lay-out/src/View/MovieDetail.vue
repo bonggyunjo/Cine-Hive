@@ -49,8 +49,10 @@
     <div class="bottom-section">
       <h3>바로가기</h3>
       <div class="streaming-services">
-        <img class="streaming-logo" src="path/to/tving-logo.png" alt="티빙"/>
-        <img class="streaming-logo" src="path/to/netflix-logo.png" alt="넷플릭스"/>
+        <img class="streaming-logo" src="../assets/movieDetailLogo/wiki.png"  />
+        <img class="streaming-logo" src="../assets/movieDetailLogo/bing.png" />
+        <img class="streaming-logo" src="../assets/movieDetailLogo/netflix.png" />
+        <img class="streaming-logo" src="../assets/movieDetailLogo/tiving.png" />
         <!-- 추가 스트리밍 서비스 이미지 -->
       </div>
     </div>
@@ -185,9 +187,9 @@ export default {
 }
 
 .streaming-logo {
-  width: 150px; /* 로고 크기 조정 */
-  height: auto; /* 비율 유지 */
-  margin-right: 10px; /* 로고 간격 */
+  width: 75px; /* 로고 크기 조정 */
+  height: 70px; /* 비율 유지 */
+  margin-right: 50px; /* 로고 간격 */
 }
 .actors-list {
   display: flex; /* 가로 방향으로 정렬 */

@@ -62,4 +62,8 @@ public class Movie {
         actor.setMovie(this);
     }
 
+    // 비디오 정보를 저장하는 리스트
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "movie_id")
+    private List<Video> videos;
 }
