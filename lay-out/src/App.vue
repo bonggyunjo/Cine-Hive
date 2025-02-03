@@ -45,6 +45,7 @@ export default {
 }
 
 #app {
+  background-color: black;
   font-family: 'Inter', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

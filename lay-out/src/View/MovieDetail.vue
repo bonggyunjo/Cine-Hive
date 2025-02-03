@@ -2,33 +2,39 @@
   <div class="movie-detail">
     <div class="movie-backdrop">
       <div class="movie-poster">
-        <img :src="'https://image.tmdb.org/t/p/original' + movie.posterPath" alt="포스터" />
+        <img :src="'https://image.tmdb.org/t/p/original' + movie.posterPath" alt="포스터"/>
       </div>
       <div class="movie-content">
-        <h2>{{ movie.title }}</h2>
+        <div class="info-item">
+          <span>제목</span>
+          <p>{{ movie.title }}</p>
+        </div>
         <div class="movie-info">
+
           <div class="info-item">
-            <h4>평점</h4>
+            <span>평점</span>
             <p>{{ movie.voteAverage }}</p>
           </div>
           <div class="info-item">
-            <h4>출연진</h4>
-            <ul>
-              <li v-for="actor in movie.actors" :key="actor.id">
-                {{ actor.name }} (역: {{ actor.role }})
-              </li>
-            </ul>
+            <span>출연진</span>
+            <div class="actors-list">
+              <span v-for="actor in movie.actors" :key="actor.id" class="actor-item">
+                {{ actor.name }}
+              </span>
+            </div>
           </div>
+
+
           <div class="info-item">
-            <h4>감독</h4>
+            <span>감독</span>
             <!-- 감독 정보 추가 -->
           </div>
           <div class="info-item">
-            <h4>출시일</h4>
+            <span>출시일</span>
             <p>{{ movie.releaseDate }}</p>
           </div>
           <div class="info-item">
-            <h5>줄거리</h5>
+            <span>줄거리</span>
             <p>{{ movie.overview || '설명 없음' }}</p>
           </div>
         </div>
@@ -38,13 +44,13 @@
       <button @click="viewReviews">감상평 보기</button>
       <button @click="viewReview">리뷰 보기</button>
       <button @click="addToFavorites">찜하기</button>
+      <button @click="goBack">뒤로 가기</button>
     </div>
     <div class="bottom-section">
-      <button @click="goBack" class="back-button">뒤로 가기</button>
       <h3>바로가기</h3>
       <div class="streaming-services">
-        <img class="streaming-logo" src="path/to/tving-logo.png" alt="티빙" />
-        <img class="streaming-logo" src="path/to/netflix-logo.png" alt="넷플릭스" />
+        <img class="streaming-logo" src="path/to/tving-logo.png" alt="티빙"/>
+        <img class="streaming-logo" src="path/to/netflix-logo.png" alt="넷플릭스"/>
         <!-- 추가 스트리밍 서비스 이미지 -->
       </div>
     </div>
@@ -91,10 +97,13 @@ export default {
   display: flex;
   flex-direction: column; /* 세로 방향으로 정렬 */
   height: 1000px;
-  padding: 20px;
+  padding: 40px 60px; /* 위, 아래, 왼쪽, 오른쪽 여백을 조정하여 위치 이동 */
   border-radius: 10px; /* 모서리 둥글게 */
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* 그림자 효과 */
+  margin-left: 40px; /* 왼쪽 여백 추가 */
+  margin-top: 40px; /* 위쪽 여백 추가 */
 }
+
 
 .movie-backdrop {
   display: flex;
@@ -157,6 +166,7 @@ export default {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  position: relative;
 }
 
 .back-button:hover {
@@ -165,6 +175,8 @@ export default {
 
 .bottom-section {
   margin-top: 20px; /* 포스터와 버튼 사이 간격 */
+  position: relative;
+  top:50px;
 }
 
 .streaming-services {
@@ -176,5 +188,34 @@ export default {
   width: 150px; /* 로고 크기 조정 */
   height: auto; /* 비율 유지 */
   margin-right: 10px; /* 로고 간격 */
+}
+.actors-list {
+  display: flex; /* 가로 방향으로 정렬 */
+  flex-wrap: wrap; /* 줄바꿈 허용 */
+  margin-top: 10px; /* 위쪽 여백 추가 */
+}
+
+.actor-item {
+  background-color: rgba(255, 255, 255, 0.1); /* 배경색 추가 */
+  border-radius: 5px; /* 둥근 모서리 */
+  padding: 5px 10px; /* 패딩 추가 */
+  margin-right: 10px; /* 간격 추가 */
+  margin-bottom: 5px; /* 아래쪽 간격 추가 */
+  color: white; /* 글자색 */
+  transition: background-color 0.3s; /* 배경색 변화 효과 */
+}
+
+.actor-item:hover {
+  background-color: rgba(255, 255, 255, 0.3); /* 호버 시 배경색 변화 */
+}
+
+.bottom-section h3{
+  position: relative;
+  left:-48%;
+}
+.info-item span{
+  font-weight: bolder;
+  margin-bottom: 10px;
+  font-size: 14px;
 }
 </style>
