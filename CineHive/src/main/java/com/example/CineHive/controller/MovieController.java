@@ -1,9 +1,12 @@
 package com.example.CineHive.controller;
 
+import com.example.CineHive.entity.Video.Animation;
 import com.example.CineHive.entity.Video.Drama;
 import com.example.CineHive.entity.Video.Movie;
 import com.example.CineHive.repository.Videos.DramaRepository;
 import com.example.CineHive.repository.Videos.MovieRepository;
+import com.example.CineHive.service.AnimationService;
+import com.example.CineHive.service.DramaService;
 import com.example.CineHive.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +22,10 @@ import java.util.Optional;
 public class MovieController {
     @Autowired
     private MovieService movieService;
+    @Autowired
+    private DramaService dramaService;
+    @Autowired
+    private AnimationService animationService;
 
     @Autowired
     private MovieRepository movieRepository;
@@ -51,14 +58,18 @@ public class MovieController {
     public ResponseEntity<?> searchMovies(@RequestParam String query) {
         System.out.println("Request received for searching movies");
         List<Movie> searchResults1 = movieService.searchMovies(query);  // 검색 결과 받기
-        List<Drama> searchResults2 = movieService.searchDramas(query);  // 검색 결과 받기
+        List<Drama> searchResults2 = dramaService.searchDramas(query);  // 검색 결과 받기
+        List<Animation> searchResults3 = animationService.searchAnimations(query);  // 검색 결과 받기
 
         Map<String,Object> response = new HashMap<>();
         response.put("movies", searchResults1);
         response.put("dramas", searchResults2);
+        response.put("animations", searchResults3);
 
         return ResponseEntity.ok().body(response);  // 검색 결과를 클라이언트로 반환
     }
+
+
 
     @GetMapping("/movies/{id}")
     @ResponseBody
