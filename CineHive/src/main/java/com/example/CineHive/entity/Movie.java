@@ -68,4 +68,10 @@ public class Movie {
     private List<Video> videos;
 
 
+    // 감독 정보
+    @ManyToOne
+    @JoinColumn(name = "director_id") // 외래 키
+    private Director director;
+
+
 }

@@ -10,17 +10,18 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-
 @Getter
 @Setter
-public class Video {
+@NoArgsConstructor
+@AllArgsConstructor
+public class Director {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id; // 고유 ID
 
-    private String videoKey; // 유튜브 비디오 키
-    private String name;
-    private String site;
-    private String type; // (예: Trailer, Teaser)
+    private String name; // 감독 이름
 
+    private int gender;
+
+    private String job;
 }

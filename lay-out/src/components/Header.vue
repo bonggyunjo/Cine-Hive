@@ -2,7 +2,7 @@
   <header>
     <div class="header-container">
       <router-link to="/" class="site-title"><span @click="goToHome">CINEHIVE</span></router-link>
-      
+
       <nav class="nav">
         <ul>
           <li>Animation</li>
