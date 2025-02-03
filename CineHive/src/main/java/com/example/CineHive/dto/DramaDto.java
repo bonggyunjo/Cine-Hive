@@ -12,14 +12,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DramaDto {
-    private DatesDTO dates;
     private int page;
     private List<DramaDTO> results;
 
-    public static class DatesDTO {
-        private String maximum;
-        private String minimum;
-    }
 
     public static class DramaDTO{
         private long id;

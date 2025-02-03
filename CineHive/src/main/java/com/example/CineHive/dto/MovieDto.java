@@ -12,15 +12,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MovieDto {
-    private DatesDTO dates;
     private int page;
     private List<MovieDTO> results;
 
-    // DatesDTO inner class
-    public static class DatesDTO {
-        private String maximum;
-        private String minimum;
-    }
     public static class MovieDTO {
         private long id;
         private String title;
