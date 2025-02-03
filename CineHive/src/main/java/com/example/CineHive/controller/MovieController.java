@@ -1,14 +1,19 @@
 package com.example.CineHive.controller;
 
-import com.example.CineHive.entity.Video.Animation;
-import com.example.CineHive.entity.Video.Drama;
-import com.example.CineHive.entity.Video.Movie;
+import com.example.CineHive.entity.VideoType.Animation;
+import com.example.CineHive.entity.VideoType.Drama;
+import com.example.CineHive.entity.VideoType.Movie;
+import com.example.CineHive.entity.VideoType.TopMovie;
+import com.example.CineHive.repository.Videos.AnimationRepository;
 import com.example.CineHive.repository.Videos.DramaRepository;
 import com.example.CineHive.repository.Videos.MovieRepository;
+import com.example.CineHive.repository.Videos.TopMovieRepository;
 import com.example.CineHive.service.AnimationService;
 import com.example.CineHive.service.DramaService;
 import com.example.CineHive.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +36,10 @@ public class MovieController {
     private MovieRepository movieRepository;
     @Autowired
     private DramaRepository dramaRepository;
-
+    @Autowired
+    private AnimationRepository animationRepository;
+    @Autowired
+    private TopMovieRepository topmovieRepository;
 
     @GetMapping("/now_playing")
     public ResponseEntity<?> getNowPlayingMovies() {
@@ -47,10 +55,19 @@ public class MovieController {
         return movieRepository.findAll();
     }
 
-    @GetMapping("/popular_movie")
-    public ResponseEntity<?> getPopularMovies() {
+    //Topmovie 데이블에서 가져오기
+    @GetMapping("/get_topmovies")
+    @ResponseBody
+    public List<TopMovie> getTopMoviesfromDataBase() {
+        Pageable pageable = PageRequest.of(0, 24); // 첫 번째 페이지에서 24개 가져오기
+        return topmovieRepository.findTopMovies(pageable);
+    }
+
+    //TopRated 영화 DB에 넣기
+    @GetMapping("/top_movie")
+    public ResponseEntity<?> getTopMovies() {
         System.out.println("Request received for Top movies");
-        movieService.saveTopRatedMoviesToDatabase();  // 매개변수로 language와 page 전달
+        movieService.saveTopRatedMoviesToDatabase();
         return ResponseEntity.ok().body("성공적으로 데이터를 저장했습니다!");
     }
 
@@ -70,7 +87,6 @@ public class MovieController {
     }
 
 
-
     @GetMapping("/movies/{id}")
     @ResponseBody
     public ResponseEntity<Movie> getMovieById(@PathVariable Long id) {
@@ -88,6 +104,17 @@ public class MovieController {
         Optional<Drama> dramaOptional = dramaRepository.findById(id);
         if (dramaOptional.isPresent()) {
             return ResponseEntity.ok(dramaOptional.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/animations/{id}")
+    @ResponseBody
+    public ResponseEntity<Animation> getAnimationById(@PathVariable Long id) {
+        Optional<Animation> animationOptional = animationRepository.findById(id);
+        if (animationOptional.isPresent()) {
+            return ResponseEntity.ok(animationOptional.get());
         } else {
             return ResponseEntity.notFound().build();
         }
