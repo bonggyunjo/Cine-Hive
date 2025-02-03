@@ -75,6 +75,7 @@ export default {
 
         const movies = response.data.movies;
         const dramas = response.data.dramas;
+        const animations =response.data.animations;
 
         // 받은 데이터를 SearchPage로 전달
         this.$router.push({
@@ -82,7 +83,8 @@ export default {
           query: {
             q: this.searchQuery,
             movies: JSON.stringify(movies),
-            dramas: JSON.stringify(dramas)
+            dramas: JSON.stringify(dramas),
+            animations: JSON.stringify(animations),
           },
         });
       } catch (error) {

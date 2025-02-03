@@ -6,6 +6,7 @@ import SocialLoginAdditionalInfo from "@/View/SocialLoginAdditionalInfo.vue";
 import SearchPage from "@/View/SearchPage.vue";
 import MovieDetail from "@/View/MovieDetail.vue";
 import DramaDetail from "@/View/DramaDetail.vue";
+import AnimationDetail from "@/View/AnimationDetail.vue";
 
 Vue.use(Router);
 
@@ -21,6 +22,10 @@ const routes = [
     { path: '/drama/:id',  // 드라마 디테일 경로 추가
         name: 'DramaDetail',
         component: DramaDetail,
+        meta: { hideFooter: true }},
+    { path: '/animation/:id',  // 드라마 디테일 경로 추가
+        name: 'AnimationDetail',
+        component: AnimationDetail,
         meta: { hideFooter: true }},
 ];
 

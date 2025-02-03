@@ -12,6 +12,7 @@
     </div>
 
     <div class="movie-container">
+      <h2 class="popular-movies">인기 영화</h2>
       <!-- 영화 포스터 -->
       <div class="movie-slider">
         <div
@@ -23,6 +24,9 @@
           <img :src="'https://image.tmdb.org/t/p/w300' + movie.posterPath" alt="movie poster" />
         </div>
       </div>
+
+      <h2 class="top-movies">역대 평점 영화</h2>
+
     </div>
   </div>
 </template>

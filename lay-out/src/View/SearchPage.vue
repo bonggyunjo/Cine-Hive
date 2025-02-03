@@ -1,10 +1,9 @@
 <template>
   <div id="searchpage">
-    <h1>검색 결과</h1>
-
     <div v-if="movies.length || dramas.length">
+      <h2 class="movie-title">영화</h2>
       <div class="movie-slider" v-if="movies.length">
-        <h2>영화</h2>
+
         <div
             class="movie-poster"
             v-for="movie in movies"
@@ -12,13 +11,12 @@
             @click="openMovieDetails(movie)"
         >
           <img :src="getImageUrl(movie.posterPath)" alt="movie poster" />
-          <p>{{ movie.title }}</p>
         </div>
       </div>
 
-
+      <h2 class="drama-title">드라마</h2>
       <div class="drama-slider" v-if="dramas.length">
-        <h2>드라마</h2>
+
         <div
             class="drama-poster"
             v-for="drama in dramas"
@@ -26,10 +24,21 @@
             @click="openDramaDetails(drama)"
         >
           <img :src="getImageUrl(drama.posterPath)" alt="drama poster" />
-          <p>{{ drama.name }}</p>
       </div>
     </div>
 
+      <h2 class="animation-title">애니메이션</h2>
+      <div class="animation-slider" v-if="animations.length">
+
+        <div
+            class="animation-poster"
+            v-for="animation in animations"
+            :key="animation.id"
+            @click="openAnimationDetails(animation)"
+        >
+          <img :src="getImageUrl(animation.posterPath)" alt="animation poster" />
+        </div>
+        </div>
     <div v-else>
       <p>검색 결과가 없습니다.</p>
     </div>
@@ -69,6 +78,24 @@
           </div>
       </div>
       </div>
+
+
+      <div v-if="selectedAnimation" class="animation-modal" @click.self="closeAnimationDetails">
+        <div
+            class="animation-modal-backdrop"
+            :style="{
+            backgroundImage: 'url(https://image.tmdb.org/t/p/original' + selectedAnimation.backdropPath + ')',
+            }"
+        >
+          <div class="animation-modal-content">
+            <h2>{{ selectedAnimation.name }}</h2>
+            <p>{{ selectedAnimation.overview || '설명 없음' }}</p>
+            <p>평점: {{ selectedAnimation.voteAverage }}</p>
+            <p>출시일: {{ selectedAnimation.releaseDate }}</p>
+            <button @click="closeDramaDetails">닫기</button>
+          </div>
+        </div>
+      </div>
   </div>
   </div>
 </template>
@@ -79,9 +106,11 @@ export default {
     return {
       searchQuery: this.$route.query.q,  // 검색어
       movies: [],  // 검색된 영화 결과
-      dramas: [],  // 검색된 드라마 결과
+      dramas: [], // 검색된 드라마 결과
+      animations: [], // 검색된 애니메이션 결과
       selectedMovie: null,  // 선택된 영화
       selectedDrama: null,  // 선택된 드라마
+      selectedAnimation: null, // 선택된 애니메이션
     };
   },
   mounted() {
@@ -100,12 +129,16 @@ export default {
 
       const moviesData = this.$route.query.movies;
       const dramasData = this.$route.query.dramas;
+      const animationsData = this.$route.query.animations;
 
       if (moviesData) {
         this.movies = JSON.parse(moviesData);  // JSON 문자열을 객체로 변환
       }
       if(dramasData){
         this.dramas = JSON.parse(dramasData);
+      }
+      if(animationsData){
+        this.animations = JSON.parse(animationsData);
       }
     },
     // 영화의 포스터 이미지를 올바른 URL로 변환
@@ -120,6 +153,10 @@ export default {
     openDramaDetails(drama) {
       this.$router.push({ name: 'DramaDetail', params: { id: drama.id } });
     },
+    // 애니메이션 포스터 클릭 시 상세 정보 모달 열기
+    openAnimationDetails(animation) {
+      this.$router.push({ name: 'AnimationDetail', params: { id: animation.id } });
+    },
     // 검색 버튼 클릭 시 새로운 검색어로 URL 갱신
     closeMovieDetails() {
       this.selectedMovie = null;
@@ -127,18 +164,30 @@ export default {
     closeDramaDetails() {
       this.selectedDrama = null;
     },
+    closeAnimationDetails() {
+      this.selectedAnimation = null;
+    },
   }
 };
 </script>
 
 <style scoped>
+
+.animation-title,
+.movie-title,
+.drama-title{
+  position: relative;
+  bottom: 10px;
+  left: 0.5%;
+  text-align: left;
+}
 #searchpage{
   height: 900px;
   flex: 1;
   background-color : black;
   color: white;
 }
-
+.animation-slider,
 .drama-slider,
 .movie-slider {
   display: flex;
@@ -147,12 +196,13 @@ export default {
   gap: 10px;
   margin-bottom: 20px;
 }
-
+.animation-poster img:hover,
 .drama-poster img:hover,
 .movie-poster img:hover {
   transform: scale(1.1);
 }
 
+.animation-poster img,
 .drama-poster img,
 .movie-poster img {
   width: 200px;
@@ -162,6 +212,7 @@ export default {
 }
 
 /* 정보 모달 */
+.animation-modal,
 .drama-modal,
 .movie-modal {
   position: fixed;
@@ -175,6 +226,8 @@ export default {
   align-items: center;
   z-index: 1000;
 }
+
+.animation-modal-backdrop,
 .drama-modal-backdrop,
 .movie-modal-backdrop {
   position: fixed;
@@ -191,6 +244,7 @@ export default {
   z-index: 1000;
 }
 
+.animation-modal-content,
 .drama-modal-content,
 .movie-modal-content {
   background-color: rgba(0, 0, 0, 0.8);
@@ -201,6 +255,7 @@ export default {
   color: white;
 }
 
+.animation-modal-content button,
 .drama-modal-content button,
 .movie-modal-content button {
   margin-top: 20px;
