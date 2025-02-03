@@ -239,4 +239,25 @@ header {
     position: relative;
   }
 }
+.search-bar button {
+  background-color : #393636;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 13px;
+  margin-left: 10px;
+  transition: background-color 0.3s ease;
+  position: relative;
+  top:1px;
+}
+
+.search-bar button:hover {
+  background-color: #555555;
+}
+
+.search-bar button:active {
+  background-color: #990000;
+}
 </style>
