@@ -1,10 +1,12 @@
 package com.example.CineHive.service;
 
+import com.example.CineHive.entity.Drama;
 import com.example.CineHive.entity.Movie;
-import com.example.CineHive.entity.PMovie;
+import com.example.CineHive.entity.TopMovie;
 import com.example.CineHive.entity.credit.Video;
-import com.example.CineHive.repository.MovieRepository;
-import com.example.CineHive.repository.PMovieRepository;
+import com.example.CineHive.repository.MovieAndDrama.DramaRepository;
+import com.example.CineHive.repository.MovieAndDrama.MovieRepository;
+import com.example.CineHive.repository.MovieAndDrama.TopMovieRepository;
 import com.example.CineHive.service.movieCreditService.MovieActorService;
 import com.example.CineHive.service.movieCreditService.MovieDirectorService;
 import com.example.CineHive.service.movieCreditService.MovieVideoService;
@@ -33,7 +35,7 @@ public class MovieService {
     private MovieRepository movieRepository;
 
     @Autowired
-    private PMovieRepository pmovieRepository;
+    private TopMovieRepository pmovieRepository;
     private final ObjectMapper objectMapper;
 
 
@@ -43,6 +45,8 @@ public class MovieService {
     private MovieVideoService movieVideoService;
     @Autowired
     private MovieDirectorService movieDirectorService;
+    @Autowired
+    private DramaRepository dramaRepository;
 
 
     public MovieService(WebClient.Builder webClientBuilder, ObjectMapper objectMapper) {
@@ -50,15 +54,6 @@ public class MovieService {
         this.objectMapper = objectMapper;
     }
 
-
-    public Mono<String> getMoviesFromTMDB() {
-        return webClient.get()
-                .uri(uriBuilder -> uriBuilder.path("/movie/popular")
-                        .queryParam("api_key", apiKey)
-                        .build())
-                .retrieve()
-                .bodyToMono(String.class);
-    }
     @Transactional
     public void saveMoviesToDatabase() {
         String response = webClient.get()
@@ -144,7 +139,7 @@ public class MovieService {
 
                     // 영화가 이미 존재하는지 확인
                     if (!pmovieRepository.existsById(movieId)) {
-                        PMovie movie = new PMovie();
+                        TopMovie movie = new TopMovie();
                         movie.setId(movieId);
                         movie.setTitle(movieNode.get("title").asText());
                         String overviewText = movieNode.get("overview").asText();
@@ -159,7 +154,7 @@ public class MovieService {
                         movie.setAdult(movieNode.get("adult").asBoolean());
 
                         // Dates 필드 처리
-                        PMovie.Dates dates = new PMovie.Dates();
+                        TopMovie.Dates dates = new TopMovie.Dates();
                         dates.setMaximum(datesNode.path("maximum").asText());
                         dates.setMinimum(datesNode.path("minimum").asText());
                         movie.setDates(dates);
@@ -244,5 +239,60 @@ public class MovieService {
     }
 
 
+    public List<Drama> searchDramas(String query) {
+        String response = webClient.get()
+                .uri("https://api.themoviedb.org/3/search/tv?query="
+                        + UriUtils.encode(query, StandardCharsets.UTF_8)
+                        + "&api_key=" + apiKey
+                        + "&include_adult=true&language=ko&page=1")
+                .header("Accept", "application/json")
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();  // block()을 사용하여 응답을 기다립니다.
 
+        List<Drama> dramas = new ArrayList<>();
+        if (response != null) {
+            try {
+                JsonNode rootNode = objectMapper.readTree(response);
+                JsonNode dramasNode = rootNode.path("results");
+
+                for (JsonNode dramaNode : dramasNode) {
+                    Long dramaId = dramaNode.get("id").asLong();
+                    Drama drama = new Drama();
+                    drama.setId(dramaId);
+                    drama.setName(dramaNode.get("name").asText());
+                    drama.setOverview(dramaNode.get("overview").asText());
+
+                    if(dramaNode.has("poster_path")&&!dramaNode.get("poster_path").isNull()){
+                        drama.setPosterPath(dramaNode.get("poster_path").asText());
+                    }
+
+                    drama.setFirstAirDate(dramaNode.get("first_air_date").asText());
+                    drama.setBackdropPath(dramaNode.get("backdrop_path").asText());
+                    drama.setGenreIds(objectMapper.convertValue(dramaNode.get("genre_ids"), List.class));  // List로 변환
+                    drama.setVoteAverage(dramaNode.get("vote_average").asDouble());
+                    drama.setVoteCount(dramaNode.get("vote_count").asInt());
+                    drama.setPopularity(dramaNode.get("popularity").asDouble());
+                    drama.setAdult(dramaNode.get("adult").asBoolean());
+
+
+                    if (!dramaRepository.existsById(dramaId)) {
+                        dramaRepository.save(drama);
+                        System.out.println("Saved new movie: " + drama.getName());
+
+                    } else {
+                        System.out.println("Drama already exists: " + drama.getName());
+                    }
+
+                    // 데이터베이스와 상관없이 항상 리스트에 추가
+                    dramas.add(drama);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("응답이 없습니다.");
+        }
+        return dramas;
+    }
 }
