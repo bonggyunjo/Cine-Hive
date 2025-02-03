@@ -33,6 +33,9 @@ public class MovieService {
     private final ObjectMapper objectMapper;
 
 
+    @Autowired
+    private MovieActorService movieActorService;
+
     public MovieService(WebClient.Builder webClientBuilder, ObjectMapper objectMapper) {
         this.webClient = webClientBuilder.baseUrl("https://api.themoviedb.org/3").build();
         this.objectMapper = objectMapper;
@@ -90,6 +93,9 @@ public class MovieService {
                         // 데이터베이스에 저장
                         movieRepository.save(movie);
                         System.out.println("Saved movie: " + movie.getTitle());
+
+                        // 크레딧 정보 저장 호출
+                        movieActorService.saveMovieCredits(movieId);
                     }
                 }
             } catch (Exception e) {

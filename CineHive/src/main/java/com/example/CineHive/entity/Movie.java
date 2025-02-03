@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -50,6 +51,15 @@ public class Movie {
     public static class Dates {
         private String maximum;
         private String minimum;
+    }
+
+    //출연진 정보
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Actor> actors = new ArrayList<>();
+
+    public void addActor(Actor actor) {
+        actors.add(actor);
+        actor.setMovie(this);
     }
 
 }

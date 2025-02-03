@@ -12,7 +12,6 @@
     </div>
 
     <div class="movie-container">
-      <button @click="displayPreferredGenres" style="position: relative; top:200px;">선호 장르 표시</button>
       <!-- 영화 포스터 -->
       <div class="movie-slider">
         <div

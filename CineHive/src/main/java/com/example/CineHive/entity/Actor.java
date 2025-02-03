@@ -1,5 +1,6 @@
 package com.example.CineHive.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,12 +20,12 @@ public class Actor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name; // 배우 이름
-    private String originalName; // 원래 이름
-    private String role; // 캐릭터 이름으로 변경
-    private Integer gender; // 성별 (0: 미정, 1: 여성, 2: 남성)
+    private String name;
+    private String originalName;
+    private String role;
+    private Integer gender;
 
     @ManyToOne
     @JoinColumn(name = "movie_id", nullable = false)
-    private Movie movie; // 영화와의 관계
+    private Movie movie;
 }
