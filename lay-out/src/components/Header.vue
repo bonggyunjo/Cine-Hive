@@ -1,12 +1,10 @@
 <template>
   <header>
     <div class="header-container">
-      <router-link to="/" class="site-title">CINEHIVE</router-link>
+      <router-link to="/" class="site-title"><span @click="goToHome">CINEHIVE</span></router-link>
+      
       <nav class="nav">
         <ul>
-          <li>
-            <router-link to="/" class="nav-link">Home</router-link>
-          </li>
           <li>Animation</li>
           <li>Movie</li>
           <li>Drama</li>
@@ -53,6 +51,9 @@ export default {
     ...mapState(['isLoggedIn']),
   },
   methods: {
+    goToHome(){
+      window.location.href = '/';
+    },
     logout() {
       this.$store.dispatch('logout');
       localStorage.removeItem('token');

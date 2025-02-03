@@ -1,23 +1,21 @@
 <template>
   <div class="movie-detail">
-
     <div class="movie-backdrop">
       <div class="movie-poster">
-        <img :src="'https://image.tmdb.org/t/p/original' + movie.posterPath" alt="포스터"/>
+        <img :src="'https://image.tmdb.org/t/p/original' + movie.posterPath" alt="포스터" class="poster-image" />
       </div>
       <div class="movie-content">
         <div class="info-item">
-          <span>제목</span>
-          <p>{{ movie.title }}</p>
+          <span class="info-label">제목</span>
+          <p class="info-text">{{ movie.title }}</p>
         </div>
         <div class="movie-info">
-
           <div class="info-item">
-            <span>평점</span>
-            <p>{{ movie.voteAverage }}</p>
+            <span class="info-label">평점</span>
+            <p class="info-text">{{ movie.voteAverage }}</p>
           </div>
           <div class="info-item">
-            <span>출연진</span>
+            <span class="info-label">출연진</span>
             <div class="actors-list">
               <span v-for="actor in movie.actors" :key="actor.id" class="actor-item">
                 {{ actor.name }}
@@ -25,16 +23,16 @@
             </div>
           </div>
           <div class="info-item">
-            <span>감독</span>
+            <span class="info-label">감독</span>
             <!-- 감독 정보 추가 -->
           </div>
           <div class="info-item">
-            <span>출시일</span>
-            <p>{{ movie.releaseDate }}</p>
+            <span class="info-label">출시일</span>
+            <p class="info-text">{{ movie.releaseDate }}</p>
           </div>
           <div class="info-item">
-            <span>줄거리</span>
-            <p>{{ movie.overview || '설명 없음' }}</p>
+            <span class="info-label">줄거리</span>
+            <p class="info-text">{{ movie.overview || '설명 없음' }}</p>
           </div>
         </div>
       </div>
@@ -46,29 +44,28 @@
             frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen
+            class="trailer-iframe"
         ></iframe>
       </div>
-
     </div>
     <div class="action-buttons">
-      <button @click="viewReviews">감상평 보기</button>
-      <button @click="viewReview">리뷰 보기</button>
-      <button @click="addToFavorites">찜하기</button>
-      <button @click="goBack">뒤로 가기</button>
+      <button class="action-button" @click="viewReviews">감상평 보기</button>
+      <button class="action-button" @click="viewReview">리뷰 보기</button>
+      <button class="action-button" @click="addToFavorites">찜하기</button>
+      <button class="action-button" @click="goBack">뒤로 가기</button>
     </div>
     <div class="bottom-section">
-      <h3>바로가기</h3>
+      <h3 class="section-title">바로가기</h3>
       <div class="streaming-services">
-        <img class="streaming-logo" src="../assets/movieDetailLogo/wiki.png"  />
-        <img class="streaming-logo" src="../assets/movieDetailLogo/bing.png" />
-        <img class="streaming-logo" src="../assets/movieDetailLogo/netflix.png" />
-        <img class="streaming-logo" src="../assets/movieDetailLogo/tiving.png" />
+        <img class="streaming-logo" src="../assets/movieDetailLogo/wiki.png" alt="Wiki" />
+        <img class="streaming-logo" src="../assets/movieDetailLogo/bing.png" alt="Bing" />
+        <img class="streaming-logo" src="../assets/movieDetailLogo/netflix.png" alt="Netflix" />
+        <img class="streaming-logo" src="../assets/movieDetailLogo/tiving.png" alt="Tiving" />
         <!-- 추가 스트리밍 서비스 이미지 -->
       </div>
     </div>
   </div>
 </template>
-
 
 <script>
 import axios from 'axios';
@@ -105,36 +102,36 @@ export default {
 <style scoped>
 .movie-detail {
   color: white;
-  background-color: black; /* 배경을 어두운 색으로 설정 */
+  background-color: black;
   display: flex;
-  flex-direction: column; /* 세로 방향으로 정렬 */
+  flex-direction: column;
   height: 1000px;
-  padding: 40px 60px; /* 위, 아래, 왼쪽, 오른쪽 여백을 조정하여 위치 이동 */
-  border-radius: 10px; /* 모서리 둥글게 */
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* 그림자 효과 */
-  margin-left: 40px; /* 왼쪽 여백 추가 */
-  margin-top: 40px; /* 위쪽 여백 추가 */
+  padding: 40px 60px;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  margin-left: 40px;
+  margin-top: 40px;
 }
-
 
 .movie-backdrop {
   display: flex;
-  align-items: flex-start; /* 포스터와 내용 정렬 */
+  align-items: flex-start;
 }
 
 .movie-poster {
-  margin-right: 20px; /* 포스터와 내용 간 간격 */
+  margin-right: 20px;
 }
 
-.movie-poster img {
-  max-width: 300px; /* 포스터의 최대 너비 설정 */
-  height: auto; /* 비율 유지 */
-  border-radius: 8px; /* 포스터의 모서리 둥글게 */
+.poster-image {
+  max-width: 300px;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
 .movie-content {
   max-width: 600px;
-  text-align: left; /* 왼쪽 정렬 */
+  text-align: left;
 }
 
 .movie-info {
@@ -142,107 +139,104 @@ export default {
 }
 
 .info-item {
-  margin-bottom: 15px; /* 항목 간 간격 */
+  margin-bottom: 15px;
 }
 
-.info-item h3 {
+.info-label {
+  font-weight: bolder;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #f0f0f0;
+}
+
+.info-text {
   margin: 0;
-  font-size: 1.2em; /* 제목 크기 조정 */
-  color: #f0f0f0; /* 제목 색상 */
+  font-size: 16px;
+  color: #ccc;
 }
 
 .action-buttons {
-  margin-top: 20px; /* 포스터 아래 간격 */
-  display: flex; /* 버튼을 가로로 나열 */
-}
-
-.action-buttons button {
-  margin-right: 10px; /* 버튼 간격 */
-  padding: 10px 15px;
-  background-color: #1a1a1a;
-  border: none;
-  color: white;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-.action-buttons button:hover {
-  background-color: #555;
-}
-
-.back-button {
   margin-top: 20px;
-  padding: 10px 15px;
-  background-color: #1a1a1a;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  position: relative;
+  display: flex;
+  gap: 10px; /* 버튼 간격 */
 }
 
-.back-button:hover {
+.action-button {
+  padding: 10px 15px;
+  background-color: #1a1a1a;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.action-button:hover {
   background-color: #555;
 }
 
 .bottom-section {
-  margin-top: 20px; /* 포스터와 버튼 사이 간격 */
+  margin-top: 20px;
   position: relative;
-  top:50px;
+  top: 50px;
+}
+
+.section-title {
+  position: relative;
+  left:-47.8%;
+  top:-10px;
+  margin-bottom: 10px;
+  font-size: 18px;
+  color: #f0f0f0;
 }
 
 .streaming-services {
   display: flex;
-  margin-top: 10px;
+  gap: 20px; /* 로고 간격 */
 }
 
 .streaming-logo {
-  width: 75px; /* 로고 크기 조정 */
-  height: 70px; /* 비율 유지 */
-  margin-right: 50px; /* 로고 간격 */
+  width: 75px;
+  height: 70px;
+  border-radius: 8px;
+  transition: transform 0.3s;
 }
+
+.streaming-logo:hover {
+  transform: scale(1.1);
+}
+
 .actors-list {
-  display: flex; /* 가로 방향으로 정렬 */
-  flex-wrap: wrap; /* 줄바꿈 허용 */
-  margin-top: 10px; /* 위쪽 여백 추가 */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px; /* 출연진 간격 */
 }
 
 .actor-item {
-  background-color: rgba(255, 255, 255, 0.1); /* 배경색 추가 */
-  border-radius: 5px; /* 둥근 모서리 */
-  padding: 5px 10px; /* 패딩 추가 */
-  margin-right: 10px; /* 간격 추가 */
-  margin-bottom: 5px; /* 아래쪽 간격 추가 */
-  color: white; /* 글자색 */
-  transition: background-color 0.3s; /* 배경색 변화 효과 */
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+  padding: 5px 10px;
+  color: white;
+  transition: background-color 0.3s;
 }
 
 .actor-item:hover {
-  background-color: rgba(255, 255, 255, 0.3); /* 호버 시 배경색 변화 */
-}
-
-.bottom-section h3{
-  position: relative;
-  left:-48%;
-}
-.info-item span{
-  font-weight: bolder;
-  margin-bottom: 10px;
-  font-size: 14px;
+  background-color: rgba(255, 255, 255, 0.3);
 }
 
 .trailer-section {
   display: flex;
-  flex-direction: column; /* 세로 방향으로 정렬 */
-  align-items: flex-end; /* 오른쪽 정렬 */
-  margin-top: 20px; /* 위쪽 여백 추가 */
+  flex-direction: column;
+  align-items: flex-end;
+  margin-top: 20px;
   position: relative;
-  left:10%;
-  top:-40px;
+  left: 10%;
+  top: -40px;
+  position: relative;
 }
 
-.trailer-section h3 {
-  margin-bottom: 10px; /* 제목 아래 여백 */
+.trailer-iframe {
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
-
 </style>
