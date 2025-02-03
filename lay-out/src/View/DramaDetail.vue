@@ -7,20 +7,12 @@
       <div class="drama-content">
         <div class="info-item">
           <span class="info-label">제목</span>
-          <p class="info-text">{{ drama.title }}</p>
+          <p class="info-text">{{ drama.name }}</p>
         </div>
         <div class="drama-info">
           <div class="info-item">
             <span class="info-label">평점</span>
             <p class="info-text">{{ drama.voteAverage }}</p>
-          </div>
-          <div class="info-item">
-            <span class="info-label">출연진</span>
-            <div class="actors-list">
-              <span v-for="actor in drama.actors.slice(0, 5)" :key="actor.id" class="actor-item">
-                {{ actor.name }}
-              </span>
-            </div>
           </div>
           <div class="info-item">
             <span class="info-label">감독</span>
@@ -47,7 +39,6 @@
             class="trailer-iframe"
         ></iframe>
       </div>
-
     </div>
     <div class="action-buttons">
       <button class="action-button" @click="viewReviews">감상평 보기</button>
@@ -93,6 +84,18 @@ export default {
         console.error('드라마 상세 정보를 가져오는 중 오류가 발생했습니다:', error);
       }
     },
+    viewReviews() {
+      // 여기에 감상평 보기 동작 추가
+      console.log('감상평 보기 클릭됨');
+    },
+    viewReview() {
+      // 리뷰 보기 동작 추가
+      console.log('리뷰 보기 클릭됨');
+    },
+    addToFavorites() {
+      // 찜하기 동작 추가
+      console.log('찜하기 클릭됨');
+    },
     goBack() {
       window.location.href = '/'; // 페이지를 새로 고침
     },
@@ -102,6 +105,7 @@ export default {
   }
 }
 </script>
+
 
 <style scoped>
 .drama-detail {

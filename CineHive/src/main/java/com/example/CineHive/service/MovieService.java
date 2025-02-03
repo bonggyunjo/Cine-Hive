@@ -13,6 +13,7 @@ import com.example.CineHive.service.movieCreditService.MovieVideoService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriUtils;
@@ -26,8 +27,8 @@ import java.util.List;
 
 @Service
 public class MovieService {
-    private final String apiKey = "d119fb469de12ae18b9fd948a485c7db";
-    private final String Bearer_key="eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkMTE5ZmI0NjlkZTEyYWUxOGI5ZmQ5NDhhNDg1YzdkYiIsIm5iZiI6MTczMzQ5MTMxMC45ODQsInN1YiI6IjY3NTJmYTZlODBlNWI4ZjBhNzU2M2NiZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.JoaKcxfdBOrUFiPGq8z3OkfKEJvQhBtyUJFOiP4_WIk";
+    @Value("${tmdb.api.key}")
+    private String apiKey;
 
     private final WebClient webClient;
 

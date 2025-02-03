@@ -2,6 +2,7 @@ package com.example.CineHive.controller;
 
 import com.example.CineHive.entity.Drama;
 import com.example.CineHive.entity.Movie;
+import com.example.CineHive.repository.MovieAndDrama.DramaRepository;
 import com.example.CineHive.repository.MovieAndDrama.MovieRepository;
 import com.example.CineHive.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,8 @@ public class MovieController {
 
     @Autowired
     private MovieRepository movieRepository;
+    @Autowired
+    private DramaRepository dramaRepository;
 
 
     @GetMapping("/now_playing")
@@ -62,6 +65,17 @@ public class MovieController {
         Optional<Movie> movieOptional = movieRepository.findById(id);
         if (movieOptional.isPresent()) {
             return ResponseEntity.ok(movieOptional.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/dramas/{id}")
+    @ResponseBody
+    public ResponseEntity<Drama> getDramaById(@PathVariable Long id) {
+        Optional<Drama> dramaOptional = dramaRepository.findById(id);
+        if (dramaOptional.isPresent()) {
+            return ResponseEntity.ok(dramaOptional.get());
         } else {
             return ResponseEntity.notFound().build();
         }
