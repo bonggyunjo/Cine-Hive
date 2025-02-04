@@ -9,6 +9,8 @@ import com.example.CineHive.repository.videos.movie.TopMovieRepository;
 import com.example.CineHive.service.creditService.animation.AnimationService;
 import com.example.CineHive.service.creditService.drama.DramaService;
 import com.example.CineHive.service.creditService.movie.MovieService;
+import com.example.CineHive.service.creditService.movie.NowPlayingMovieService;
+import com.example.CineHive.service.creditService.movie.TopRatedMovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -36,6 +38,11 @@ public class MovieController {
     @Autowired
     private TopMovieRepository topmovieRepository;
 
+    @Autowired
+    private NowPlayingMovieService nowPlayingMovieService;
+
+    @Autowired
+    private TopRatedMovieService topRatedMovieService;
     @GetMapping("/now_playing")
     public ResponseEntity<?> getNowPlayingMovies() {
         System.out.println("Request received for now playing movies");
@@ -53,11 +60,11 @@ public class MovieController {
     //Topmovie 데이블에서 가져오기
     @GetMapping("/get_topmovies")
     @ResponseBody
-    public List<TopMovie> getTopMoviesfromDataBase() {
-        Pageable pageable = PageRequest.of(0, 22); // 첫 번째 페이지에서 24개 가져오기
-        return topmovieRepository.findTopMovies(pageable);
+    public ResponseEntity<List<TopMovie>> getTopRatedMoviesList() {
+        Pageable pageable = PageRequest.of(0, 22); // 첫 번째 페이지에서 22개 가져오기
+        List<TopMovie> topRatedMovies = topRatedMovieService.getTopRatedMovies(pageable);
+        return ResponseEntity.ok(topRatedMovies);
     }
-
     //TopRated 영화 DB에 넣기
     @GetMapping("/top_movie")
     public ResponseEntity<?> getTopMovies() {
@@ -108,7 +115,7 @@ public class MovieController {
     @ResponseBody
     public ResponseEntity<List<Movie>> getNowPlayingMoviesList() {
         Pageable pageable = PageRequest.of(0, 22); // 첫 번째 페이지에서 22개 가져오기
-        List<Movie> nowPlayingMovies = movieService.getNowPlayingMovies(pageable);
+        List<Movie> nowPlayingMovies = nowPlayingMovieService.getNowPlayingMovies(pageable);
         return ResponseEntity.ok(nowPlayingMovies);
     }
 }
