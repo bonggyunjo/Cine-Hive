@@ -10,8 +10,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "director")
+@Entity(name = "DramaDirector") // 엔티티 이름 변경
+@Table(name = "drama_directors")
 public class Director {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

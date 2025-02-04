@@ -32,7 +32,10 @@ public class Drama {
     private String originalLanguage;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "drama_id") // 외래 키 설정
-    private List<Director> directors; // 감독 리스트    private List<Integer> genreIds;
+    @JoinColumn(name = "drama_id")
+    private List<Director> directors;
+
+    @ElementCollection
+    private List<Integer> genreIds;
 
 }

@@ -1,9 +1,9 @@
-package com.example.CineHive.service.creditService.movieService;
+package com.example.CineHive.service.creditService.dramaService;
 
-import com.example.CineHive.entity.credit.movie.Director;
-import com.example.CineHive.entity.video.Movie;
-import com.example.CineHive.repository.videos.movie.MovieDirectorRepository;
-import com.example.CineHive.repository.videos.movie.MovieRepository;
+import com.example.CineHive.entity.credit.drama.Director;
+import com.example.CineHive.entity.video.Drama;
+import com.example.CineHive.repository.videos.drama.DramaDirectorRepository;
+import com.example.CineHive.repository.videos.drama.DramaRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
@@ -13,29 +13,29 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
-public class MovieDirectorService {
+public class DramaDirectorService {
     @Value("${tmdb.api.key}")
     private String apiKey;
 
     private final WebClient webClient;
 
     @Autowired
-    private MovieRepository movieRepository;
+    private DramaRepository dramaRepository;
 
     @Autowired
     private ObjectMapper objectMapper;
 
     @Autowired
-    private MovieDirectorRepository directorRepository;
+    private DramaDirectorRepository dramaDirectorRepository;
 
-    public MovieDirectorService(WebClient.Builder webClientBuilder) {
+    public DramaDirectorService(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder.baseUrl("https://api.themoviedb.org/3").build();
     }
 
     @Transactional
-    public void saveMovieDirectors(Long movieId) {
+    public void saveDramaDirectors(Long dramaId) {
         String response = webClient.get()
-                .uri("/movie/" + movieId + "/credits?api_key=" + apiKey + "&language=ko")
+                .uri("/tv/" + dramaId + "/credits?api_key=" + apiKey + "&language=en-US")
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
@@ -45,22 +45,20 @@ public class MovieDirectorService {
                 JsonNode rootNode = objectMapper.readTree(response);
                 JsonNode crewNode = rootNode.path("crew");
 
-                Movie movie = movieRepository.findById(movieId).orElse(null);
-                if (movie != null) {
+                Drama drama = dramaRepository.findById(dramaId).orElse(null);
+                if (drama != null) {
                     for (JsonNode crewMember : crewNode) {
                         // 감독 정보를 찾기 위해 "job" 속성이 "Director"인 경우만 필터링
                         if ("Director".equals(crewMember.get("job").asText())) {
                             Director director = new Director();
                             director.setName(crewMember.get("name").asText());
-                            director.setGender(crewMember.get("gender").asInt());
-                            director.setJob(crewMember.get("job").asText());
 
-                            // Movie에 Director 추가
-                            movie.setDirector(director);
+                            // Drama에 Director 추가
+                            drama.getDirectors().add(director);
                             break; // 감독은 한 명만 있으므로 루프 탈출
                         }
                     }
-                    movieRepository.save(movie);
+                    dramaRepository.save(drama);
                 }
             } catch (Exception e) {
                 System.out.println("JSON 처리 중 오류 발생: " + e.getMessage());
@@ -70,5 +68,4 @@ public class MovieDirectorService {
             System.out.println("응답이 없습니다.");
         }
     }
-
 }

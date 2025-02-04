@@ -1,7 +1,7 @@
 package com.example.CineHive.service;
 
 import com.example.CineHive.entity.video.Drama;
-import com.example.CineHive.repository.Videos.DramaRepository;
+import com.example.CineHive.repository.videos.drama.DramaRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;

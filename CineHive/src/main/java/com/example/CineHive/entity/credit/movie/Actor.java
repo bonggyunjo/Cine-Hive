@@ -10,7 +10,7 @@ import lombok.Setter;
 
 
 @Entity
-@Table(name = "actors")
+@Table(name = "movie_actors")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

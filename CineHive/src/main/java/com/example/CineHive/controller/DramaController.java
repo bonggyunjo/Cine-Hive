@@ -1,7 +1,7 @@
 package com.example.CineHive.controller;
 
 import com.example.CineHive.entity.video.Drama;
-import com.example.CineHive.repository.Videos.DramaRepository;
+import com.example.CineHive.repository.videos.drama.DramaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

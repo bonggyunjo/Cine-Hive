@@ -1,4 +1,4 @@
-package com.example.CineHive.repository.Videos;
+package com.example.CineHive.repository.videos.movie;
 
 import com.example.CineHive.entity.video.TopMovie;
 import org.springframework.data.domain.Pageable;

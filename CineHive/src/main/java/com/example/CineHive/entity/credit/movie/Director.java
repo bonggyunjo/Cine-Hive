@@ -6,12 +6,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "directors")
+@Entity(name = "MovieDirector") // 엔티티 이름 변경
+@Table(name = "movie_directors")
 public class Director {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
