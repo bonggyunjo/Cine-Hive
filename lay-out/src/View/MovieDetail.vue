@@ -96,6 +96,15 @@ export default {
     goBack() {
       this.$router.go(-1);
     },
+    viewReviews() {
+      console.log('감상평 보기 클릭됨');
+    },
+    viewReview() {
+      console.log('리뷰 보기 클릭됨');
+    },
+    addToFavorites() {
+      console.log('찜하기 클릭됨');
+    },
     goToLink(url) {
       window.open(url, '_blank'); // 새 탭에서 링크 열기
     }
