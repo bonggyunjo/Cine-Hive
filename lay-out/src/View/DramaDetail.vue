@@ -12,7 +12,7 @@
         <div class="drama-info">
           <div class="info-item">
             <span class="info-label">평점</span>
-            <p class="info-text">{{ drama.voteAverage }}</p>
+            <p class="info-text">{{ drama }}</p>
           </div>
           <div class="info-item">
             <span class="info-label">감독</span>

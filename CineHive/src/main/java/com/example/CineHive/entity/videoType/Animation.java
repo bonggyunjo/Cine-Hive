@@ -1,7 +1,5 @@
-package com.example.CineHive.entity.VideoType;
+package com.example.CineHive.entity.videoType;
 
-import com.example.CineHive.entity.credit.Director;
-import com.example.CineHive.entity.credit.Video;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,30 +13,24 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "Topmovie")
-public class TopMovie {
+@Table(name = "animation")
+public class Animation {
+
     @Id
     private Long id;
+    private String name;
 
-    private String title;
     @Lob
     private String overview;
-
     private String posterPath;
-
     private String backdropPath;
 
-    private String releaseDate;
+    private double voteAverage;
+    private int voteCount;
+    private double popularity;
 
     @ElementCollection
     private List<Integer> genreIds;
 
-    private double voteAverage;
-
-    private int voteCount;
-
-    private double popularity;
-
-    private boolean adult;
 
 }

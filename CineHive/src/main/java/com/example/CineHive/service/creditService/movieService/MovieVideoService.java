@@ -1,7 +1,7 @@
-package com.example.CineHive.service.movieCreditService;
+package com.example.CineHive.service.creditService.movieService;
 
 import com.example.CineHive.dto.MovieVideoDto;
-import com.example.CineHive.entity.credit.Video;
+import com.example.CineHive.entity.credit.movie.Video;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;

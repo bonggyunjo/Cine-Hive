@@ -1,4 +1,4 @@
-package com.example.CineHive.entity.credit;
+package com.example.CineHive.entity.credit.movie;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

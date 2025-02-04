@@ -1,8 +1,8 @@
-package com.example.CineHive.entity.VideoType;
+package com.example.CineHive.entity.videoType;
 
-import com.example.CineHive.entity.credit.Actor;
-import com.example.CineHive.entity.credit.Director;
-import com.example.CineHive.entity.credit.Video;
+import com.example.CineHive.entity.credit.movie.Actor;
+import com.example.CineHive.entity.credit.movie.Director;
+import com.example.CineHive.entity.credit.movie.Video;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

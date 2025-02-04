@@ -1,4 +1,4 @@
-package com.example.CineHive.entity.credit;
+package com.example.CineHive.entity.credit.movie;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -18,7 +18,7 @@ public class Director {
     private Long id; // 고유 ID
 
     private String name; // 감독 이름
-
+    
     private int gender;
 
     private String job;

@@ -1,6 +1,6 @@
 package com.example.CineHive.repository.Videos;
 
-import com.example.CineHive.entity.VideoType.TopMovie;
+import com.example.CineHive.entity.videoType.TopMovie;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

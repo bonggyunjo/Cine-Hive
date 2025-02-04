@@ -1,9 +1,9 @@
 package com.example.CineHive.controller;
 
-import com.example.CineHive.entity.VideoType.Animation;
-import com.example.CineHive.entity.VideoType.Drama;
-import com.example.CineHive.entity.VideoType.Movie;
-import com.example.CineHive.entity.VideoType.TopMovie;
+import com.example.CineHive.entity.videoType.Animation;
+import com.example.CineHive.entity.videoType.Drama;
+import com.example.CineHive.entity.videoType.Movie;
+import com.example.CineHive.entity.videoType.TopMovie;
 import com.example.CineHive.repository.Videos.AnimationRepository;
 import com.example.CineHive.repository.Videos.DramaRepository;
 import com.example.CineHive.repository.Videos.MovieRepository;
