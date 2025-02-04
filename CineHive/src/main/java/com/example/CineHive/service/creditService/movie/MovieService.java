@@ -228,5 +228,41 @@ public class MovieService {
         return movies;
     }
 
+    public List<Movie> getNowPlayingMovies() {
+        String response = webClient.get()
+                .uri("https://api.themoviedb.org/3/movie/now_playing?language=ko&page=1&api_key=" + apiKey)
+                .header("Accept", "application/json")
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();  // block()을 사용하여 응답을 기다립니다.
+
+        List<Movie> movies = new ArrayList<>();
+        if (response != null) {
+            try {
+                JsonNode rootNode = objectMapper.readTree(response);
+                JsonNode moviesNode = rootNode.path("results");
+
+                for (JsonNode movieNode : moviesNode) {
+                    Long movieId = movieNode.get("id").asLong();
+                    Movie movie = new Movie();
+                    movie.setId(movieId);
+                    movie.setTitle(movieNode.get("title").asText());
+                    movie.setOverview(movieNode.get("overview").asText());
+                    movie.setPosterPath(movieNode.get("poster_path").asText());
+                    movie.setBackdropPath(movieNode.get("backdrop_path").asText());
+                    movie.setVoteAverage(movieNode.get("vote_average").asDouble());
+                    movie.setVoteCount(movieNode.get("vote_count").asInt());
+                    movie.setPopularity(movieNode.get("popularity").asDouble());
+                    movies.add(movie);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("응답이 없습니다.");
+        }
+        return movies;
+    }
+
 
 }

@@ -104,4 +104,10 @@ public class MovieController {
         }
     }
 
+    @GetMapping("/now_playing_movies")
+    @ResponseBody
+    public ResponseEntity<List<Movie>> getNowPlayingMoviesList() {
+        List<Movie> nowPlayingMovies = movieService.getNowPlayingMovies();
+        return ResponseEntity.ok(nowPlayingMovies);
+    }
 }
