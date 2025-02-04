@@ -14,7 +14,7 @@
     <div class="movie-container">
       <h2 class="section-title">인기 영화</h2>
       <!-- 영화 포스터 -->
-      <div class="movie-slider">
+      <div class="top-slider">
         <div
             class="movie-card"
             v-for="movie in movies"

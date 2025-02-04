@@ -54,7 +54,7 @@ public class MovieController {
     @GetMapping("/get_topmovies")
     @ResponseBody
     public List<TopMovie> getTopMoviesfromDataBase() {
-        Pageable pageable = PageRequest.of(0, 24); // 첫 번째 페이지에서 24개 가져오기
+        Pageable pageable = PageRequest.of(0, 22); // 첫 번째 페이지에서 24개 가져오기
         return topmovieRepository.findTopMovies(pageable);
     }
 
@@ -107,7 +107,8 @@ public class MovieController {
     @GetMapping("/now_playing_movies")
     @ResponseBody
     public ResponseEntity<List<Movie>> getNowPlayingMoviesList() {
-        List<Movie> nowPlayingMovies = movieService.getNowPlayingMovies();
+        Pageable pageable = PageRequest.of(0, 22); // 첫 번째 페이지에서 22개 가져오기
+        List<Movie> nowPlayingMovies = movieService.getNowPlayingMovies(pageable);
         return ResponseEntity.ok(nowPlayingMovies);
     }
 }

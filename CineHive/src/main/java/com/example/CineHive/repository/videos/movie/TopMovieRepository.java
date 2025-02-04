@@ -11,6 +11,4 @@ import java.util.List;
 
 public interface TopMovieRepository extends JpaRepository<TopMovie, Long> {
 
-    @Query("SELECT m FROM TopMovie m ORDER BY m.popularity DESC")
-    List<TopMovie> findTopMovies(Pageable pageable);
 }

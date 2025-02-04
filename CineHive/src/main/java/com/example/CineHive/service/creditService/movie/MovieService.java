@@ -16,6 +16,8 @@ import org.springframework.web.util.UriUtils;
 
 import org.springframework.stereotype.Service;
 
+import org.springframework.data.domain.Pageable;
+
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -228,13 +230,13 @@ public class MovieService {
         return movies;
     }
 
-    public List<Movie> getNowPlayingMovies() {
+    public List<Movie> getNowPlayingMovies(Pageable pageable) {
         String response = webClient.get()
-                .uri("https://api.themoviedb.org/3/movie/now_playing?language=ko&page=1&api_key=" + apiKey)
+                .uri("https://api.themoviedb.org/3/movie/now_playing?language=ko&page=" + (pageable.getPageNumber() + 1) + "&api_key=" + apiKey)
                 .header("Accept", "application/json")
                 .retrieve()
                 .bodyToMono(String.class)
-                .block();  // block()을 사용하여 응답을 기다립니다.
+                .block();
 
         List<Movie> movies = new ArrayList<>();
         if (response != null) {
@@ -263,6 +265,7 @@ public class MovieService {
         }
         return movies;
     }
+
 
 
 }
