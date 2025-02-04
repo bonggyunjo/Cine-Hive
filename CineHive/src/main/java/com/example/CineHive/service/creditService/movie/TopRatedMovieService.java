@@ -1,8 +1,13 @@
 package com.example.CineHive.service.creditService.movie;
 
+import com.example.CineHive.entity.credit.movie.Video;
+import com.example.CineHive.entity.videotype.Movie;
 import com.example.CineHive.entity.videotype.TopMovie;
+import com.example.CineHive.repository.videos.movie.MovieRepository;
+import com.example.CineHive.repository.videos.movie.TopMovieRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
@@ -19,11 +24,21 @@ public class TopRatedMovieService {
     private final WebClient webClient;
     private final ObjectMapper objectMapper;
 
+    @Autowired
+    private MovieDirectorService movieDirectorService;
+    @Autowired
+    private MovieActorService movieActorService;
+    @Autowired
+    private MovieVideoService movieVideoService;
+    @Autowired
+    private TopMovieRepository topMovieRepository;
+    @Autowired
+    private MovieRepository movieRepository;
+
     public TopRatedMovieService(WebClient.Builder webClientBuilder, ObjectMapper objectMapper) {
         this.webClient = webClientBuilder.baseUrl("https://api.themoviedb.org/3").build();
         this.objectMapper = objectMapper;
     }
-
 
     public List<TopMovie> getTopRatedMovies(Pageable pageable) {
         String response = webClient.get()
@@ -50,7 +65,46 @@ public class TopRatedMovieService {
                     topMovie.setVoteAverage(movieNode.get("vote_average").asDouble());
                     topMovie.setVoteCount(movieNode.get("vote_count").asInt());
                     topMovie.setPopularity(movieNode.get("popularity").asDouble());
+
                     topMovies.add(topMovie);
+
+                    // TopMovie 테이블에 저장
+                    if (!topMovieRepository.existsById(movieId)) {
+                        topMovieRepository.save(topMovie);  // topMovie 저장
+                        System.out.println("Saved top movie: " + topMovie.getTitle());
+                    } else {
+                        System.out.println("Top movie already exists: " + topMovie.getTitle());
+                    }
+
+                    // Movie 테이블에 저장
+                    if (!movieRepository.existsById(movieId)) {
+                        Movie movie = new Movie();
+                        movie.setId(movieId);
+                        movie.setTitle(topMovie.getTitle());
+                        movie.setOverview(topMovie.getOverview());
+                        movie.setPosterPath(topMovie.getPosterPath());
+                        movie.setBackdropPath(topMovie.getBackdropPath());
+                        movie.setVoteAverage(topMovie.getVoteAverage());
+                        movie.setVoteCount(topMovie.getVoteCount());
+                        movie.setPopularity(topMovie.getPopularity());
+                        // 비디오 정보 가져오기 (첫 번째 비디오만)
+                        Video video = movieVideoService.getFirstVideoForMovie(movieId);
+                        if (video != null) {
+                            movie.setVideos(List.of(video)); // 비디오 정보를 리스트로 설정
+                        } else {
+                            movie.setVideos(new ArrayList<>()); // 비디오가 없으면 빈 리스트 설정
+                        }
+
+                        // 필요한 추가 속성 설정
+                        movieRepository.save(movie);  // Movie 저장
+                        System.out.println("Saved movie: " + movie.getTitle());
+                    } else {
+                        System.out.println("Movie already exists: " + topMovie.getTitle());
+                    }
+                    // 배우 정보
+                    movieActorService.saveMovieCredits(movieId);
+                    // 감독 정보
+                    movieDirectorService.saveMovieDirectors(movieId);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

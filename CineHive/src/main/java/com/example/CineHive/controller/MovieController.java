@@ -99,18 +99,7 @@ public class MovieController {
             return ResponseEntity.notFound().build();
         }
     }
-
-    @GetMapping("/topmovies/{id}")
-    @ResponseBody
-    public ResponseEntity<TopMovie> getTopMovieById(@PathVariable Long id) {
-        Optional<TopMovie> topMovieOptional = topmovieRepository.findById(id);
-        if (topMovieOptional.isPresent()) {
-            return ResponseEntity.ok(topMovieOptional.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
+    
     @GetMapping("/now_playing_movies")
     @ResponseBody
     public ResponseEntity<List<Movie>> getNowPlayingMoviesList() {

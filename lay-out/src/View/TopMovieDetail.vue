@@ -74,7 +74,7 @@ export default {
     async fetchTopMovieDetails() {
       const movieId = this.$route.params.id;
       try {
-        const response = await axios.get(`http://localhost:8081/topmovies/${movieId}`);
+        const response = await axios.get(`http://localhost:8081/movies/${movieId}`);
         console.log(response.data); // 추가
         this.topMovie = response.data;
       } catch (error) {
