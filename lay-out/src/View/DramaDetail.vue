@@ -24,8 +24,7 @@
             </p>
           </div>
           <div class="info-item">
-            <span class="info-label">방영일</span>
-            <p class="info-text">{{ drama.firstAirDate }}</p>
+            <span class="info-label">출연진</span>
           </div>
           <div class="info-item">
             <span class="info-label">줄거리</span>

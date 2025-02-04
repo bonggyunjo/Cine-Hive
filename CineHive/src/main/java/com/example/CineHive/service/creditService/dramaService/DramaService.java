@@ -30,6 +30,9 @@ public class DramaService {
     @Autowired
     private DramaDirectorService dramaDirectorService;
 
+    @Autowired
+    private DramaActorService dramaActorService;
+
     public DramaService(WebClient.Builder webClientBuilder, ObjectMapper objectMapper) {
         this.webClient = webClientBuilder.baseUrl("https://api.themoviedb.org/3").build();
         this.objectMapper = objectMapper;
@@ -84,6 +87,8 @@ public class DramaService {
                     } else {
                         System.out.println("Drama already exists: " + drama.getName());
                     }
+                    //배우
+                    dramaActorService.saveDramaCredits(dramaId);
                     //감독 정보 저장
                     dramaDirectorService.saveDramaDirectors(dramaId);
                     // 데이터베이스와 상관없이 항상 리스트에 추가
