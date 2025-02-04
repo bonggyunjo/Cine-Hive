@@ -17,14 +17,20 @@
           <div class="info-item">
             <span class="info-label">감독</span>
             <p class="info-text">
-              <span v-if="drama.directors.length > 0">
-                {{ drama.directors.map(director => director.name).join(', ') }}
-              </span>
+        <span v-if="drama.directors.length > 0">
+            {{ [...new Set(drama.directors.map(director => director.name))].join(', ') }}
+        </span>
               <span v-else>정보 없음</span>
             </p>
           </div>
           <div class="info-item">
             <span class="info-label">출연진</span>
+            <p class="info-text">
+              <span v-if="drama.actors.length > 0">
+                {{ drama.actors.map(actor => actor.name).join(', ') }}
+              </span>
+              <span v-else>정보 없음</span>
+            </p>
           </div>
           <div class="info-item">
             <span class="info-label">줄거리</span>
@@ -57,53 +63,54 @@
         <img class="streaming-logo" src="../assets/movieDetailLogo/wiki.png" alt="Watcha" @click="goToLink('https://www.wavve.com')" />
         <img class="streaming-logo" src="../assets/movieDetailLogo/netflix.png" alt="Netflix" @click="goToLink('https://www.netflix.com')" />
         <img class="streaming-logo" src="../assets/movieDetailLogo/tiving.png" alt="Tiving" @click="goToLink('https://www.tving.com')" />
-        <!-- 추가 스트리밍 서비스 이미지 -->
+
       </div>
     </div>
   </div>
 </template>
+
 <script>
 import axios from 'axios';
 
 export default {
   data() {
     return {
-      drama: {}, // 영화 대신 drama로 수정
+      drama: {},
     };
   },
   created() {
     this.fetchDramaDetails();
   },
   watch: {
-    '$route.params.id': 'fetchDramaDetails' // URL 매개변수 변경 시 데이터 다시 로드
+    '$route.params.id': 'fetchDramaDetails'
   },
   methods: {
     async fetchDramaDetails() {
-      const dramaId = this.$route.params.id; // 영화 대신 드라마 아이디 사용
+      const dramaId = this.$route.params.id;
       try {
-        const response = await axios.get(`http://localhost:8081/dramas/${dramaId}`); // 드라마 API 엔드포인트로 변경
+        const response = await axios.get(`http://localhost:8081/dramas/${dramaId}`);
         this.drama = response.data;
       } catch (error) {
         console.error('드라마 상세 정보를 가져오는 중 오류가 발생했습니다:', error);
       }
     },
     viewReviews() {
-      // 여기에 감상평 보기 동작 추가
+
       console.log('감상평 보기 클릭됨');
     },
     viewReview() {
-      // 리뷰 보기 동작 추가
+
       console.log('리뷰 보기 클릭됨');
     },
     addToFavorites() {
-      // 찜하기 동작 추가
+
       console.log('찜하기 클릭됨');
     },
     goBack() {
-      window.location.href = '/'; // 페이지를 새로 고침
+      window.location.href = '/';
     },
     goToLink(url) {
-      window.open(url, '_blank'); // 새 탭에서 링크 열기
+      window.open(url, '_blank');
     }
   }
 }
