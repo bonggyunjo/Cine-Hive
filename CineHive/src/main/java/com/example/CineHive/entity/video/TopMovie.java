@@ -1,4 +1,4 @@
-package com.example.CineHive.entity.videoType;
+package com.example.CineHive.entity.video;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,24 +13,30 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "drama")
-public class Drama {
+@Table(name = "Topmovie")
+public class TopMovie {
     @Id
     private Long id;
-    private String name;
-    private String originalName;
+
+    private String title;
     @Lob
     private String overview;
+
     private String posterPath;
+
     private String backdropPath;
-    private String firstAirDate;
-    private double voteAverage;
-    private int voteCount;
-    private double popularity;
-    private boolean adult;
-    private String originalLanguage;
+
+    private String releaseDate;
 
     @ElementCollection
     private List<Integer> genreIds;
+
+    private double voteAverage;
+
+    private int voteCount;
+
+    private double popularity;
+
+    private boolean adult;
 
 }

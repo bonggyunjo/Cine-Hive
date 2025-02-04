@@ -1,6 +1,6 @@
 package com.example.CineHive.service.oauthService;
 
-import com.example.CineHive.dto.oauthInfo.KakaoUserInfo;
+import com.example.CineHive.dto.oauth.KakaoUserInfo;
 import com.example.CineHive.entity.oauth.KakaoUser;
 import com.example.CineHive.repository.KakaoUserRepository;
 import com.example.CineHive.repository.UserRepository;

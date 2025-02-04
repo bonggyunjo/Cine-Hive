@@ -11,8 +11,8 @@
         </div>
         <div class="drama-info">
           <div class="info-item">
-            <span class="info-label">평점</span>
-            <p class="info-text">{{ drama }}</p>
+            <span class="info-label">인기 지수</span>
+            <p class="info-text">{{ drama.popularity }}</p>
           </div>
           <div class="info-item">
             <span class="info-label">감독</span>

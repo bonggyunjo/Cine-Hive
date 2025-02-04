@@ -1,21 +1,18 @@
-package com.example.CineHive.dto.oauthInfo;
+package com.example.CineHive.dto.oauth;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class NaverUserInfo {
+public class KakaoUserInfo {
 
-    private String naverId;
-
+    private String kakaoId;
     private String email;
-
     private String nickname;
-
 }

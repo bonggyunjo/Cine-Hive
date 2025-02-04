@@ -1,7 +1,7 @@
 package com.example.CineHive.service;
 
-import com.example.CineHive.entity.videoType.Movie;
-import com.example.CineHive.entity.videoType.TopMovie;
+import com.example.CineHive.entity.video.Movie;
+import com.example.CineHive.entity.video.TopMovie;
 import com.example.CineHive.entity.credit.movie.Video;
 import com.example.CineHive.repository.Videos.MovieRepository;
 import com.example.CineHive.repository.Videos.TopMovieRepository;

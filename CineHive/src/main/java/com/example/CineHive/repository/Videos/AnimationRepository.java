@@ -1,6 +1,6 @@
 package com.example.CineHive.repository.Videos;
 
-import com.example.CineHive.entity.videoType.Animation;
+import com.example.CineHive.entity.video.Animation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

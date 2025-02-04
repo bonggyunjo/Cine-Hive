@@ -1,11 +1,9 @@
 package com.example.CineHive.controller;
 
-import com.example.CineHive.entity.videoType.Animation;
-import com.example.CineHive.entity.videoType.Drama;
-import com.example.CineHive.entity.videoType.Movie;
-import com.example.CineHive.entity.videoType.TopMovie;
-import com.example.CineHive.repository.Videos.AnimationRepository;
-import com.example.CineHive.repository.Videos.DramaRepository;
+import com.example.CineHive.entity.video.Animation;
+import com.example.CineHive.entity.video.Drama;
+import com.example.CineHive.entity.video.Movie;
+import com.example.CineHive.entity.video.TopMovie;
 import com.example.CineHive.repository.Videos.MovieRepository;
 import com.example.CineHive.repository.Videos.TopMovieRepository;
 import com.example.CineHive.service.AnimationService;
@@ -34,10 +32,7 @@ public class MovieController {
 
     @Autowired
     private MovieRepository movieRepository;
-    @Autowired
-    private DramaRepository dramaRepository;
-    @Autowired
-    private AnimationRepository animationRepository;
+
     @Autowired
     private TopMovieRepository topmovieRepository;
 
@@ -93,28 +88,6 @@ public class MovieController {
         Optional<Movie> movieOptional = movieRepository.findById(id);
         if (movieOptional.isPresent()) {
             return ResponseEntity.ok(movieOptional.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @GetMapping("/dramas/{id}")
-    @ResponseBody
-    public ResponseEntity<Drama> getDramaById(@PathVariable Long id) {
-        Optional<Drama> dramaOptional = dramaRepository.findById(id);
-        if (dramaOptional.isPresent()) {
-            return ResponseEntity.ok(dramaOptional.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @GetMapping("/animations/{id}")
-    @ResponseBody
-    public ResponseEntity<Animation> getAnimationById(@PathVariable Long id) {
-        Optional<Animation> animationOptional = animationRepository.findById(id);
-        if (animationOptional.isPresent()) {
-            return ResponseEntity.ok(animationOptional.get());
         } else {
             return ResponseEntity.notFound().build();
         }

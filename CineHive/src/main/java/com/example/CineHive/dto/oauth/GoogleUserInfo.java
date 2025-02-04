@@ -1,4 +1,4 @@
-package com.example.CineHive.dto.oauthInfo;
+package com.example.CineHive.dto.oauth;
 
 
 import lombok.AllArgsConstructor;
@@ -10,9 +10,11 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class KakaoUserInfo {
+public class GoogleUserInfo {
+    private String googleId;
 
-    private String kakaoId;
     private String email;
+
     private String nickname;
+
 }

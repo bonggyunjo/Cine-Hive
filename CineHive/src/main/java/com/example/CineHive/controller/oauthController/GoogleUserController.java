@@ -1,6 +1,6 @@
 package com.example.CineHive.controller.oauthController;
 
-import com.example.CineHive.dto.oauthInfo.GoogleUserInfo;
+import com.example.CineHive.dto.oauth.GoogleUserInfo;
 import com.example.CineHive.dto.UserDto;
 import com.example.CineHive.entity.User;
 import com.example.CineHive.repository.UserRepository;
