@@ -31,10 +31,11 @@
             class="movie-poster"
             v-for="movie in topmovies"
             :key="movie.id"
-            @click="goToMovieDetail(movie.id)"
+            @click="goToMovieDetail(movie.id, 'top')"
         >
           <img :src="'https://image.tmdb.org/t/p/w300' + movie.posterPath" alt="movie poster" />
         </div>
+
       </div>
 
       <h2>선호 장르</h2>
@@ -86,8 +87,12 @@ export default {
       }
     },
 
-    goToMovieDetail(movieId) {
-      this.$router.push({ name: 'MovieDetail', params: { id: movieId } });
+    goToMovieDetail(movieId, movieType) {
+      if (movieType === 'top') {
+        this.$router.push({ name: 'TopMovieDetail', params: { id: movieId } });
+      } else {
+        this.$router.push({ name: 'MovieDetail', params: { id: movieId } });
+      }
     },
   },
   mounted() {

@@ -7,6 +7,7 @@ import SearchPage from "@/View/SearchPage.vue";
 import MovieDetail from "@/View/MovieDetail.vue";
 import DramaDetail from "@/View/DramaDetail.vue";
 import AnimationDetail from "@/View/AnimationDetail.vue";
+import TopMovieDetail from "@/View/TopMovieDetail.vue";
 
 Vue.use(Router);
 
@@ -27,6 +28,14 @@ const routes = [
         name: 'AnimationDetail',
         component: AnimationDetail,
         meta: { hideFooter: true }},
+
+    {
+        path: '/topmovies/:id',
+        name: 'TopMovieDetail',
+        component: TopMovieDetail,
+        meta: { hideFooter: true }
+    }
+
 ];
 
 const router = new Router({

@@ -28,7 +28,8 @@ public class SecurityConfig {
                                          "/top_movie","/movies/**",
                                 "/dramas/**",
                                 "/animations/**",
-                                "/get_topmovies").permitAll()
+                                "/get_topmovies",
+                                "/topmovies/**").permitAll()
                         .requestMatchers("/login", "/register", "/checkuserId/**","/checknickname/**","/checkemail/**",
                                 "/api/auth/kakao/check-user","/api/auth/kakao/register",
                                 "/api/auth/google/register","/api/auth/google/check-user","/api/auth/naver/check-user","/api/auth/naver/register").permitAll() // 로그인과 회원가입은 누구나 접근 가능
