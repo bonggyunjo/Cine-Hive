@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "MovieDirector") // 엔티티 이름 변경
+@Entity(name = "MovieDirector")
 @Table(name = "movie_directors")
 public class Director {
     @Id

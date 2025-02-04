@@ -1,4 +1,4 @@
-package com.example.CineHive.service.oauthService;
+package com.example.CineHive.service.oauth;
 
 import com.example.CineHive.dto.oauth.KakaoUserInfo;
 import com.example.CineHive.entity.oauth.KakaoUser;

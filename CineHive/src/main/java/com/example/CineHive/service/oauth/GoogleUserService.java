@@ -1,4 +1,4 @@
-package com.example.CineHive.service.oauthService;
+package com.example.CineHive.service.oauth;
 
 import com.example.CineHive.dto.oauth.GoogleUserInfo;
 import com.example.CineHive.entity.oauth.GoogleUser;

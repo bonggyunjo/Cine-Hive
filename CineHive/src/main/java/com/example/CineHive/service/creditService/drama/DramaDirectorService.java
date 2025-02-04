@@ -1,4 +1,4 @@
-package com.example.CineHive.service.creditService.dramaService;
+package com.example.CineHive.service.creditService.drama;
 
 import com.example.CineHive.entity.credit.drama.Director;
 import com.example.CineHive.entity.video.Drama;

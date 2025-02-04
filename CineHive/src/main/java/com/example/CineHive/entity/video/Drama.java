@@ -40,7 +40,7 @@ public class Drama {
     private List<Integer> genreIds;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "drama_id")  // Actor와의 관계 설정
-    private List<Actor> actors; // 추가된 부분
+    @JoinColumn(name = "drama_id")
+    private List<Actor> actors;
 
 }

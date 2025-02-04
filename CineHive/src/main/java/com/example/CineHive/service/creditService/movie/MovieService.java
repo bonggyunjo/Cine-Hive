@@ -1,13 +1,10 @@
-package com.example.CineHive.service.creditService.movieService;
+package com.example.CineHive.service.creditService.movie;
 
 import com.example.CineHive.entity.video.Movie;
 import com.example.CineHive.entity.video.TopMovie;
 import com.example.CineHive.entity.credit.movie.Video;
 import com.example.CineHive.repository.videos.movie.MovieRepository;
 import com.example.CineHive.repository.videos.movie.TopMovieRepository;
-import com.example.CineHive.service.creditService.movieService.MovieActorService;
-import com.example.CineHive.service.creditService.movieService.MovieDirectorService;
-import com.example.CineHive.service.creditService.movieService.MovieVideoService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;

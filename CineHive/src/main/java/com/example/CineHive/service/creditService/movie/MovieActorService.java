@@ -1,8 +1,7 @@
-package com.example.CineHive.service.creditService.movieService;
+package com.example.CineHive.service.creditService.movie;
 
-import com.example.CineHive.entity.credit.movie.Director;
+import com.example.CineHive.entity.credit.movie.Actor;
 import com.example.CineHive.entity.video.Movie;
-import com.example.CineHive.repository.videos.movie.MovieDirectorRepository;
 import com.example.CineHive.repository.videos.movie.MovieRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
-public class MovieDirectorService {
+public class MovieActorService {
     @Value("${tmdb.api.key}")
     private String apiKey;
 
@@ -25,17 +24,14 @@ public class MovieDirectorService {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Autowired
-    private MovieDirectorRepository directorRepository;
-
-    public MovieDirectorService(WebClient.Builder webClientBuilder) {
+    public MovieActorService(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder.baseUrl("https://api.themoviedb.org/3").build();
     }
 
     @Transactional
-    public void saveMovieDirectors(Long movieId) {
+    public void saveMovieCredits(Long movieId) {
         String response = webClient.get()
-                .uri("/movie/" + movieId + "/credits?api_key=" + apiKey + "&language=ko")
+                .uri("/movie/" + movieId + "/credits?api_key=" + apiKey +"&language=ko")
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
@@ -43,21 +39,26 @@ public class MovieDirectorService {
         if (response != null) {
             try {
                 JsonNode rootNode = objectMapper.readTree(response);
-                JsonNode crewNode = rootNode.path("crew");
+                JsonNode castNode = rootNode.path("cast");
 
                 Movie movie = movieRepository.findById(movieId).orElse(null);
                 if (movie != null) {
-                    for (JsonNode crewMember : crewNode) {
-                        // 감독 정보를 찾기 위해 "job" 속성이 "Director"인 경우만 필터링
-                        if ("Director".equals(crewMember.get("job").asText())) {
-                            Director director = new Director();
-                            director.setName(crewMember.get("name").asText());
-                            director.setGender(crewMember.get("gender").asInt());
-                            director.setJob(crewMember.get("job").asText());
+                    int mainActorCount = 3; // 필요한 주연 배우 수 설정
+                    for (int i = 0; i < Math.min(castNode.size(), mainActorCount); i++) {
+                        JsonNode castMember = castNode.get(i);
+                        Actor actor = new Actor();
+                        actor.setName(castMember.get("name").asText());
+                        actor.setOriginalName(castMember.get("original_name").asText());
+                        actor.setRole(castMember.get("character").asText());
+                        actor.setGender(castMember.get("gender").asInt());
 
-                            // Movie에 Director 추가
-                            movie.setDirector(director);
-                            break; // 감독은 한 명만 있으므로 루프 탈출
+                        // 중복 확인
+                        boolean alreadyExists = movie.getActors().stream()
+                                .anyMatch(existingActor -> existingActor.getName().equals(actor.getName()));
+
+                        if (!alreadyExists) {
+                            // Movie에 Actor 추가
+                            movie.addActor(actor);
                         }
                     }
                     movieRepository.save(movie);
@@ -70,5 +71,4 @@ public class MovieDirectorService {
             System.out.println("응답이 없습니다.");
         }
     }
-
 }

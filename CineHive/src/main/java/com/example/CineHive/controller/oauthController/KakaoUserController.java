@@ -4,7 +4,7 @@ import com.example.CineHive.dto.oauth.KakaoUserInfo;
 import com.example.CineHive.dto.UserDto;
 import com.example.CineHive.entity.User;
 import com.example.CineHive.repository.UserRepository;
-import com.example.CineHive.service.oauthService.KakaoUserService;
+import com.example.CineHive.service.oauth.KakaoUserService;
 import com.example.CineHive.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

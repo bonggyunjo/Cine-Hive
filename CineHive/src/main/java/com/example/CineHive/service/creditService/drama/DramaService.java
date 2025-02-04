@@ -1,4 +1,4 @@
-package com.example.CineHive.service.creditService.dramaService;
+package com.example.CineHive.service.creditService.drama;
 
 import com.example.CineHive.entity.video.Drama;
 import com.example.CineHive.repository.videos.drama.DramaRepository;

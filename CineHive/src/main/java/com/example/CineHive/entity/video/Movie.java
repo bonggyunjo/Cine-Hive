@@ -53,8 +53,8 @@ public class Movie {
 
 
     // 감독 정보
-    @ManyToOne(cascade = CascadeType.PERSIST) // 추가
-    @JoinColumn(name = "director_id") // 외래 키
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "director_id")
     private Director director;
 
 
