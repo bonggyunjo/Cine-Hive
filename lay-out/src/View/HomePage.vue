@@ -149,10 +149,7 @@ export default {
   }
 }
 
-.bounce {
-  display: inline-block;
-  animation: bounce 0.5s ease forwards;
-}
+
 
 @keyframes bounce {
   0% {
@@ -217,28 +214,8 @@ h1 {
   transform: scale(1.1);
 }
 
-/* 영화 정보 모달 */
-.movie-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
 
-.movie-modal-content {
-  background-color: rgba(0, 0, 0, 0.8);
-  padding: 20px;
-  border-radius: 8px;
-  max-width: 600px;
-  text-align: center;
-  color: white;
-}
+
 
 .movie-modal-content button {
   margin-top: 20px;
@@ -250,38 +227,15 @@ h1 {
   border-radius: 5px;
 }
 
-.movie-modal-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
+
 
 .movie-modal-content button:hover {
   background-color: #555;
 }
 
-.search-bar {
-  width: 100%;
-  padding: 10px;
-  display: flex;
-  justify-content: center;
-  background-color : black;
-  position: sticky; /* 상단 고정 */
-  top: 0;
-  z-index: 100;
-}
 
 .search-bar input {
-  width: 80%; /* 검색창 너비 */
+  width: 80%;
   max-width: 600px;
   padding: 10px;
   font-size: 16px;

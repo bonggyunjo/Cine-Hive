@@ -8,7 +8,7 @@
               class="poster"
               v-for="movie in movies"
               :key="movie.id"
-              @click="openMovieDetails(movie)"
+              @click="openMovieDetails(movie.id)"
           >
             <img :src="getImageUrl(movie.posterPath)" alt="movie poster" />
           </div>
@@ -23,7 +23,7 @@
               class="poster"
               v-for="drama in dramas"
               :key="drama.id"
-              @click="openDramaDetails(drama)"
+              @click="openDramaDetails(drama.id)"
           >
             <img :src="getImageUrl(drama.posterPath)" alt="drama poster" />
           </div>
@@ -38,7 +38,7 @@
               class="poster"
               v-for="animation in animations"
               :key="animation.id"
-              @click="openAnimationDetails(animation)"
+              @click="openAnimationDetails(animation.id)"
           >
             <img :src="getImageUrl(animation.posterPath)" alt="animation poster" />
           </div>
@@ -116,14 +116,14 @@ export default {
     getImageUrl(path) {
       return path ? `https://image.tmdb.org/t/p/w500${path}` : '/default-poster.jpg';
     },
-    openMovieDetails(movie) {
-      this.selectedMovie = movie;
+    openMovieDetails(movieId) {
+      this.$router.push({ name: 'MovieDetail', params: { id: movieId } });
     },
-    openDramaDetails(drama) {
-      this.selectedDrama = drama;
+    openDramaDetails(dramaId) {
+      this.$router.push({ name: 'DramaDetail', params: { id: dramaId } });
     },
-    openAnimationDetails(animation) {
-      this.selectedAnimation = animation;
+    openAnimationDetails(animationId) {
+      this.$router.push({ name: 'AnimationDetail', params: { id: animationId } });
     },
     closeMovieDetails() {
       this.selectedMovie = null;
@@ -149,9 +149,7 @@ export default {
 /* 카테고리 스타일 */
 .category {
   margin-bottom: 30px;
-  text-align: left; /* 추가: 카테고리를 왼쪽 정렬 */
 }
-
 
 /* 제목 스타일 */
 .title {
