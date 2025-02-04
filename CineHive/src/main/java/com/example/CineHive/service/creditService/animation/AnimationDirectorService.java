@@ -50,7 +50,7 @@ public class AnimationDirectorService {
                         if ("Director".equals(crewMember.get("job").asText())) {
                             Director director = new Director();
                             director.setName(crewMember.get("name").asText());
-
+                            director.setAnimation(animation);
                             // Animation에 Director 추가
                             animation.getDirectors().add(director);
                             break; // 감독은 한 명만 있으므로 루프 탈출

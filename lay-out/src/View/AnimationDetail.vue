@@ -14,14 +14,15 @@
             <span class="info-label">평점</span>
             <p class="info-text">{{ animation.voteAverage }}</p>
           </div>
-<!--          <div class="info-item">-->
-<!--            <span class="info-label">제작사</span>-->
-<!--            <p class="info-text">{{ animation.productionCompany || '정보 없음' }}</p>-->
-<!--          </div>-->
-<!--          <div class="info-item">-->
-<!--            <span class="info-label">개봉일</span>-->
-<!--            <p class="info-text">{{ animation.releaseDate }}</p>-->
-<!--          </div>-->
+          <div class="info-item">
+            <span class="info-label">감독</span>
+            <p class="info-text">
+              <span v-if="animation.directors.length > 0">
+                {{ animation.directors.map(d => d.name).join(', ') }}
+              </span>
+              <span v-else>정보 없음</span>
+            </p>
+          </div>
           <div class="info-item">
             <span class="info-label">줄거리</span>
             <p class="info-text">{{ animation.overview || '설명 없음' }}</p>
@@ -39,7 +40,6 @@
             class="trailer-iframe"
         ></iframe>
       </div>
-
     </div>
     <div class="action-buttons">
       <button class="action-button" @click="viewReviews">감상평 보기</button>
@@ -49,6 +49,7 @@
     </div>
   </div>
 </template>
+
 
 <script>
 import axios from 'axios';

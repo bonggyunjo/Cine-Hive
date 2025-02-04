@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -33,7 +34,7 @@ public class Animation {
     @ElementCollection
     private List<Integer> genreIds;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "animation_id")
-    private List<Director> directors;
+    @OneToMany(mappedBy = "animation", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Director> directors = new ArrayList<>(); // 빈 리스트로 초기화
+
 }
