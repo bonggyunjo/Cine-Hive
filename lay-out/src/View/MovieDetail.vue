@@ -94,7 +94,7 @@ export default {
       }
     },
     goBack() {
-      window.location.href = '/'; // 페이지를 새로 고침
+      this.$router.go(-1);
     },
     goToLink(url) {
       window.open(url, '_blank'); // 새 탭에서 링크 열기

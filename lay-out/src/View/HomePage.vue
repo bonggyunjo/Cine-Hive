@@ -102,8 +102,7 @@ export default {
 .top-movies{
   position: relative;
   bottom: 10px;
-  left: 0.5%;
-  text-align: left;
+  text-align: right;
 }
 
 #homepage{

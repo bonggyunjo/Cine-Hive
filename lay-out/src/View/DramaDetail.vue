@@ -107,7 +107,7 @@ export default {
       console.log('찜하기 클릭됨');
     },
     goBack() {
-      window.location.href = '/';
+      this.$router.go(-1);
     },
     goToLink(url) {
       window.open(url, '_blank');
