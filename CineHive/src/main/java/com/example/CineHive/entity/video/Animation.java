@@ -2,6 +2,7 @@ package com.example.CineHive.entity.video;
 
 import com.example.CineHive.entity.credit.animation.Director;
 import com.example.CineHive.entity.credit.animation.Video;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -36,9 +37,10 @@ public class Animation {
     private List<Integer> genreIds;
 
     @OneToMany(mappedBy = "animation", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Director> directors = new ArrayList<>(); // 빈 리스트로 초기화
+    private List<Director> directors = new ArrayList<>();
 
 
     @OneToMany(mappedBy = "animation", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Video> videos = new ArrayList<>(); // 비디오 리스트 초기화
+    @JsonManagedReference
+    private List<Video> videos = new ArrayList<>();
 }

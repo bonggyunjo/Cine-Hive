@@ -1,5 +1,6 @@
 package com.example.CineHive.service.creditService.animation;
 
+import com.example.CineHive.entity.credit.animation.Video;
 import com.example.CineHive.entity.video.Animation;
 import com.example.CineHive.repository.videos.animation.AnimationRepository;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -28,6 +29,9 @@ public class AnimationService {
     @Autowired
     private AnimationDirectorService animationDirectorService;
 
+    @Autowired
+    private AnimationVideoService animationVideoService;
+
     public AnimationService(WebClient.Builder webClientBuilder, ObjectMapper objectMapper) {
         this.webClient = webClientBuilder.baseUrl("https://api.themoviedb.org/3").build();
         this.objectMapper = objectMapper;
@@ -42,7 +46,7 @@ public class AnimationService {
                 .header("Accept", "application/json")
                 .retrieve()
                 .bodyToMono(String.class)
-                .block();  // block()을 사용하여 응답을 기다립니다.
+                .block();  // 응답을 기다림
 
         List<Animation> animations = new ArrayList<>();
 
@@ -53,38 +57,45 @@ public class AnimationService {
 
                 for (JsonNode animationNode : animationsNode) {
                     List<Integer> genreIds = objectMapper.convertValue(animationNode.get("genre_ids"), List.class);
-                    // 애니메이션만
+                    // 애니메이션 장르(16)만 필터링
                     if (!genreIds.contains(16)) {
                         continue;
                     }
                     Long animationId = animationNode.get("id").asLong();
                     String posterPath = animationNode.get("poster_path").asText();
 
-                    // 포스터 이미지가 없으면 다음 데이터로 넘어감
+                    // 포스터 없는 경우 제외
                     if (posterPath == null || posterPath.isEmpty()) {
                         continue;
                     }
-                    Animation animation = new Animation();
-                    animation.setId(animationId); // movieId를 animationId로 변경
+
+                    Animation animation = animationRepository.findById(animationId).orElse(new Animation());
+                    animation.setId(animationId);
                     animation.setName(animationNode.get("title").asText());
                     animation.setOverview(animationNode.get("overview").asText());
-
                     animation.setPosterPath(posterPath);
                     animation.setBackdropPath(animationNode.get("backdrop_path").asText());
-                    animation.setGenreIds(objectMapper.convertValue(animationNode.get("genre_ids"), List.class));  // List로 변환
+                    animation.setGenreIds(objectMapper.convertValue(animationNode.get("genre_ids"), List.class));
                     animation.setVoteAverage(animationNode.get("vote_average").asDouble());
                     animation.setVoteCount(animationNode.get("vote_count").asInt());
                     animation.setPopularity(animationNode.get("popularity").asDouble());
 
-                    if (!animationRepository.existsById(animationId)) {
-                        animationRepository.save(animation);
-                        System.out.println("Saved new animation: " + animation.getName());
-                    } else {
-                        System.out.println("Animation already exists: " + animation.getName());
+
+                    Video video = animationVideoService.getFirstVideoForAnimation(animationId);
+                    if (video != null) {
+                        video.setAnimation(animation);
+                        animation.getVideos().add(video);
+                        System.out.println("Added video: " + video.getName());
                     }
 
+
+                    animationRepository.save(animation);
+                    System.out.println("Saved animation: " + animation.getName());
+
+
                     animationDirectorService.saveAnimationDirectors(animationId);
-                    // 데이터베이스와 상관없이 항상 리스트에 추가
+
+
                     animations.add(animation);
                 }
             } catch (Exception e) {
