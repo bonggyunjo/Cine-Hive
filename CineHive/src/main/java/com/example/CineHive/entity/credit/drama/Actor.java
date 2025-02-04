@@ -1,7 +1,6 @@
 package com.example.CineHive.entity.credit.drama;
 
-import com.example.CineHive.entity.video.Drama;
-import com.example.CineHive.entity.video.Movie;
+import com.example.CineHive.entity.videotype.Drama;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

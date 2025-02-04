@@ -1,7 +1,7 @@
 package com.example.CineHive.service.creditService.animation;
 
 import com.example.CineHive.entity.credit.animation.Director; // 애니메이션 감독 엔티티
-import com.example.CineHive.entity.video.Animation; // 애니메이션 엔티티
+import com.example.CineHive.entity.videotype.Animation; // 애니메이션 엔티티
 import com.example.CineHive.repository.videos.animation.AnimationRepository; // 애니메이션 리포지토리
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

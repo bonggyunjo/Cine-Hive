@@ -1,7 +1,7 @@
 package com.example.CineHive.service.creditService.drama;
 
 import com.example.CineHive.entity.credit.drama.Actor;
-import com.example.CineHive.entity.video.Drama;
+import com.example.CineHive.entity.videotype.Drama;
 import com.example.CineHive.repository.videos.drama.DramaRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

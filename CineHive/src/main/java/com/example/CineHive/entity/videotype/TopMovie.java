@@ -1,4 +1,4 @@
-package com.example.CineHive.entity.video;
+package com.example.CineHive.entity.videotype;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
