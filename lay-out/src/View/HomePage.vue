@@ -72,7 +72,7 @@ export default {
     async fetchMovies() {
       try {
         const response = await axios.get('http://localhost:8081/now_playing_movies');
-        this.movies = response.data;
+        this.movies = response.data.slice(0, 18);
       } catch (error) {
         console.error('영화 데이터를 가져오는 중 오류가 발생했습니다:', error);
       }
@@ -81,7 +81,7 @@ export default {
     async fetchTopmovies(){
       try {
         const response1 = await axios.get('http://localhost:8081/get_topmovies');
-        this.topmovies = response1.data;
+        this.topmovies = response1.data.slice(0, 18);
       } catch (error) {
         console.error('영화 데이터를 가져오는 중 오류가 발생했습니다:', error);
       }
