@@ -146,22 +146,22 @@ export default {
   padding: 20px;
 }
 
-/* 카테고리 스타일 */
+
 .category {
   margin-bottom: 30px;
 }
 
-/* 제목 스타일 */
+
 .title {
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 10px;
   padding-left: 10px;
-  text-align: left; /* 추가: 텍스트를 왼쪽 정렬 */
+  text-align: left;
 }
 
 
-/* 포스터 컨테이너 */
+
 .grid-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -169,7 +169,7 @@ export default {
   justify-content: center;
 }
 
-/* 포스터 스타일 */
+
 .poster img {
   width: 100%;
   border-radius: 10px;
@@ -182,7 +182,7 @@ export default {
   cursor: pointer;
 }
 
-/* 검색 결과 없을 때 */
+
 .no-results {
   text-align: center;
   color: gray;
@@ -190,7 +190,7 @@ export default {
   margin-top: 10px;
 }
 
-/* 모달 스타일 */
+
 .modal {
   position: fixed;
   top: 0;

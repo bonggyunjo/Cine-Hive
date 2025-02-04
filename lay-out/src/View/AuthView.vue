@@ -171,10 +171,10 @@ export default {
       const phonePattern = /^\d{3}-\d{4}-\d{4}$/;
       if (!phonePattern.test(this.memPhone)) {
         this.phoneError = '전화번호 형식이 올바르지 않습니다.';
-        this.isPhoneValid = false; // 유효하지 않음
+        this.isPhoneValid = false;
       } else {
         this.phoneError = '';
-        this.isPhoneValid = true; // 유효함
+        this.isPhoneValid = true;
       }
     },
     formatPhoneNumber() {
@@ -185,7 +185,7 @@ export default {
       this.currentStep = 1;
     },
     async checkDuplicatesName() {
-      // 중복 체크 요청
+
       const memUserid = this.memUserid;
 
       try {
@@ -283,7 +283,7 @@ export default {
       }
       if (!this.isPhoneValid) {
         alert('전화번호 형식이 올바르지 않습니다. (예: 010-1234-5678)');
-        return; // 함수 종료
+        return;
       }
 
       const userData = {
@@ -300,7 +300,7 @@ export default {
       console.log('Sending User Data:', userData);
       try {
         const response = await axios.post('http://localhost:8081/register', userData);
-        alert(response.data); // 성공 메시지 표시
+        alert(response.data);
         window.location.reload();
       } catch (error) {
         if (error.response) {
@@ -320,21 +320,21 @@ export default {
 
       try {
         const response = await axios.post('http://localhost:8081/login', loginData);
-          console.log('API Response:', response.data); // API 응답 확인
+          console.log('API Response:', response.data);
 
-        if (response.data.user) { // user가 포함되어 있는지 확인
+        if (response.data.user) {
           const user = {
-            userid: response.data.user.memUserid, // 서버에서 받은 userid
-            preferredGenres: response.data.user.genres // 서버에서 받은 선호 장르
+            userid: response.data.user.memUserid,
+            preferredGenres: response.data.user.genres
           };
 
-          // Vuex 스토어에 로그인 상태 저장
+
           this.$store.commit('SET_LOGIN', { isLoggedIn: true, user });
 
-          // 상태 확인
+
           console.log('User from store after commit:', this.$store.state.user);
 
-          // 메인 화면으로 리다이렉트
+
           if (this.$route.path !== '/') {
             this.$router.push('/');
           }
@@ -360,15 +360,15 @@ export default {
     },
     kakaoLogin() {
       this.loginType='kakao';
-      window.location.href = 'http://localhost:8081/api/auth/kakao'; // 서버의 카카오 로그인 URL로 리다이렉트
+      window.location.href = 'http://localhost:8081/api/auth/kakao';
     },
     googleLogin() {
       this.loginType='google';
-      window.location.href = 'http://localhost:8081/api/auth/google'; // 서버의 카카오 로그인 URL로 리다이렉트
+      window.location.href = 'http://localhost:8081/api/auth/google';
     },
     naverLogin() {
       this.loginType='naver';
-      window.location.href = 'http://localhost:8081/api/auth/naver'; // 서버의 카카오 로그인 URL로 리다이렉트
+      window.location.href = 'http://localhost:8081/api/auth/naver';
     },
   }
 }
@@ -391,7 +391,7 @@ export default {
   height: 60%;
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* 그림자 효과를 더 강조 */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }
 
 .left-section, .right-section {

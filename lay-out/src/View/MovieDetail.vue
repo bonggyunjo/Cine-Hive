@@ -62,7 +62,7 @@
         <img class="streaming-logo" src="../assets/movieDetailLogo/wiki.png" alt="Watcha" @click="goToLink('https://www.wavve.com')" />
         <img class="streaming-logo" src="../assets/movieDetailLogo/netflix.png" alt="Netflix" @click="goToLink('https://www.netflix.com')" />
         <img class="streaming-logo" src="../assets/movieDetailLogo/tiving.png" alt="Tiving" @click="goToLink('https://www.tving.com')" />
-        <!-- 추가 스트리밍 서비스 이미지 -->
+
       </div>
     </div>
   </div>
@@ -106,7 +106,7 @@ export default {
       console.log('찜하기 클릭됨');
     },
     goToLink(url) {
-      window.open(url, '_blank'); // 새 탭에서 링크 열기
+      window.open(url, '_blank');
     }
   }
 }
@@ -171,7 +171,7 @@ export default {
 .action-buttons {
   margin-top: 20px;
   display: flex;
-  gap: 10px; /* 버튼 간격 */
+  gap: 10px;
 }
 
 .action-button {
@@ -205,7 +205,7 @@ export default {
 
 .streaming-services {
   display: flex;
-  gap: 20px; /* 로고 간격 */
+  gap: 20px;
 }
 
 .streaming-logo {
@@ -221,9 +221,9 @@ export default {
 
 .actors-list {
   display: flex;
-  flex-direction: row; /* 가로로 나열 */
-  flex-wrap: wrap; /* 여러 줄로 나올 수 있도록 */
-  gap: 10px; /* 출연진 간격 */
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 

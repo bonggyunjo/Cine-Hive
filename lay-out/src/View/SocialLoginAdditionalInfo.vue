@@ -82,17 +82,17 @@ export default {
       const phonePattern = /^\d{3}-\d{4}-\d{4}$/;
       if (!phonePattern.test(this.memPhone)) {
         this.phoneError = '전화번호 형식이 올바르지 않습니다.';
-        this.isPhoneValid = false; // 유효하지 않음
+        this.isPhoneValid = false;
       } else {
         this.phoneError = '';
-        this.isPhoneValid = true; // 유효함
+        this.isPhoneValid = true;
       }
     },
     formatPhoneNumber() {
       this.memPhone = this.memPhone.replace(/\D/g, '').replace(/(\d{3})(\d{4})(\d+)/, '$1-$2-$3');
     },
     async getUserInfo() {
-      console.log('로그인 타입:', this.loginType); // 로그인 타입 출력
+      console.log('로그인 타입:', this.loginType);
       try {
         const response = await axios.get(`http://localhost:8081/api/auth/${this.loginType}/success`, { withCredentials: true });
         this.userInfo = response.data;
@@ -135,7 +135,7 @@ export default {
       this.validatePhone();
       if (!this.isPhoneValid) {
         alert('전화번호 형식이 올바르지 않습니다. (예: 010-1234-5678)');
-        return; // 전화번호가 유효하지 않은 경우 종료
+        return;
       }
       try {
         let userExistsResponse;
@@ -144,7 +144,7 @@ export default {
         if (this.loginType === 'google') {
           userExistsResponse = await axios.get(`http://localhost:8081/api/auth/google/check-user`, {
             params: {
-              googleId: this.userInfo.googleId // 구글 ID 전송
+              googleId: this.userInfo.googleId
             }
           });
         }
@@ -152,7 +152,7 @@ export default {
           // 카카오 ID를 확인하는 경우
           userExistsResponse = await axios.get(`http://localhost:8081/api/auth/kakao/check-user`, {
             params: {
-              kakaoId: this.userInfo.kakaoId // 카카오 ID 전송
+              kakaoId: this.userInfo.kakaoId
             }
           });
         }
@@ -160,14 +160,14 @@ export default {
           // 카카오 ID를 확인하는 경우
           userExistsResponse = await axios.get(`http://localhost:8081/api/auth/naver/check-user`, {
             params: {
-              naverId: this.userInfo.naverId // 카카오 ID 전송
+              naverId: this.userInfo.naverId
             }
           });
         }
         if (!userExistsResponse.data) {
           const userData = {
             memUserid: this.memUserid,
-            [this.loginType + 'Id']: this.userInfo[this.loginType + 'Id'], // 카카오 또는 구글 ID
+            [this.loginType + 'Id']: this.userInfo[this.loginType + 'Id'],
             memNickname: this.userInfo.nickname,
             memName: this.memName,
             memPhone: this.memPhone,
@@ -194,7 +194,7 @@ export default {
       } else {
         this.selectedGenres.splice(index, 1);
       }
-      console.log(this.selectedGenres); // 추가된 로그
+      console.log(this.selectedGenres);
     },
 
   },
@@ -280,13 +280,13 @@ h1 {
   font-size: 14px;
   color: black;
   text-align: center;
-  animation: fadeIn 0.5s ease-in-out; /* 애니메이션 추가 */
+  animation: fadeIn 0.5s ease-in-out;
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(-10px); /* 위에서 아래로 떨어지는 효과 */
+    transform: translateY(-10px);
   }
   to {
     opacity: 1;

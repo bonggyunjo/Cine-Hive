@@ -94,7 +94,7 @@ export default {
       console.log('찜하기 클릭됨');
     },
     goToLink(url) {
-      window.open(url, '_blank'); // 새 탭에서 링크 열기
+      window.open(url, '_blank');
     },
   },
 };
@@ -159,7 +159,7 @@ export default {
 .action-buttons {
   margin-top: 20px;
   display: flex;
-  gap: 10px; /* 버튼 간격 */
+  gap: 10px;
 }
 
 .action-button {
@@ -193,7 +193,7 @@ export default {
 
 .streaming-services {
   display: flex;
-  gap: 20px; /* 로고 간격 */
+  gap: 20px;
 }
 
 .streaming-logo {

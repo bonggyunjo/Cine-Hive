@@ -265,7 +265,7 @@ h1 {
 
 .search-bar input:focus {
   outline: none;
-  box-shadow: 0 0 5px rgba(255, 0, 0, 0.8); /* 포커스 시 효과 */
+  box-shadow: 0 0 5px rgba(255, 0, 0, 0.8);
 }
 
 </style>

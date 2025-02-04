@@ -176,7 +176,7 @@ export default {
 .action-buttons {
   margin-top: 20px;
   display: flex;
-  gap: 10px; /* 버튼 간격 */
+  gap: 10px;
 }
 
 .action-button {
@@ -210,7 +210,7 @@ export default {
 
 .streaming-services {
   display: flex;
-  gap: 20px; /* 로고 간격 */
+  gap: 20px;
 }
 
 .streaming-logo {
