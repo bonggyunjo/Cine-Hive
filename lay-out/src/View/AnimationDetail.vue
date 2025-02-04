@@ -47,6 +47,17 @@
       <button class="action-button" @click="addToFavorites">찜하기</button>
       <button class="action-button" @click="goBack">뒤로 가기</button>
     </div>
+
+    <div class="bottom-section">
+      <h3 class="section-title">바로가기</h3>
+      <div class="streaming-services">
+        <img class="streaming-logo" src="../assets/movieDetailLogo/bing.png" alt="Wave" @click="goToLink('https://www.watcha.com')" />
+        <img class="streaming-logo" src="../assets/movieDetailLogo/wiki.png" alt="Watcha" @click="goToLink('https://www.wavve.com')" />
+        <img class="streaming-logo" src="../assets/movieDetailLogo/netflix.png" alt="Netflix" @click="goToLink('https://www.netflix.com')" />
+        <img class="streaming-logo" src="../assets/movieDetailLogo/tiving.png" alt="Tiving" @click="goToLink('https://www.tving.com')" />
+        <!-- 추가 스트리밍 서비스 이미지 -->
+      </div>
+    </div>
   </div>
 </template>
 
@@ -98,7 +109,7 @@ export default {
   background-color: black;
   display: flex;
   flex-direction: column;
-  height: auto;
+  height: 1000px;
   padding: 40px 60px;
   border-radius: 10px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
@@ -173,10 +184,44 @@ export default {
   flex-direction: column;
   align-items: flex-end;
   margin-top: 20px;
+  position: relative;
+  left: 10%;
+  top: -40px;
 }
 
 .trailer-iframe {
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
+.bottom-section {
+  margin-top: 20px;
+  position: relative;
+  top: 50px;
+}
+
+.section-title {
+  position: relative;
+  left:-47.8%;
+  top:-10px;
+  margin-bottom: 10px;
+  font-size: 18px;
+  color: #f0f0f0;
+}
+
+.streaming-services {
+  display: flex;
+  gap: 20px; /* 로고 간격 */
+}
+
+.streaming-logo {
+  width: 75px;
+  height: 70px;
+  border-radius: 8px;
+  transition: transform 0.3s;
+}
+
+.streaming-logo:hover {
+  transform: scale(1.1);
+}
+
 </style>

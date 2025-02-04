@@ -1,7 +1,7 @@
 package com.example.CineHive.controller;
 
-import com.example.CineHive.dto.LoginRequest;
-import com.example.CineHive.dto.UserDto;
+import com.example.CineHive.dto.user.LoginDto;
+import com.example.CineHive.dto.user.UserDto;
 import com.example.CineHive.entity.User;
 import com.example.CineHive.repository.UserRepository;
 import com.example.CineHive.service.UserService;
@@ -56,7 +56,7 @@ public class UserController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<Map<String, Object>> login(@RequestBody LoginDto loginRequest) {
         try {
             boolean loginSuccess = userService.loginUser(loginRequest.getMemUserid(), loginRequest.getMemPassword());
             if (loginSuccess) {
@@ -64,7 +64,7 @@ public class UserController {
                 User user = userRepository.findByMemUserid(loginRequest.getMemUserid()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
                 Map<String, Object> response = new HashMap<>();
                 response.put("message", "로그인 성공");
-                response.put("user", new LoginRequest(user.getMemUserid(), user.getGenres().toString())); // 사용자 정보 추가
+                response.put("user", new LoginDto(user.getMemUserid(), user.getGenres().toString())); // 사용자 정보 추가
 
                 return ResponseEntity.ok(response);
             } else {

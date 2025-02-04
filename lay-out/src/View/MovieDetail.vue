@@ -237,7 +237,6 @@ export default {
   position: relative;
   left: 10%;
   top: -40px;
-  position: relative;
 }
 
 .trailer-iframe {
