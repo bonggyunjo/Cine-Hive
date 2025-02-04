@@ -12,11 +12,11 @@
     </div>
 
     <div class="movie-container">
-      <h2 class="popular-movies">인기 영화</h2>
+      <h2 class="section-title">인기 영화</h2>
       <!-- 영화 포스터 -->
       <div class="movie-slider">
         <div
-            class="movie-poster"
+            class="movie-card"
             v-for="movie in movies"
             :key="movie.id"
             @click="goToMovieDetail(movie.id)"
@@ -25,10 +25,10 @@
         </div>
       </div>
 
-      <h2 class="top-movies">역대 평점 영화</h2>
+      <h2 class="section-title">역대 평점 영화</h2>
       <div class="top-slider">
         <div
-            class="movie-poster"
+            class="movie-card"
             v-for="movie in topmovies"
             :key="movie.id"
             @click="goToMovieDetail(movie.id, 'top')"
@@ -38,10 +38,10 @@
 
       </div>
 
-      <h2>선호 장르</h2>
+      <h2 class="section-title">선호 장르</h2>
       <div class="prefer-slide">
         <div
-            class="movie-poster"
+            class="movie-card"
             v-for="movie in prefer"
             :key="movie.id"
             @click="goToMovieDetail(movie.id)"
@@ -103,12 +103,6 @@ export default {
 </script>
 <style scoped>
 
-.popular-movies,
-.top-movies{
-  position: relative;
-  bottom: 10px;
-  text-align: right;
-}
 
 #homepage{
   height: 900px;
@@ -116,7 +110,13 @@ export default {
   background-color : black;
   color: white;
 }
-
+.section-title {
+  text-align: left;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  padding-left: 10px;
+}
 .main-image{
   position: relative;
   top:100px;
@@ -194,9 +194,15 @@ h1 {
 
 .movie-container {
   display: flex;
-  justify-content: center;
-  align-items: center;
   flex-direction: column;
+  gap: 20px;
+}
+
+.movie-slider {
+  display: flex;
+  overflow-x: auto;
+  padding: 10px;
+  gap: 15px;
 }
 .top-slider,
 .movie-slider {
@@ -207,6 +213,22 @@ h1 {
   margin-bottom: 100px;
 }
 
+.movie-card {
+  flex: 0 0 auto;
+  width: 200px;
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out;
+}
+
+.movie-card img {
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
+}
+
+.movie-card:hover {
+  transform: scale(1.1);
+}
 .movie-poster img {
   width: 200px;
   height: 300px;
@@ -218,9 +240,6 @@ h1 {
   transform: scale(1.1);
 }
 
-
-
-
 .movie-modal-content button {
   margin-top: 20px;
   padding: 10px;
@@ -231,12 +250,9 @@ h1 {
   border-radius: 5px;
 }
 
-
-
 .movie-modal-content button:hover {
   background-color: #555;
 }
-
 
 .search-bar input {
   width: 80%;
