@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.Optional;
 
 @Controller
-public class AnimationController {
+public class  AnimationController {
 
     @Autowired
     private AnimationRepository animationRepository;

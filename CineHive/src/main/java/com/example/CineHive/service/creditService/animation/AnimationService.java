@@ -69,7 +69,7 @@ public class AnimationService {
                         continue;
                     }
 
-                    Animation animation = animationRepository.findById(animationId).orElse(new Animation());
+                    Animation animation = new Animation();
                     animation.setId(animationId);
                     animation.setName(animationNode.get("title").asText());
                     animation.setOverview(animationNode.get("overview").asText());
