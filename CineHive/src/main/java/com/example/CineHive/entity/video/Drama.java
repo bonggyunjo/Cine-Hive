@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -39,8 +40,7 @@ public class Drama {
     @ElementCollection
     private List<Integer> genreIds;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "drama_id")
-    private List<Actor> actors;
+    @OneToMany(mappedBy = "drama", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Actor> actors = new ArrayList<>();
 
 }

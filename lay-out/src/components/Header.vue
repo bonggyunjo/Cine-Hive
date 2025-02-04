@@ -13,6 +13,7 @@
           <li>Watched List</li>
         </ul>
       </nav>
+
       <div class="search-bar">
         <input
             type="text"
@@ -22,6 +23,7 @@
         />
         <button @click="searchMovies">검색</button>
       </div>
+
       <div class="login-area">
         <template v-if="isLoggedIn">
           <span @click="logout" class="logout-link">Logout</span>
@@ -32,6 +34,11 @@
           <router-link to="/auth" style="text-decoration: none"><span>회원이 아니신가요?</span></router-link>
         </template>
       </div>
+    </div>
+
+    <!-- 로딩 메시지 -->
+    <div v-if="loading" class="loading-overlay">
+      <p>로딩 중...</p>
     </div>
   </header>
 </template>
@@ -45,6 +52,7 @@ export default {
   data() {
     return {
       searchQuery: "", // 검색어
+      loading: false, // 로딩 상태
     };
   },
   computed: {
@@ -67,6 +75,8 @@ export default {
         return;
       }
 
+      this.loading = true; // 로딩 시작
+
       try {
         // 서버로 검색어를 보내고 결과를 받음
         const response = await axios.get('http://localhost:8081/search', {
@@ -75,7 +85,7 @@ export default {
 
         const movies = response.data.movies;
         const dramas = response.data.dramas;
-        const animations =response.data.animations;
+        const animations = response.data.animations;
 
         // 받은 데이터를 SearchPage로 전달
         this.$router.push({
@@ -89,14 +99,30 @@ export default {
         });
       } catch (error) {
         console.error("검색 중 오류가 발생했습니다:", error);
+      } finally {
+        this.loading = false; // 로딩 종료
       }
     },
   },
 };
 </script>
 
-<style scoped>
 
+<style scoped>
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  font-size: 20px;
+}
 .site-title {
   text-decoration: none;
   color: inherit; /* 색상도 기본으로 유지 */

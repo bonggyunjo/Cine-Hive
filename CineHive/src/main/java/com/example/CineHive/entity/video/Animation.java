@@ -1,5 +1,6 @@
 package com.example.CineHive.entity.video;
 
+import com.example.CineHive.entity.credit.animation.Director;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,5 +33,7 @@ public class Animation {
     @ElementCollection
     private List<Integer> genreIds;
 
-
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "animation_id")
+    private List<Director> directors;
 }
