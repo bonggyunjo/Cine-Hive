@@ -1,4 +1,4 @@
-package com.example.CineHive.service;
+package com.example.CineHive.service.creditService.movieService;
 
 import com.example.CineHive.entity.video.Movie;
 import com.example.CineHive.entity.video.TopMovie;

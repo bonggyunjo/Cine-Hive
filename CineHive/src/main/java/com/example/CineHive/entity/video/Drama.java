@@ -1,5 +1,6 @@
 package com.example.CineHive.entity.video;
 
+import com.example.CineHive.entity.credit.drama.Actor;
 import com.example.CineHive.entity.credit.drama.Director;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -37,5 +38,9 @@ public class Drama {
 
     @ElementCollection
     private List<Integer> genreIds;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "drama_id")  // Actor와의 관계 설정
+    private List<Actor> actors; // 추가된 부분
 
 }

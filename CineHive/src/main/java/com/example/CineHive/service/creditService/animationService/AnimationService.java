@@ -1,4 +1,4 @@
-package com.example.CineHive.service;
+package com.example.CineHive.service.creditService.animationService;
 
 import com.example.CineHive.entity.video.Animation;
 import com.example.CineHive.repository.videos.animation.AnimationRepository;

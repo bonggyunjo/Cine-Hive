@@ -1,4 +1,4 @@
-package com.example.CineHive.service;
+package com.example.CineHive.service.creditService.dramaService;
 
 import com.example.CineHive.entity.video.Drama;
 import com.example.CineHive.repository.videos.drama.DramaRepository;
@@ -26,6 +26,9 @@ public class DramaService {
 
     @Autowired
     private DramaRepository dramaRepository;
+
+    @Autowired
+    private DramaDirectorService dramaDirectorService;
 
     public DramaService(WebClient.Builder webClientBuilder, ObjectMapper objectMapper) {
         this.webClient = webClientBuilder.baseUrl("https://api.themoviedb.org/3").build();
@@ -81,9 +84,11 @@ public class DramaService {
                     } else {
                         System.out.println("Drama already exists: " + drama.getName());
                     }
-
+                    //감독 정보 저장
+                    dramaDirectorService.saveDramaDirectors(dramaId);
                     // 데이터베이스와 상관없이 항상 리스트에 추가
                     dramas.add(drama);
+
                 }
             } catch (Exception e) {
                 e.printStackTrace();

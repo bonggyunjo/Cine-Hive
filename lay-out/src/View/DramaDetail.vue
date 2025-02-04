@@ -16,7 +16,12 @@
           </div>
           <div class="info-item">
             <span class="info-label">감독</span>
-            <p class="info-text">{{ drama.director ? drama.director.name : '정보 없음' }}</p>
+            <p class="info-text">
+              <span v-if="drama.directors.length > 0">
+                {{ drama.directors.map(director => director.name).join(', ') }}
+              </span>
+              <span v-else>정보 없음</span>
+            </p>
           </div>
           <div class="info-item">
             <span class="info-label">방영일</span>
@@ -58,7 +63,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import axios from 'axios';
 
@@ -212,25 +216,6 @@ export default {
 
 .streaming-logo:hover {
   transform: scale(1.1);
-}
-
-.actors-list {
-  display: flex;
-  flex-direction: row; /* 가로로 나열 */
-  flex-wrap: wrap; /* 여러 줄로 나올 수 있도록 */
-  gap: 10px; /* 출연진 간격 */
-}
-
-.actor-item {
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 5px;
-  padding: 5px 10px;
-  color: white;
-  transition: background-color 0.3s;
-}
-
-.actor-item:hover {
-  background-color: rgba(255, 255, 255, 0.3);
 }
 
 .trailer-section {
