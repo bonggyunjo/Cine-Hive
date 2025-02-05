@@ -38,7 +38,7 @@
 
     <!-- 로딩 메시지 -->
     <div v-if="loading" class="loading-overlay">
-      <p>로딩 중...</p>
+      <p>검색 중...</p>
     </div>
   </header>
 </template>
@@ -78,9 +78,9 @@ export default {
       this.loading = true; // 로딩 시작
 
       try {
-        // 서버로 검색어를 보내고 결과를 받음
-        const response = await axios.get('http://localhost:8081/search', {
-          params: { query: this.searchQuery }
+        // 서버로 검색어를 포함한 POST 요청을 보냄
+        const response = await axios.post('http://localhost:8081/search', {
+          query: this.searchQuery
         });
 
         const movies = response.data.movies;

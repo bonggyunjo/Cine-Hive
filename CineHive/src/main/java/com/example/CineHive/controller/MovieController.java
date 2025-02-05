@@ -73,9 +73,11 @@ public class MovieController {
         return ResponseEntity.ok().body("성공적으로 데이터를 저장했습니다!");
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<?> searchMovies(@RequestParam String query) {
-        System.out.println("Request received for searching movies");
+    @PostMapping("/search")
+    public ResponseEntity<?> searchMovies(@RequestBody Map<String, String> request) {
+        String query = request.get("query");
+
+        System.out.println("Request received for searching movies: " + query);
         List<Movie> searchResults1 = movieService.searchMovies(query);  // 검색 결과 받기
         List<Drama> searchResults2 = dramaService.searchDramas(query);  // 검색 결과 받기
         List<Animation> searchResults3 = animationService.searchAnimations(query);  // 검색 결과 받기
@@ -87,6 +89,7 @@ public class MovieController {
 
         return ResponseEntity.ok().body(response);  // 검색 결과를 클라이언트로 반환
     }
+
 
 
     @GetMapping("/movies/{id}")
