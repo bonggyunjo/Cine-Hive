@@ -12,7 +12,7 @@
               :key="movie.id"
               @click="openMovieDetails(movie.id)"
           >
-            <img :src="getImageUrl(movie.posterPath)" alt="movie poster" />
+            <img :src="getImageUrl(movie.posterPath)" alt="movie poster"/>
           </div>
         </div>
         <p v-if="!movies.length" class="no-results">정보가 없습니다.</p>
@@ -27,7 +27,7 @@
               :key="drama.id"
               @click="openDramaDetails(drama.id)"
           >
-            <img :src="getImageUrl(drama.posterPath)" alt="drama poster" />
+            <img :src="getImageUrl(drama.posterPath)" alt="drama poster"/>
           </div>
         </div>
         <p v-if="!dramas.length" class="no-results">정보가 없습니다.</p>
@@ -42,7 +42,7 @@
               :key="animation.id"
               @click="openAnimationDetails(animation.id)"
           >
-            <img :src="getImageUrl(animation.posterPath)" alt="animation poster" />
+            <img :src="getImageUrl(animation.posterPath)" alt="animation poster"/>
           </div>
         </div>
         <p v-if="!animations.length" class="no-results">정보가 없습니다.</p>
@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import {mapState, mapActions} from 'vuex';
 import axios from 'axios';
 
 export default {
@@ -92,13 +92,20 @@ export default {
       }
     },
 
-    // ✅ getImageUrl 함수 추가
     getImageUrl(path) {
       if (!path) return "https://via.placeholder.com/150"; // 기본 이미지 처리
       return `https://image.tmdb.org/t/p/w500${path}`; // TMDB API 이미지 URL 예제
-    }
+    },
+    openMovieDetails(movieId) {
+      this.$router.push({ name: 'MovieDetail', params: { id: movieId } });
+    },
+    openDramaDetails(dramaId) {
+      this.$router.push({ name: 'DramaDetail', params: { id: dramaId } });
+    },
+    openAnimationDetails(animationId) {
+      this.$router.push({ name: 'AnimationDetail', params: { id: animationId } });
+    },
   },
-
   created() {
     console.log("페이지 로드됨. 검색어:", this.searchQuery);
     if (this.searchQuery) {
@@ -107,8 +114,6 @@ export default {
   }
 };
 </script>
-
-
 
 
 <style scoped>
@@ -132,7 +137,6 @@ export default {
   padding-left: 10px;
   text-align: left;
 }
-
 
 
 .grid-container {
