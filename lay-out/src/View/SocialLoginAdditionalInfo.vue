@@ -75,7 +75,8 @@ export default {
   },
   created() {
     this.loginType = this.$route.query.loginType; // 쿼리 파라미터에서 loginType 초기화
-    this.getUserInfo();
+    console.log('로그인 타입:', this.loginType); // 로그인 타입 로그
+    this.getUserInfo(); // 사용자 정보 가져오기
   },
   methods: {
     validatePhone() {
@@ -92,23 +93,23 @@ export default {
       this.memPhone = this.memPhone.replace(/\D/g, '').replace(/(\d{3})(\d{4})(\d+)/, '$1-$2-$3');
     },
     async getUserInfo() {
-      console.log('로그인 타입:', this.loginType);
       try {
-        const response = await axios.get(`http://localhost:8081/api/auth/${this.loginType}/success`, { withCredentials: true });
+        const response = await axios.get(`http://localhost:8081/api/auth/${this.loginType}/success`, {
+          withCredentials: true
+        });
         this.userInfo = response.data;
-        console.log('사용자 정보:', this.userInfo);
+
+        // Vuex에 로그인 상태 업데이트
+        this.$store.commit('SET_LOGIN', {
+          isLoggedIn: true,
+          user: this.userInfo
+        });
+
       } catch (error) {
-        if (error.response) {
-          console.error('사용자 정보 가져오기 실패:', error.response.data);
-          alert(`사용자 정보를 가져올 수 없습니다: ${error.response.data}`);
-        } else {
-          console.error('요청 실패:', error);
-          alert('서버와 연결할 수 없습니다. 다시 시도해주세요.');
-        }
-        this.$router.push('/login');
+        console.error('사용자 정보 가져오기 실패:', error);
+        alert('로그인 실패. 다시 시도해 주세요.');
       }
     },
-
     async submitAdditionalInfo() {
       if (!this.memUserid) {
         alert('아이디를 입력해 주세요.');
@@ -131,43 +132,34 @@ export default {
         return;
       }
 
-      // 전화번호 유효성 검사
       this.validatePhone();
       if (!this.isPhoneValid) {
         alert('전화번호 형식이 올바르지 않습니다. (예: 010-1234-5678)');
         return;
       }
+
       try {
         let userExistsResponse;
+        const loginTypeId = `${this.loginType}Id`;
 
-        // loginType이 google이면 구글 API를 호출
         if (this.loginType === 'google') {
           userExistsResponse = await axios.get(`http://localhost:8081/api/auth/google/check-user`, {
-            params: {
-              googleId: this.userInfo.googleId
-            }
+            params: { googleId: this.userInfo.googleId }
           });
-        }
-        if (this.loginType === 'kakao'){
-          // 카카오 ID를 확인하는 경우
+        } else if (this.loginType === 'kakao') {
           userExistsResponse = await axios.get(`http://localhost:8081/api/auth/kakao/check-user`, {
-            params: {
-              kakaoId: this.userInfo.kakaoId
-            }
+            params: { kakaoId: this.userInfo.kakaoId }
           });
-        }
-        if(this.loginType === 'naver'){
-          // 카카오 ID를 확인하는 경우
+        } else if (this.loginType === 'naver') {
           userExistsResponse = await axios.get(`http://localhost:8081/api/auth/naver/check-user`, {
-            params: {
-              naverId: this.userInfo.naverId
-            }
+            params: { naverId: this.userInfo.naverId }
           });
         }
+
         if (!userExistsResponse.data) {
           const userData = {
             memUserid: this.memUserid,
-            [this.loginType + 'Id']: this.userInfo[this.loginType + 'Id'],
+            [loginTypeId]: this.userInfo[loginTypeId],
             memNickname: this.userInfo.nickname,
             memName: this.memName,
             memPhone: this.memPhone,
@@ -176,12 +168,22 @@ export default {
             genres: this.selectedGenres,
             memPassword: '0'
           };
+
           const response = await axios.post(`http://localhost:8081/api/auth/${this.loginType}/register`, userData);
+
+          // ✅ Vuex에 로그인 상태 업데이트
+          this.$store.dispatch('login', userData);
+
           alert(response.data);
-          this.$router.push('/');
+          this.$router.push('/'); // 로그인 후 이동할 페이지
         } else {
           alert('사용자가 이미 존재합니다. 추가 정보 입력은 필요하지 않습니다.');
+
+          // ✅ 이미 가입된 사용자 정보 Vuex에 저장
+          this.$store.dispatch('login', userExistsResponse.data);
+
           this.$router.push('/');
+          window.location.reload();  // 새로고침을 통해 상태 업데이트
         }
       } catch (error) {
         alert('정보 제출 중 오류가 발생했습니다.');

@@ -1,7 +1,9 @@
 <template>
   <header>
     <div class="header-container">
-      <router-link to="/" class="site-title"><span @click="goToHome">CINEHIVE</span></router-link>
+      <router-link to="/" class="site-title">
+        <span @click="goToHome">CINEHIVE</span>
+      </router-link>
 
       <nav class="nav">
         <ul>
@@ -27,11 +29,11 @@
       <div class="login-area">
         <template v-if="isLoggedIn">
           <span @click="logout" class="logout-link">Logout</span>
-          <span>myPage</span>
+          <router-link to="/mypage" class="nav-link">My Page</router-link>
         </template>
         <template v-else>
           <router-link to="/auth" class="login-link">Login</router-link>
-          <router-link to="/auth" style="text-decoration: none"><span>회원이 아니신가요?</span></router-link>
+          <router-link to="/auth" class="signup-link">회원이 아니신가요?</router-link>
         </template>
       </div>
     </div>
@@ -45,7 +47,7 @@
 
 <script>
 import axios from 'axios';
-import {mapActions, mapState} from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
 export default {
   name: 'HeaderComponent',
@@ -56,16 +58,21 @@ export default {
     };
   },
   computed: {
-    ...mapState(['isLoggedIn']),
+    ...mapState(['isLoggedIn', 'user']),
   },
   methods: {
     ...mapActions(['updateSearchResults']), // Vuex 액션 추가
-    goToHome(){
-      window.location.href = '/';
+
+    goToHome() {
+      this.$router.push('/');
     },
+
     logout() {
-      this.$store.dispatch('logout');
+      this.$store.dispatch('logout'); // Vuex 상태 변경
       localStorage.removeItem('token');
+      sessionStorage.clear(); // 모든 세션 데이터 제거
+
+      // 현재 페이지가 '/'가 아닐 때만 이동
       if (this.$route.path !== '/') {
         this.$router.push('/');
       }
@@ -79,15 +86,12 @@ export default {
       this.loading = true; // 로딩 시작
 
       try {
-        // 서버로 검색어를 포함한 POST 요청을 보냄
         const response = await axios.post('http://localhost:8081/search', {
           query: this.searchQuery
         });
 
-        const { movies, dramas, animations } = response.data;
-
         // Vuex에 검색 결과 저장
-        this.updateSearchResults({ movies, dramas, animations });
+        this.updateSearchResults(response.data);
 
         // 검색어만 URL에 추가
         this.$router.push({
@@ -104,7 +108,6 @@ export default {
 };
 </script>
 
-
 <style scoped>
 .loading-overlay {
   position: fixed;
@@ -120,14 +123,10 @@ export default {
   z-index: 1000;
   font-size: 20px;
 }
+
 .site-title {
   text-decoration: none;
-  color: inherit; /* 색상도 기본으로 유지 */
-}
-
-.nav-link {
-  text-decoration: none;
-  color: inherit; /* 색상 기본 유지 */
+  color: inherit; /* 색상 유지 */
 }
 
 header {
@@ -149,7 +148,6 @@ header {
   font-size: 22px;
   margin-left: 10px;
   position: absolute;
-
 }
 
 .nav ul {
@@ -196,23 +194,16 @@ header {
 }
 
 .login-link,
-.logout-link {
+.logout-link,
+.nav-link {
   color: white;
   text-decoration: none;
   cursor: pointer;
 }
 
 .login-link:hover,
-.logout-link:hover {
-  color: #F50000;
-}
-
-.login-area span {
-  color: white;
-  font-size: 13px;
-  cursor: pointer;
-}
-.login-area span:hover{
+.logout-link:hover,
+.nav-link:hover {
   color: #F50000;
 }
 
@@ -246,7 +237,6 @@ header {
   }
 }
 
-
 @media (max-width: 480px) {
   .header-container {
     text-align: center;
@@ -272,8 +262,9 @@ header {
     position: relative;
   }
 }
+
 .search-bar button {
-  background-color : #393636;
+  background-color: #393636;
   color: white;
   border: none;
   padding: 10px 18px;
@@ -283,7 +274,7 @@ header {
   margin-left: 10px;
   transition: background-color 0.3s ease;
   position: relative;
-  top:1px;
+  top: 1px;
 }
 
 .search-bar button:hover {

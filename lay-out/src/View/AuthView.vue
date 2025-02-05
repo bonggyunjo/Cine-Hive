@@ -358,9 +358,11 @@ export default {
         this.selectedGenres.splice(index, 1);
       }
     },
+
     kakaoLogin() {
       this.loginType='kakao';
       window.location.href = 'http://localhost:8081/api/auth/kakao';
+
     },
     googleLogin() {
       this.loginType='google';

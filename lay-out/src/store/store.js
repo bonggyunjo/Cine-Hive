@@ -29,4 +29,8 @@ export default new Vuex.Store({
             commit('SET_SEARCH_RESULTS', results);
         }
     },
+    getters: {
+        getUserId: (state) => (state.user ? state.user.memUserid : null),
+        getUserInfo: (state) => state.user
+    }
 });
