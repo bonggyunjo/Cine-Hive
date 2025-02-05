@@ -45,7 +45,7 @@
 
 <script>
 import axios from 'axios';
-import { mapState } from 'vuex';
+import {mapActions, mapState} from 'vuex';
 
 export default {
   name: 'HeaderComponent',
@@ -59,6 +59,7 @@ export default {
     ...mapState(['isLoggedIn']),
   },
   methods: {
+    ...mapActions(['updateSearchResults']), // Vuex 액션 추가
     goToHome(){
       window.location.href = '/';
     },
@@ -83,19 +84,15 @@ export default {
           query: this.searchQuery
         });
 
-        const movies = response.data.movies;
-        const dramas = response.data.dramas;
-        const animations = response.data.animations;
+        const { movies, dramas, animations } = response.data;
 
-        // 받은 데이터를 SearchPage로 전달
+        // Vuex에 검색 결과 저장
+        this.updateSearchResults({ movies, dramas, animations });
+
+        // 검색어만 URL에 추가
         this.$router.push({
           path: '/search',
-          query: {
-            q: this.searchQuery,
-            movies: JSON.stringify(movies),
-            dramas: JSON.stringify(dramas),
-            animations: JSON.stringify(animations),
-          },
+          query: { q: this.searchQuery }
         });
       } catch (error) {
         console.error("검색 중 오류가 발생했습니다:", error);

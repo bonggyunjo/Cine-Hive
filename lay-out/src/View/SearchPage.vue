@@ -1,5 +1,7 @@
 <template>
   <div id="searchpage">
+    <h1>"{{ searchQuery }}" 검색 결과</h1>
+
     <div v-if="movies.length || dramas.length || animations.length">
       <div class="category">
         <h2 class="title">영화</h2>
@@ -46,97 +48,68 @@
         <p v-if="!animations.length" class="no-results">정보가 없습니다.</p>
       </div>
     </div>
+
     <p v-else class="no-results">검색 결과가 없습니다.</p>
-
-    <!-- 영화 상세 정보 모달 -->
-    <div v-if="selectedMovie" class="modal" @click.self="closeMovieDetails">
-      <div class="modal-content">
-        <h2>{{ selectedMovie.title }}</h2>
-        <p>{{ selectedMovie.overview || '설명 없음' }}</p>
-        <p>평점: {{ selectedMovie.voteAverage }}</p>
-        <p>출시일: {{ selectedMovie.releaseDate }}</p>
-        <button @click="closeMovieDetails">닫기</button>
-      </div>
-    </div>
-
-    <div v-if="selectedDrama" class="modal" @click.self="closeDramaDetails">
-      <div class="modal-content">
-        <h2>{{ selectedDrama.name }}</h2>
-        <p>{{ selectedDrama.overview || '설명 없음' }}</p>
-        <p>평점: {{ selectedDrama.voteAverage }}</p>
-        <p>출시일: {{ selectedDrama.releaseDate }}</p>
-        <button @click="closeDramaDetails">닫기</button>
-      </div>
-    </div>
-
-    <div v-if="selectedAnimation" class="modal" @click.self="closeAnimationDetails">
-      <div class="modal-content">
-        <h2>{{ selectedAnimation.name }}</h2>
-        <p>{{ selectedAnimation.overview || '설명 없음' }}</p>
-        <p>평점: {{ selectedAnimation.voteAverage }}</p>
-        <p>출시일: {{ selectedAnimation.releaseDate }}</p>
-        <button @click="closeAnimationDetails">닫기</button>
-      </div>
-    </div>
   </div>
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex';
+import axios from 'axios';
+
 export default {
-  data() {
-    return {
-      searchQuery: this.$route.query.q,
-      movies: [],
-      dramas: [],
-      animations: [],
-      selectedMovie: null,
-      selectedDrama: null,
-      selectedAnimation: null,
-    };
-  },
-  mounted() {
-    this.fetchSearchResults();
-  },
-  watch: {
-    '$route.query.q': function (newQuery) {
-      this.searchQuery = newQuery;
-      this.fetchSearchResults();
+  name: 'SearchPage',
+  computed: {
+    ...mapState(['searchResults']),
+    searchQuery() {
+      return this.$route.query.q || "";
+    },
+    movies() {
+      return this.searchResults?.movies || [];
+    },
+    dramas() {
+      return this.searchResults?.dramas || [];
+    },
+    animations() {
+      return this.searchResults?.animations || [];
     }
   },
   methods: {
-    fetchSearchResults() {
-      const moviesData = this.$route.query.movies;
-      const dramasData = this.$route.query.dramas;
-      const animationsData = this.$route.query.animations;
+    ...mapActions(['updateSearchResults']),
 
-      this.movies = moviesData ? JSON.parse(moviesData) : [];
-      this.dramas = dramasData ? JSON.parse(dramasData) : [];
-      this.animations = animationsData ? JSON.parse(animationsData) : [];
+    async fetchSearchResults() {
+      if (!this.searchQuery) return;
+
+      try {
+        const response = await axios.post('http://localhost:8081/search', {
+          query: this.searchQuery
+        });
+
+        console.log("서버 응답 데이터:", response.data);
+        this.updateSearchResults(response.data);
+      } catch (error) {
+        console.error("검색 결과 오류:", error);
+      }
     },
+
+    // ✅ getImageUrl 함수 추가
     getImageUrl(path) {
-      return path ? `https://image.tmdb.org/t/p/w500${path}` : '/default-poster.jpg';
-    },
-    openMovieDetails(movieId) {
-      this.$router.push({ name: 'MovieDetail', params: { id: movieId } });
-    },
-    openDramaDetails(dramaId) {
-      this.$router.push({ name: 'DramaDetail', params: { id: dramaId } });
-    },
-    openAnimationDetails(animationId) {
-      this.$router.push({ name: 'AnimationDetail', params: { id: animationId } });
-    },
-    closeMovieDetails() {
-      this.selectedMovie = null;
-    },
-    closeDramaDetails() {
-      this.selectedDrama = null;
-    },
-    closeAnimationDetails() {
-      this.selectedAnimation = null;
-    },
+      if (!path) return "https://via.placeholder.com/150"; // 기본 이미지 처리
+      return `https://image.tmdb.org/t/p/w500${path}`; // TMDB API 이미지 URL 예제
+    }
+  },
+
+  created() {
+    console.log("페이지 로드됨. 검색어:", this.searchQuery);
+    if (this.searchQuery) {
+      this.fetchSearchResults();
+    }
   }
 };
 </script>
+
+
+
 
 <style scoped>
 #searchpage {
