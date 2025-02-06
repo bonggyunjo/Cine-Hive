@@ -332,4 +332,15 @@ header {
 .search-bar button:active {
   background-color: #990000;
 }
+
+.signup-link{
+  text-decoration: none;
+  color: white;
+  position: relative;
+  top:0.5px;
+  font-size: 14.5px;
+}
+.signup-link:hover{
+  color: red;
+}
 </style>
