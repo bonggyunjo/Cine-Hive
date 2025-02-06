@@ -49,7 +49,7 @@ public class KakaoUserController {
                 // 기존 회원인 경우
                 HttpSession session = request.getSession();
                 session.setAttribute("user", userInfo); // 세션에 사용자 정보 저장
-                response.sendRedirect("http://localhost:8080/z"); // 메인 화면으로 리다이렉트
+                response.sendRedirect("http://localhost:8080/"); // 메인 화면으로 리다이렉트
             } else {
                 // 소셜 회원인 경우 추가 정보 입력 화면으로 리다이렉트
                 kakaoUserService.registerUser(userInfo); // 사용자 정보 저장

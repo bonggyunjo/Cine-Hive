@@ -359,6 +359,8 @@ export default {
       }
     },
 
+
+
     kakaoLogin() {
       this.loginType='kakao';
       window.location.href = 'http://localhost:8081/api/auth/kakao';
@@ -372,6 +374,7 @@ export default {
       this.loginType='naver';
       window.location.href = 'http://localhost:8081/api/auth/naver';
     },
+
   }
 }
 </script>
