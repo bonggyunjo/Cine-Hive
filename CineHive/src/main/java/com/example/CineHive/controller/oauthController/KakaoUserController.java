@@ -51,28 +51,18 @@ public class KakaoUserController {
             String accessToken = kakaoUserService.getAccessToken(code);
             KakaoUserInfo userInfo = kakaoUserService.getUserInfo(accessToken);
 
-            // userInfo 값 로깅
-            System.out.println("UserInfo before DB lookup: " + userInfo.getName() + ", " + userInfo.getGenres());
-
-            // 구글 ID로 GoogleUser 엔티티를 조회, 없으면 새로 등록
             KakaoUser kakaoUser = kakaoUserRepository.findByKakaoId(userInfo.getKakaoId()).orElse(null);
 
-            // googleUser가 null인 경우 확인
             if (kakaoUser == null) {
                 System.out.println("GoogleUser is null for Google ID: " + userInfo.getKakaoId());
-                kakaoUser = kakaoUserService.registerNewKakaoUser(userInfo);  // 예: 구글 사용자 등록 메서드
+                kakaoUser = kakaoUserService.registerNewKakaoUser(userInfo);
             } else {
                 System.out.println("GoogleUser found: " + kakaoUser.getName() + ", " + kakaoUser.getGenres());
             }
 
-            // DB에서 name과 genres 값을 가져오기
-            userInfo.setName(kakaoUser.getName());  // DB에서 name 값 설정
-            userInfo.setGenres(kakaoUser.getGenres());  // DB에서 genres 값 설정
+            userInfo.setName(kakaoUser.getName());
+            userInfo.setGenres(kakaoUser.getGenres());
 
-            // 로그 찍기
-            System.out.println("User Info after setting from DB: " + userInfo.getName() + ", " + userInfo.getGenres());
-
-            // 응답을 클라이언트에게 보냄
             response.setContentType("application/json");
             response.getWriter().write(new ObjectMapper().writeValueAsString(userInfo));
 
@@ -80,14 +70,14 @@ public class KakaoUserController {
             if (userService.checkUserExists(userInfo.getKakaoId())) {
                 // 기존 회원인 경우
                 HttpSession session = request.getSession();
-                session.setAttribute("user", userInfo); // 세션에 사용자 정보 저장
-                response.sendRedirect("http://localhost:8080/"); // 메인 화면으로 리다이렉트
+                session.setAttribute("user", userInfo);
+                response.sendRedirect("http://localhost:8080/");
             } else {
-                // 소셜 회원인 경우 추가 정보 입력 화면으로 리다이렉트
-                kakaoUserService.registerUser(userInfo); // 사용자 정보 저장
+
+                kakaoUserService.registerUser(userInfo);
                 HttpSession session = request.getSession();
-                session.setAttribute("user", userInfo); // 세션에 사용자 정보 저장
-                response.sendRedirect("http://localhost:8080/additional-info?loginType=kakao"); // 추가 정보 입력 화면으로 리다이렉트
+                session.setAttribute("user", userInfo);
+                response.sendRedirect("http://localhost:8080/additional-info?loginType=kakao");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -99,7 +89,7 @@ public class KakaoUserController {
     @PostMapping("/session")
     public ResponseEntity<?> createSession(@RequestBody KakaoUserInfo userInfo, HttpServletRequest request) {
         HttpSession session = request.getSession();
-        session.setAttribute("user", userInfo); // 사용자 정보를 세션에 저장
+        session.setAttribute("user", userInfo);
         return ResponseEntity.ok("Session created successfully");
     }
 
@@ -107,11 +97,11 @@ public class KakaoUserController {
     @GetMapping("/kakao/success")
     public ResponseEntity<?> successPage(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
-        log.info("Session exists: {}", session != null); // 세션 존재 여부 로그
+        log.info("Session exists: {}", session != null);
 
         if (session != null) {
             KakaoUserInfo userInfo = (KakaoUserInfo) session.getAttribute("user");
-            log.info("User info in session: {}", userInfo); // 세션에 저장된 사용자 정보 로그
+            log.info("User info in session: {}", userInfo);
 
             if (userInfo != null) {
                 return ResponseEntity.ok(userInfo);
@@ -126,18 +116,18 @@ public class KakaoUserController {
         // 카카오 로그아웃 URL 생성
         String logoutUrl = "https://kauth.kakao.com/oauth/logout?client_id=" + kakaoUserService.getClientId() + "&logout_redirect_uri=" + kakaoUserService.getLogoutRedirectUri();
 
-        return ResponseEntity.ok(logoutUrl); // 로그아웃 URL 반환
+        return ResponseEntity.ok(logoutUrl);
     }
 
     @GetMapping("/logout")
     public RedirectView handleLogoutRedirect(HttpServletRequest request) {
-        HttpSession session = request.getSession(false); // 현재 세션 가져오기
+        HttpSession session = request.getSession(false);
         if (session != null) {
-            session.invalidate(); // 세션 무효화
+            session.invalidate();
         }
         RedirectView redirectView = new RedirectView();
-        redirectView.setUrl("http://localhost:8080/login"); // 로그인 페이지로 리다이렉트
-        return redirectView; // RedirectView 반환
+        redirectView.setUrl("http://localhost:8080/login");
+        return redirectView;
     }
 
     @GetMapping("/kakao/check-user")
@@ -156,17 +146,17 @@ public class KakaoUserController {
         newUser.setMemName(userDto.getMemName());
         newUser.setMemPhone(userDto.getMemPhone());
         newUser.setMemSex(userDto.getMemSex());
-        newUser.setKakaoId(userDto.getKakaoId()); // 카카오 ID 추가
+        newUser.setKakaoId(userDto.getKakaoId()); 
         newUser.setMemRegisterDatetime(LocalDateTime.now());
-        newUser.setMemType("카카오"); // 가입 유형 설정
+        newUser.setMemType("카카오");
         newUser.setGenres(userDto.getGenres());
 
         userRepository.save(newUser);
-        // 2. googleUser 테이블 업데이트 (name과 genres 추가)
+
         KakaoUser kakaoUser = kakaoUserRepository.findByKakaoId(userDto.getKakaoId())
                 .orElseThrow(() -> new IllegalArgumentException("Kakao User not found"));
-        kakaoUser.setName(userDto.getMemName());  // 이름 업데이트
-        kakaoUser.setGenres(userDto.getGenres());  // 장르 업데이트
+        kakaoUser.setName(userDto.getMemName());
+        kakaoUser.setGenres(userDto.getGenres());
         kakaoUserRepository.save(kakaoUser);
         return ResponseEntity.ok("회원가입이 완료되었습니다.");
     }

@@ -43,7 +43,6 @@ public class GoogleUserController {
                 "&response_type=code" +
                 "&scope=" + URLEncoder.encode("email profile", "UTF-8"); // 'scope' 값 인코딩 추가
 
-        // URL 검증 (디버깅용)
         System.out.println("Redirect URL: " + redirectUrl);
 
         response.sendRedirect(redirectUrl);
@@ -55,13 +54,9 @@ public class GoogleUserController {
             String accessToken = googleUserService.getAccessToken(code);
             GoogleUserInfo userInfo = googleUserService.getUserInfo(accessToken);
 
-            // userInfo 값 로깅
-            System.out.println("UserInfo before DB lookup: " + userInfo.getName() + ", " + userInfo.getGenres());
 
-            // 구글 ID로 GoogleUser 엔티티를 조회, 없으면 새로 등록
             GoogleUser googleUser = googleUserRepository.findByGoogleId(userInfo.getGoogleId()).orElse(null);
 
-            // googleUser가 null인 경우 확인
             if (googleUser == null) {
                 System.out.println("GoogleUser is null for Google ID: " + userInfo.getGoogleId());
                 googleUser = googleUserService.registerNewGoogleUser(userInfo);  // 예: 구글 사용자 등록 메서드
@@ -69,14 +64,9 @@ public class GoogleUserController {
                 System.out.println("GoogleUser found: " + googleUser.getName() + ", " + googleUser.getGenres());
             }
 
-            // DB에서 name과 genres 값을 가져오기
-            userInfo.setName(googleUser.getName());  // DB에서 name 값 설정
-            userInfo.setGenres(googleUser.getGenres());  // DB에서 genres 값 설정
+            userInfo.setName(googleUser.getName());
+            userInfo.setGenres(googleUser.getGenres());
 
-            // 로그 찍기
-            System.out.println("User Info after setting from DB: " + userInfo.getName() + ", " + userInfo.getGenres());
-
-            // 응답을 클라이언트에게 보냄
             response.setContentType("application/json");
             response.getWriter().write(new ObjectMapper().writeValueAsString(userInfo));
 
@@ -86,10 +76,10 @@ public class GoogleUserController {
                 session.setAttribute("user", userInfo);
                 response.sendRedirect("http://localhost:8080/additional-info?loginType=google");
             } else {
-                // 이미 가입된 사용자
+
                 HttpSession session = request.getSession();
-                session.setAttribute("user", userInfo); // 세션에 사용자 정보 저장
-                response.sendRedirect("http://localhost:8080/"); // 홈 화면으로 리다이렉트
+                session.setAttribute("user", userInfo);
+                response.sendRedirect("http://localhost:8080/");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -114,7 +104,6 @@ public class GoogleUserController {
 
     @PostMapping("/google/register")
     public ResponseEntity<String> registerUserDetails(@RequestBody UserDto userDto) {
-        // 1. user 테이블에 저장
         User newUser = new User();
         newUser.setMemUserid(userDto.getMemUserid());
         newUser.setMemEmail(userDto.getMemEmail());
@@ -126,10 +115,9 @@ public class GoogleUserController {
         newUser.setGoogleId(userDto.getGoogleId());
         newUser.setMemRegisterDatetime(LocalDateTime.now());
         newUser.setMemType("구글");
-        newUser.setGenres(userDto.getGenres());  // 선택한 장르 저장
+        newUser.setGenres(userDto.getGenres());
         userRepository.save(newUser);
 
-        // 2. googleUser 테이블 업데이트 (name과 genres 추가)
         GoogleUser googleUser = googleUserRepository.findByGoogleId(userDto.getGoogleId())
                 .orElseThrow(() -> new IllegalArgumentException("Google User not found"));
         googleUser.setName(userDto.getMemName());  // 이름 업데이트
