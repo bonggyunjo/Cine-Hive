@@ -2,6 +2,7 @@
 package com.example.CineHive.service.oauth;
 
 import com.example.CineHive.dto.oauth.NaverUserInfo;
+import com.example.CineHive.entity.User;
 import com.example.CineHive.entity.oauth.NaverUser;
 import com.example.CineHive.repository.NaverUserRepository;
 import com.example.CineHive.repository.UserRepository;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.Scanner;
 
 
@@ -29,6 +31,8 @@ public class NaverUserService {
 
     private final NaverUserRepository naverUserRepository;
     private final UserRepository userRepository;
+
+
 
     public NaverUserService(NaverUserRepository naverUserRepository, UserRepository userRepository) {
         this.naverUserRepository = naverUserRepository;
@@ -91,8 +95,34 @@ public class NaverUserService {
 
     public void registerUser(NaverUserInfo userInfo) {
         NaverUser naverUser = naverUserRepository.findByNaverId(userInfo.getNaverId())
-                .orElse(new NaverUser(userInfo.getNaverId(), userInfo.getNickname(), userInfo.getEmail()));
+                .orElse(new NaverUser(userInfo.getNaverId(), userInfo.getNickname(), userInfo.getEmail(), null, null));
 
         naverUserRepository.save(naverUser);
+    }
+
+    public NaverUser registerNewNaverUser(NaverUserInfo userInfo) {
+
+        User user = new User();
+        user.setMemUserid(userInfo.getNaverId());
+        user.setMemEmail(userInfo.getEmail());
+        user.setMemNickname(userInfo.getNickname());
+        user.setMemName(userInfo.getName());
+        user.setMemPhone("");
+        user.setMemSex("");
+        user.setMemRegisterDatetime(LocalDateTime.now());
+        user.setMemType("네이버");
+        user.setGenres(userInfo.getGenres());
+        userRepository.save(user);
+
+
+        NaverUser naverUser = new NaverUser();
+        naverUser.setNaverId(userInfo.getNaverId());
+        naverUser.setNickname(userInfo.getNickname());
+        naverUser.setMemUserId(user.getMemUserid());
+        naverUser.setName(userInfo.getName());
+        naverUser.setGenres(userInfo.getGenres());
+        naverUserRepository.save(naverUser);  // GoogleUser 테이블에 저장
+
+        return naverUser;
     }
 }

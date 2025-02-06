@@ -146,7 +146,7 @@ public class KakaoUserController {
         newUser.setMemName(userDto.getMemName());
         newUser.setMemPhone(userDto.getMemPhone());
         newUser.setMemSex(userDto.getMemSex());
-        newUser.setKakaoId(userDto.getKakaoId()); 
+        newUser.setKakaoId(userDto.getKakaoId());
         newUser.setMemRegisterDatetime(LocalDateTime.now());
         newUser.setMemType("카카오");
         newUser.setGenres(userDto.getGenres());
