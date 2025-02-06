@@ -61,10 +61,16 @@ public class UserController {
             boolean loginSuccess = userService.loginUser(loginRequest.getMemUserid(), loginRequest.getMemPassword());
             if (loginSuccess) {
                 // 사용자 정보를 가져와서 응답 생성
-                User user = userRepository.findByMemUserid(loginRequest.getMemUserid()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+                User user = userService.getUserInfo(loginRequest.getMemUserid());
                 Map<String, Object> response = new HashMap<>();
                 response.put("message", "로그인 성공");
-                response.put("user", new LoginDto(user.getMemUserid(), user.getGenres().toString())); // 사용자 정보 추가
+                response.put("user", new HashMap<String, Object>() {{
+                    put("memUserid", user.getMemUserid());
+                    put("name", user.getMemName());
+                    put("nickname", user.getMemNickname());
+                    put("email", user.getMemEmail());
+                    put("genres", user.getGenres());
+                }});
 
                 return ResponseEntity.ok(response);
             } else {
@@ -74,6 +80,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", e.getMessage()));
         }
     }
+
 
 
     @GetMapping("/checkuserId/{memUserid}")

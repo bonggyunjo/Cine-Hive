@@ -88,4 +88,10 @@ public class UserService{
     public boolean checkUserExistsNaver(String naverId) {
         return userRepository.findByNaverId(naverId).isPresent();
     }
+
+
+    public User getUserInfo(String memUserid) {
+        return userRepository.findByMemUserid(memUserid).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+    }
+
 }

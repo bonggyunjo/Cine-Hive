@@ -320,20 +320,23 @@ export default {
 
       try {
         const response = await axios.post('http://localhost:8081/login', loginData);
-          console.log('API Response:', response.data);
+        console.log('API Response:', response.data);
 
         if (response.data.user) {
           const user = {
             userid: response.data.user.memUserid,
-            preferredGenres: response.data.user.genres
+            name: response.data.user.name || '',
+            nickname: response.data.user.nickname || '',
+            email: response.data.user.email || '',
+            preferredGenres: response.data.user.genres || [] // 선호 장르
           };
 
 
+          // Store the user in Vuex
           this.$store.commit('SET_LOGIN', { isLoggedIn: true, user });
 
 
           console.log('User from store after commit:', this.$store.state.user);
-
 
           if (this.$route.path !== '/') {
             this.$router.push('/');

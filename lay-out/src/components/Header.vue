@@ -66,9 +66,12 @@ export default {
   },
   computed: {
     ...mapState(['isLoggedIn', 'user']),
+    userId() {
+      return this.isLoggedIn ? this.user?.id : null;
+    }
   },
   methods: {
-    ...mapActions(['updateSearchResults']), // Vuex 액션 추가
+    ...mapActions(['updateSearchResults']),
 
     goToHome() {
       this.$router.push('/');
@@ -81,21 +84,29 @@ export default {
         this.userInfo = response.data;
         console.log(`${loginType} 로그인 성공:`, response.data);
 
-        // Vuex에 로그인 상태 업데이트
+
         this.$store.commit('SET_LOGIN', {
           isLoggedIn: true,
-          user: this.userInfo
+          user: {
+            id: response.data.kakaoId || response.data.naverId,
+            email: response.data.email,
+            nickname: response.data.nickname
+          }
         });
+
+        console.log("Vuex에 저장된 user:", this.$store.state.user);
+        console.log("로그인 상태:", this.$store.state.isLoggedIn);
+
       } catch (error) {
         console.error(`${loginType} 사용자 정보 가져오기 실패:`, error);
       }
     },
     logout() {
-      this.$store.dispatch('logout'); // Vuex 상태 변경
-      localStorage.removeItem('token'); // 로컬 스토리지에서 토큰 제거
-      sessionStorage.clear(); // 모든 세션 데이터 제거
+      this.$store.dispatch('logout');
+      localStorage.removeItem('token');
+      sessionStorage.clear();
 
-      // 추가: 서버에 로그아웃 요청 보내기 (쿠키 삭제)
+
       axios.get('http://localhost:8081/api/auth/logout', { withCredentials: true })
           .then(() => {
             console.log("로그아웃 성공");
@@ -114,17 +125,17 @@ export default {
         return;
       }
 
-      this.loading = true; // 로딩 시작
+      this.loading = true;
 
       try {
         const response = await axios.post('http://localhost:8081/search', {
           query: this.searchQuery
         });
 
-        // Vuex에 검색 결과 저장
+
         this.updateSearchResults(response.data);
 
-        // 검색어만 URL에 추가
+
         this.$router.push({
           path: '/search',
           query: { q: this.searchQuery }
@@ -132,13 +143,13 @@ export default {
       } catch (error) {
         console.error("검색 중 오류가 발생했습니다:", error);
       } finally {
-        this.loading = false; // 로딩 종료
+        this.loading = false;
       }
     },
   },
   created() {
     if (this.isLoggedIn) {
-      this.getUserInfo(); // 로그인 상태일 경우 사용자 정보 가져오기
+      this.getUserInfo();
     }
   }
 };

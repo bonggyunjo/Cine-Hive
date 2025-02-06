@@ -142,19 +142,25 @@ export default {
         let userExistsResponse;
         const loginTypeId = `${this.loginType}Id`;
 
+        console.log('Sending request to check if user exists...');
         if (this.loginType === 'google') {
+          console.log('googleId:', this.userInfo.googleId);
           userExistsResponse = await axios.get(`http://localhost:8081/api/auth/google/check-user`, {
             params: { googleId: this.userInfo.googleId }
           });
         } else if (this.loginType === 'kakao') {
+          console.log('kakaoId:', this.userInfo.kakaoId);
           userExistsResponse = await axios.get(`http://localhost:8081/api/auth/kakao/check-user`, {
             params: { kakaoId: this.userInfo.kakaoId }
           });
         } else if (this.loginType === 'naver') {
+          console.log('naverId:', this.userInfo.naverId);
           userExistsResponse = await axios.get(`http://localhost:8081/api/auth/naver/check-user`, {
             params: { naverId: this.userInfo.naverId }
           });
         }
+
+        console.log('User exists response:', userExistsResponse);
 
         if (!userExistsResponse.data) {
           const userData = {
@@ -169,24 +175,24 @@ export default {
             memPassword: '0'
           };
 
-          const response = await axios.post(`http://localhost:8081/api/auth/${this.loginType}/register`, userData);
 
-          // ✅ Vuex에 로그인 상태 업데이트
-          this.$store.dispatch('login', userData);
+          const response = await axios.post(`http://localhost:8081/api/auth/${this.loginType}/register`, userData);
+          console.log('Registration response:', response);
+
+          // Vuex 상태 업데이트 후 로그 추가
+          this.$store.commit('SET_USER', response.data.user); // 예시: Vuex 상태 업데이트
 
           alert(response.data);
           this.$router.push('/'); // 로그인 후 이동할 페이지
         } else {
-          alert('사용자가 이미 존재합니다. 추가 정보 입력은 필요하지 않습니다.');
 
-          // ✅ 이미 가입된 사용자 정보 Vuex에 저장
           this.$store.dispatch('login', userExistsResponse.data);
 
           this.$router.push('/');
-          window.location.reload();  // 새로고침을 통해 상태 업데이트
+          window.location.reload(); // 새로고침을 통해 상태 업데이트
         }
       } catch (error) {
-        alert('정보 제출 중 오류가 발생했습니다.');
+        alert('정보 제출 중 오류가 발생했습니다. 상세 오류를 확인해 주세요.');
       }
     },
     toggleGenre(genre) {
@@ -196,9 +202,9 @@ export default {
       } else {
         this.selectedGenres.splice(index, 1);
       }
-      console.log(this.selectedGenres);
-    },
-
+      // 로그 출력 (Vue 반응성의 __ob__ 문제 제거)
+      console.log('Selected genres:', this.selectedGenres);
+    }
   },
 };
 </script>
