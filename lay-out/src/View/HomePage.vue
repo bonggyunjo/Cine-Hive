@@ -39,14 +39,21 @@
       </div>
 
       <h2 class="section-title">선호 장르</h2>
-      <div class="prefer-slide">
-        <div
-            class="movie-card"
-            v-for="movie in prefer"
-            :key="movie.id"
-            @click="goToMovieDetail(movie.id)"
-        >
-          <img :src="'https://image.tmdb.org/t/p/w300' + movie.posterPath" alt="movie poster" />
+      <!-- 로그인 여부 체크 -->
+      <div v-if="!user" class="login-prompt-container">
+        <p class="login-prompt">로그인을 하시면 선호하는 장르를 추천해드립니다.</p>
+        <button class="login-button" @click="goToLogin">로그인</button>
+      </div>
+      <div v-else>
+        <div class="prefer-slide">
+          <div
+              class="movie-card"
+              v-for="movie in prefer"
+              :key="movie.id"
+              @click="goToMovieDetail(movie.id)"
+          >
+            <img :src="'https://image.tmdb.org/t/p/w300' + movie.posterPath" alt="movie poster" />
+          </div>
         </div>
       </div>
     </div>
@@ -94,6 +101,9 @@ export default {
         this.$router.push({ name: 'MovieDetail', params: { id: movieId } });
       }
     },
+    goToLogin() {
+      this.$router.push({ name: 'Login' }); // 로그인 페이지로 이동하는 코드
+    },
   },
   mounted() {
     this.fetchMovies();
@@ -101,10 +111,10 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 
-
-#homepage{
+#homepage {
   height: 900px;
   flex: 1;
   background-color : black;
@@ -117,12 +127,12 @@ export default {
   margin-bottom: 10px;
   padding-left: 10px;
 }
-.main-image{
+.main-image {
   position: relative;
-  top:100px;
+  top: 100px;
   margin-bottom: 150px;
 }
-.main-image img{
+.main-image img {
   opacity: 0.3;
 }
 .main-text {
@@ -153,8 +163,6 @@ export default {
   }
 }
 
-
-
 @keyframes bounce {
   0% {
     transform: translateY(20px);
@@ -167,7 +175,6 @@ export default {
     transform: translateY(0);
   }
 }
-
 
 .main-text p {
   animation: fadeIn 0.5s forwards;
@@ -268,4 +275,88 @@ h1 {
   box-shadow: 0 0 5px rgba(255, 0, 0, 0.8);
 }
 
+.login-prompt-container {
+  position: relative;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 40px 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  transform: scale(1.05);
+  animation: fadeInContainer 1s ease-out;
+}
+
+@keyframes fadeInContainer {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.login-prompt {
+  font-size: 20px;
+  color: darkslateblue;
+  font-weight: 600;
+  line-height: 1.5;
+  margin-bottom: 15px;
+  animation: fadeInText 1s ease-out, bounceText 0.8s ease-in-out infinite;
+}
+
+@keyframes fadeInText {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounceText {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.login-button {
+  padding: 15px 50px;
+  background-color: darkslateblue;
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  margin-top: 15px;
+}
+
+.login-button:hover {
+  background-color: #d1bb4a;
+  transform: translateY(-2px);
+}
+
+.login-button:active {
+  transform: translateY(2px);
+}
+
+.prefer-slide {
+  display: flex;
+  gap: 15px;
+  overflow-x: auto;
+  padding: 10px;
+  justify-content: center;
+}
 </style>
