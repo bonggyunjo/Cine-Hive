@@ -81,21 +81,21 @@ export default {
         const response = await axios.get(`http://localhost:8081/api/auth/${loginType}/success`, {
           withCredentials: true
         });
-        this.userInfo = response.data;
-        console.log(`${loginType} 로그인 성공:`, response.data);
 
+        // API 응답에서 필요한 데이터 추출
+        const userData = response.data;
 
+        console.log("data",userData)
         this.$store.commit('SET_LOGIN', {
           isLoggedIn: true,
           user: {
-            id: response.data.kakaoId || response.data.naverId,
-            email: response.data.email,
-            nickname: response.data.nickname
+            id: userData.memUserid,
+            email: userData.email || '',
+            nickname: userData.nickname,
+            name: userData.name || '', // 이름 추가
+            preferredGenres: userData.genres || [] // 장르 추가
           }
         });
-
-        console.log("Vuex에 저장된 user:", this.$store.state.user);
-        console.log("로그인 상태:", this.$store.state.isLoggedIn);
 
       } catch (error) {
         console.error(`${loginType} 사용자 정보 가져오기 실패:`, error);

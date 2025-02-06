@@ -1,6 +1,7 @@
 package com.example.CineHive.service.oauth;
 
 import com.example.CineHive.dto.oauth.GoogleUserInfo;
+import com.example.CineHive.entity.User;
 import com.example.CineHive.entity.oauth.GoogleUser;
 import com.example.CineHive.repository.GoogleUserRepository;
 import com.example.CineHive.repository.UserRepository;
@@ -15,6 +16,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 @Service
 public class GoogleUserService {
@@ -86,8 +88,36 @@ public class GoogleUserService {
 
     public void registerUser(GoogleUserInfo userInfo) {
         GoogleUser googleUser = googleUserRepository.findByGoogleId(userInfo.getGoogleId())
-                .orElse(new GoogleUser(userInfo.getGoogleId(), userInfo.getNickname(), userInfo.getEmail()));
+                .orElse(new GoogleUser(userInfo.getGoogleId(), userInfo.getNickname(), userInfo.getEmail(), null, null));
 
         googleUserRepository.save(googleUser);
     }
+
+    public GoogleUser registerNewGoogleUser(GoogleUserInfo userInfo) {
+        // 먼저 User 엔티티에 사용자 정보 저장
+        User user = new User();
+        user.setMemUserid(userInfo.getGoogleId());  // 구글 ID를 사용자 ID로 사용 (혹은 적절히 설정)
+        user.setMemEmail(userInfo.getEmail());
+        user.setMemNickname(userInfo.getNickname());
+        user.setMemName(userInfo.getName());
+        user.setMemPhone("");  // 필요에 따라 전화번호도 설정
+        user.setMemSex("");    // 필요에 따라 성별 설정
+        user.setMemRegisterDatetime(LocalDateTime.now());
+        user.setMemType("구글");
+        user.setGenres(userInfo.getGenres());  // 장르 정보 설정
+        userRepository.save(user);  // User 테이블에 저장
+
+        // 이제 GoogleUser 엔티티를 생성하고 memUserId를 설정
+        GoogleUser googleUser = new GoogleUser();
+        googleUser.setGoogleId(userInfo.getGoogleId());
+        googleUser.setNickname(userInfo.getNickname());
+        googleUser.setMemUserId(user.getMemUserid());  // User의 memUserId를 GoogleUser에 설정
+        googleUser.setName(userInfo.getName());
+        googleUser.setGenres(userInfo.getGenres());
+        googleUserRepository.save(googleUser);  // GoogleUser 테이블에 저장
+
+        return googleUser;
+    }
+
+
 }

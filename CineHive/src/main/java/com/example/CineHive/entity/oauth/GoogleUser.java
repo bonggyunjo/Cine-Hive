@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -36,11 +38,21 @@ public class GoogleUser {
     @JoinColumn(name = "user_id", referencedColumnName = "mem_id", insertable = false, updatable = false)
     private User user;
 
-    public GoogleUser(String googleId, String nickname, String memUserId) {
+    @Column
+    private String name; // 추가된 name 필드
+
+    @ElementCollection
+    @CollectionTable(name = "google_user_genres", joinColumns = @JoinColumn(name = "google_user_id"))
+    @Column(name = "genre")
+    private List<String> genres; // 추가된 genre 필드
+
+
+    public GoogleUser(String googleId, String nickname, String memUserId, String name, List<String> genres) {
         this.googleId = googleId;
         this.nickname = nickname;
         this.memUserId = memUserId; // 추가된 필드 초기화
-
+        this.name = name;
+        this.genres = genres;
     }
 }
 

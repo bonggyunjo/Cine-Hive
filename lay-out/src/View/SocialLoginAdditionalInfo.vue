@@ -175,17 +175,15 @@ export default {
             memPassword: '0'
           };
 
-
           const response = await axios.post(`http://localhost:8081/api/auth/${this.loginType}/register`, userData);
           console.log('Registration response:', response);
 
-
           this.$store.commit('SET_USER', response.data.user);
 
-          alert(response.data);
-          this.$router.push('/');
-        } else {
+          alert('회원가입에 성공하셨습니다. 다시 로그인해주세요.');
+          this.$router.push('/auth'); // Redirect to the login page
 
+        } else {
           this.$store.dispatch('login', userExistsResponse.data);
 
           this.$router.push('/');
