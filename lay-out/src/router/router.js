@@ -14,7 +14,7 @@ Vue.use(Router);
 const routes = [
     { path: '/', component: Home },
     { path: '/auth', component: AuthView, meta: { hideHeader: true, hideFooter: true } }, // 헤더와 푸터 숨기기
-    { path: '/additional-info', component: SocialLoginAdditionalInfo },
+    { path: '/additional-info', component: SocialLoginAdditionalInfo, meta: {hideHeader: true} },
     { path: '/search', component: SearchPage },
     {path: '/movie/:id',
         name: 'MovieDetail',

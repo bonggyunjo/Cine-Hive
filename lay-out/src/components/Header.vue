@@ -86,7 +86,7 @@ export default {
         });
       } catch (error) {
         console.error('사용자 정보 가져오기 실패:', error);
-        alert('로그인 실패. 다시 시도해 주세요.');
+
       }
     },
     async getUserInfoNaver() {
@@ -103,7 +103,7 @@ export default {
         });
       } catch (error) {
         console.error('사용자 정보 가져오기 실패:', error);
-        alert('로그인 실패. 다시 시도해 주세요.');
+
       }
     },
     async getUserInfoGoogle() {
@@ -120,7 +120,7 @@ export default {
         });
       } catch (error) {
         console.error('사용자 정보 가져오기 실패:', error);
-        alert('로그인 실패. 다시 시도해 주세요.');
+
       }
     },
     logout() {
