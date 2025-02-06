@@ -3,9 +3,13 @@ package com.example.CineHive.controller.oauthController;
 import com.example.CineHive.dto.oauth.KakaoUserInfo;
 import com.example.CineHive.dto.user.UserDto;
 import com.example.CineHive.entity.User;
+import com.example.CineHive.entity.oauth.GoogleUser;
+import com.example.CineHive.entity.oauth.KakaoUser;
+import com.example.CineHive.repository.KakaoUserRepository;
 import com.example.CineHive.repository.UserRepository;
 import com.example.CineHive.service.oauth.KakaoUserService;
 import com.example.CineHive.service.UserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -31,6 +35,9 @@ public class KakaoUserController {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private KakaoUserRepository kakaoUserRepository;
+
     @GetMapping("/kakao")
     public void kakaoLogin(HttpServletResponse response) throws IOException {
         String url = "https://kauth.kakao.com/oauth/authorize?client_id=" + kakaoUserService.getClientId() +
@@ -43,6 +50,31 @@ public class KakaoUserController {
         try {
             String accessToken = kakaoUserService.getAccessToken(code);
             KakaoUserInfo userInfo = kakaoUserService.getUserInfo(accessToken);
+
+            // userInfo 값 로깅
+            System.out.println("UserInfo before DB lookup: " + userInfo.getName() + ", " + userInfo.getGenres());
+
+            // 구글 ID로 GoogleUser 엔티티를 조회, 없으면 새로 등록
+            KakaoUser kakaoUser = kakaoUserRepository.findByKakaoId(userInfo.getKakaoId()).orElse(null);
+
+            // googleUser가 null인 경우 확인
+            if (kakaoUser == null) {
+                System.out.println("GoogleUser is null for Google ID: " + userInfo.getKakaoId());
+                kakaoUser = kakaoUserService.registerNewKakaoUser(userInfo);  // 예: 구글 사용자 등록 메서드
+            } else {
+                System.out.println("GoogleUser found: " + kakaoUser.getName() + ", " + kakaoUser.getGenres());
+            }
+
+            // DB에서 name과 genres 값을 가져오기
+            userInfo.setName(kakaoUser.getName());  // DB에서 name 값 설정
+            userInfo.setGenres(kakaoUser.getGenres());  // DB에서 genres 값 설정
+
+            // 로그 찍기
+            System.out.println("User Info after setting from DB: " + userInfo.getName() + ", " + userInfo.getGenres());
+
+            // 응답을 클라이언트에게 보냄
+            response.setContentType("application/json");
+            response.getWriter().write(new ObjectMapper().writeValueAsString(userInfo));
 
             // 사용자 존재 여부 확인
             if (userService.checkUserExists(userInfo.getKakaoId())) {
@@ -62,7 +94,6 @@ public class KakaoUserController {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error during Kakao login process");
         }
     }
-
 
 
     @PostMapping("/session")
@@ -131,7 +162,14 @@ public class KakaoUserController {
         newUser.setGenres(userDto.getGenres());
 
         userRepository.save(newUser);
+        // 2. googleUser 테이블 업데이트 (name과 genres 추가)
+        KakaoUser kakaoUser = kakaoUserRepository.findByKakaoId(userDto.getKakaoId())
+                .orElseThrow(() -> new IllegalArgumentException("Kakao User not found"));
+        kakaoUser.setName(userDto.getMemName());  // 이름 업데이트
+        kakaoUser.setGenres(userDto.getGenres());  // 장르 업데이트
+        kakaoUserRepository.save(kakaoUser);
         return ResponseEntity.ok("회원가입이 완료되었습니다.");
     }
+
 
 }

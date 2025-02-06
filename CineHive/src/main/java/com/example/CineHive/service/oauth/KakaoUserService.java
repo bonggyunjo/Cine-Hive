@@ -1,6 +1,7 @@
 package com.example.CineHive.service.oauth;
 
 import com.example.CineHive.dto.oauth.KakaoUserInfo;
+import com.example.CineHive.entity.User;
 import com.example.CineHive.entity.oauth.KakaoUser;
 import com.example.CineHive.repository.KakaoUserRepository;
 import com.example.CineHive.repository.UserRepository;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 @Service
 public class KakaoUserService {
@@ -101,9 +103,34 @@ public class KakaoUserService {
 
 
     public void registerUser(KakaoUserInfo userInfo) {
-        // SocialUser 저장
         KakaoUser socialUser = kakaouserRepository.findByKakaoId(userInfo.getKakaoId())
-                .orElse(new KakaoUser(userInfo.getKakaoId(), userInfo.getNickname(), userInfo.getEmail()));
+                .orElse(new KakaoUser(userInfo.getKakaoId(), userInfo.getNickname(), userInfo.getEmail(), null, null));
         kakaouserRepository.save(socialUser);
         }
+
+    public KakaoUser registerNewKakaoUser(KakaoUserInfo userInfo) {
+        // 먼저 User 엔티티에 사용자 정보 저장
+        User user = new User();
+        user.setMemUserid(userInfo.getKakaoId());  // 구글 ID를 사용자 ID로 사용 (혹은 적절히 설정)
+        user.setMemEmail(userInfo.getEmail());
+        user.setMemNickname(userInfo.getNickname());
+        user.setMemName(userInfo.getName());
+        user.setMemPhone("");  // 필요에 따라 전화번호도 설정
+        user.setMemSex("");    // 필요에 따라 성별 설정
+        user.setMemRegisterDatetime(LocalDateTime.now());
+        user.setMemType("카카오");
+        user.setGenres(userInfo.getGenres());  // 장르 정보 설정
+        userRepository.save(user);  // User 테이블에 저장
+
+        // 이제 GoogleUser 엔티티를 생성하고 memUserId를 설정
+        KakaoUser kakaoUser = new KakaoUser();
+        kakaoUser.setKakaoId(userInfo.getKakaoId());
+        kakaoUser.setNickname(userInfo.getNickname());
+        kakaoUser.setMemUserId(user.getMemUserid());  // User의 memUserId를 GoogleUser에 설정
+        kakaoUser.setName(userInfo.getName());
+        kakaoUser.setGenres(userInfo.getGenres());
+        kakaouserRepository.save(kakaoUser);  // GoogleUser 테이블에 저장
+
+        return kakaoUser;
+    }
 }
