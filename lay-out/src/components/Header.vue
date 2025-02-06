@@ -108,14 +108,13 @@ export default {
       // 로컬/세션 스토리지 데이터 삭제
       localStorage.removeItem('token');
       sessionStorage.clear();
-      window.location.reload();  // 페이지 새로 고침
-      // 로그아웃 요청
+      window.location.reload();
+
       axios.get('http://localhost:8081/api/auth/logout', {withCredentials: true})
           .then(() => {
             console.log("로그아웃 성공");
 
-            // 페이지 리로드
-            window.location.reload();  // 페이지 새로 고침
+            window.location.reload();
           })
           .catch(error => {
             console.error("로그아웃 오류:", error);

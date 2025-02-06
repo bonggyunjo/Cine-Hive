@@ -74,7 +74,7 @@ export default {
     };
   },
   created() {
-    this.loginType = this.$route.query.loginType; // 쿼리 파라미터에서 loginType 초기화
+    this.loginType = this.$route.query.loginType;
     console.log('로그인 타입:', this.loginType); // 로그인 타입 로그
     this.getUserInfo(); // 사용자 정보 가져오기
   },
@@ -99,7 +99,7 @@ export default {
         });
         this.userInfo = response.data;
 
-        // Vuex에 로그인 상태 업데이트
+
         this.$store.commit('SET_LOGIN', {
           isLoggedIn: true,
           user: this.userInfo
@@ -179,17 +179,17 @@ export default {
           const response = await axios.post(`http://localhost:8081/api/auth/${this.loginType}/register`, userData);
           console.log('Registration response:', response);
 
-          // Vuex 상태 업데이트 후 로그 추가
-          this.$store.commit('SET_USER', response.data.user); // 예시: Vuex 상태 업데이트
+
+          this.$store.commit('SET_USER', response.data.user);
 
           alert(response.data);
-          this.$router.push('/'); // 로그인 후 이동할 페이지
+          this.$router.push('/');
         } else {
 
           this.$store.dispatch('login', userExistsResponse.data);
 
           this.$router.push('/');
-          window.location.reload(); // 새로고침을 통해 상태 업데이트
+          window.location.reload();
         }
       } catch (error) {
         alert('정보 제출 중 오류가 발생했습니다. 상세 오류를 확인해 주세요.');
@@ -202,7 +202,7 @@ export default {
       } else {
         this.selectedGenres.splice(index, 1);
       }
-      // 로그 출력 (Vue 반응성의 __ob__ 문제 제거)
+
       console.log('Selected genres:', this.selectedGenres);
     }
   },

@@ -328,7 +328,7 @@ export default {
             name: response.data.user.name || '',
             nickname: response.data.user.nickname || '',
             email: response.data.user.email || '',
-            preferredGenres: response.data.user.genres || [] // 선호 장르
+            preferredGenres: response.data.user.genres || []
           };
 
 

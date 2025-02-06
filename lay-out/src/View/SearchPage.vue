@@ -94,7 +94,7 @@ export default {
 
     getImageUrl(path) {
       if (!path) return "https://via.placeholder.com/150"; // 기본 이미지 처리
-      return `https://image.tmdb.org/t/p/w500${path}`; // TMDB API 이미지 URL 예제
+      return `https://image.tmdb.org/t/p/w500${path}`;
     },
     openMovieDetails(movieId) {
       this.$router.push({ name: 'MovieDetail', params: { id: movieId } });
