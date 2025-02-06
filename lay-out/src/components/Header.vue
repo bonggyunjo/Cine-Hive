@@ -102,22 +102,24 @@ export default {
       }
     },
     logout() {
-      this.$store.dispatch('logout');
+      // Vuex에서 로그인 상태 초기화
+      this.$store.commit('SET_LOGOUT');
+
+      // 로컬/세션 스토리지 데이터 삭제
       localStorage.removeItem('token');
       sessionStorage.clear();
-
-
-      axios.get('http://localhost:8081/api/auth/logout', { withCredentials: true })
+      window.location.reload();  // 페이지 새로 고침
+      // 로그아웃 요청
+      axios.get('http://localhost:8081/api/auth/logout', {withCredentials: true})
           .then(() => {
             console.log("로그아웃 성공");
+
+            // 페이지 리로드
+            window.location.reload();  // 페이지 새로 고침
           })
           .catch(error => {
             console.error("로그아웃 오류:", error);
           });
-
-      if (this.$route.path !== '/') {
-        this.$router.push('/');
-      }
     },
     async searchMovies() {
       if (!this.searchQuery.trim()) {
