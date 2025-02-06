@@ -45,20 +45,17 @@ public class KakaoUserController {
             KakaoUserInfo userInfo = kakaoUserService.getUserInfo(accessToken);
 
             // 사용자 존재 여부 확인
-            if (!userService.checkUserExists(userInfo.getKakaoId())) {
-                // 사용자가 가입하지 않은 경우
-                kakaoUserService.registerUser(userInfo); // 사용자 정보 저장
-
-                HttpSession session = request.getSession();
-                session.setAttribute("user", userInfo);
-
-                // 클라이언트의 추가 정보 입력 화면으로 리다이렉트 (loginType을 쿼리 파라미터로 추가)
-                response.sendRedirect("http://localhost:8080/additional-info?loginType=kakao"); // 수정된 부분
-            } else {
-                // 사용자가 이미 가입한 경우 홈으로 리다이렉트
+            if (userService.checkUserExists(userInfo.getKakaoId())) {
+                // 기존 회원인 경우
                 HttpSession session = request.getSession();
                 session.setAttribute("user", userInfo); // 세션에 사용자 정보 저장
-                response.sendRedirect("http://localhost:8080/"); // 홈 화면으로 리다이렉트
+                response.sendRedirect("http://localhost:8080/z"); // 메인 화면으로 리다이렉트
+            } else {
+                // 소셜 회원인 경우 추가 정보 입력 화면으로 리다이렉트
+                kakaoUserService.registerUser(userInfo); // 사용자 정보 저장
+                HttpSession session = request.getSession();
+                session.setAttribute("user", userInfo); // 세션에 사용자 정보 저장
+                response.sendRedirect("http://localhost:8080/additional-info?loginType=kakao"); // 추가 정보 입력 화면으로 리다이렉트
             }
         } catch (Exception e) {
             e.printStackTrace();

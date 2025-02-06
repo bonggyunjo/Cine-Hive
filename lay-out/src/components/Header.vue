@@ -57,6 +57,11 @@ export default {
       loading: false, // 로딩 상태
     };
   },
+  mounted() {
+    this.getUserInfoKakao();
+    this.getUserInfoNaver();
+    this.getUserInfoGoogle();
+  },
   computed: {
     ...mapState(['isLoggedIn', 'user']),
   },
@@ -67,6 +72,57 @@ export default {
       this.$router.push('/');
     },
 
+    async getUserInfoKakao() {
+      try {
+        const response = await axios.get(`http://localhost:8081/api/auth/kakao/success`, {
+          withCredentials: true
+        });
+        this.userInfo = response.data;
+        console.log("res",response.data)
+        // Vuex에 로그인 상태 업데이트
+        this.$store.commit('SET_LOGIN', {
+          isLoggedIn: true,
+          user: this.userInfo
+        });
+      } catch (error) {
+        console.error('사용자 정보 가져오기 실패:', error);
+        alert('로그인 실패. 다시 시도해 주세요.');
+      }
+    },
+    async getUserInfoNaver() {
+      try {
+        const response = await axios.get(`http://localhost:8081/api/auth/naver/success`, {
+          withCredentials: true
+        });
+        this.userInfo = response.data;
+        console.log("res",response.data)
+        // Vuex에 로그인 상태 업데이트
+        this.$store.commit('SET_LOGIN', {
+          isLoggedIn: true,
+          user: this.userInfo
+        });
+      } catch (error) {
+        console.error('사용자 정보 가져오기 실패:', error);
+        alert('로그인 실패. 다시 시도해 주세요.');
+      }
+    },
+    async getUserInfoGoogle() {
+      try {
+        const response = await axios.get(`http://localhost:8081/api/auth/google/success`, {
+          withCredentials: true
+        });
+        this.userInfo = response.data;
+        console.log("res",response.data)
+        // Vuex에 로그인 상태 업데이트
+        this.$store.commit('SET_LOGIN', {
+          isLoggedIn: true,
+          user: this.userInfo
+        });
+      } catch (error) {
+        console.error('사용자 정보 가져오기 실패:', error);
+        alert('로그인 실패. 다시 시도해 주세요.');
+      }
+    },
     logout() {
       this.$store.dispatch('logout'); // Vuex 상태 변경
       localStorage.removeItem('token');
@@ -77,6 +133,7 @@ export default {
         this.$router.push('/');
       }
     },
+
     async searchMovies() {
       if (!this.searchQuery.trim()) {
         alert("검색어를 입력하세요!");
@@ -105,6 +162,11 @@ export default {
       }
     },
   },
+  created() {
+    if (this.isLoggedIn) {
+      this.getUserInfo(); // 로그인 상태일 경우 사용자 정보 가져오기
+    }
+  }
 };
 </script>
 

@@ -48,17 +48,17 @@ public class NaverUserController {
         try {
             String accessToken = naverUserService.getAccessToken(code);
             NaverUserInfo userInfo = naverUserService.getUserInfo(accessToken);
-            if (!userService.checkUserExistsNaver(userInfo.getNaverId())) {
-                naverUserService.registerUser(userInfo);
-                HttpSession session = request.getSession();
-                session.setAttribute("user", userInfo);
-                // 클라이언트의 추가 정보 입력 화면으로 리다이렉트 (loginType을 쿼리 파라미터로 추가)
-                response.sendRedirect("http://localhost:8080/additional-info?loginType=naver"); // 수정된 부분
-            } else {
-                // 사용자가 이미 가입한 경우 홈으로 리다이렉트
+            if (userService.checkUserExistsNaver(userInfo.getNaverId())) {
+                // 기존 회원인 경우
                 HttpSession session = request.getSession();
                 session.setAttribute("user", userInfo); // 세션에 사용자 정보 저장
                 response.sendRedirect("http://localhost:8080/"); // 홈 화면으로 리다이렉트
+            } else {
+                // 소셜 회원인 경우 추가 정보 입력 화면으로 리다이렉트
+                naverUserService.registerUser(userInfo); // 사용자 정보 저장
+                HttpSession session = request.getSession();
+                session.setAttribute("user", userInfo); // 세션에 사용자 정보 저장
+                response.sendRedirect("http://localhost:8080/additional-info?loginType=naver"); // 추가 정보 입력 화면으로 리다이렉트
             }
         } catch (Exception e) {
             e.printStackTrace();
