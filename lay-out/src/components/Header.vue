@@ -8,7 +8,7 @@
       <nav class="nav">
         <ul>
           <li>Animation</li>
-          <li>Movie</li>
+          <li @click="goToMoviesList">Movie</li>
           <li>Drama</li>
           <li>Community</li>
           <li>My List</li>
@@ -123,7 +123,11 @@ export default {
             console.error("로그아웃 오류:", error);
           });
     },
+    goToMoviesList(){
+      this.$router.push({ path: '/movies' }); // 영화 목록 페이지로 이동
+    },
   },
+
   created() {
     if (this.isLoggedIn) {
       this.getUserInfo();
