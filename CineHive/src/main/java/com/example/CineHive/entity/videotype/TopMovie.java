@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -26,7 +27,8 @@ public class TopMovie {
 
     private String backdropPath;
 
-    private String releaseDate;
+    @Column(name = "release_date")
+    private LocalDate releaseDate;
 
     @ElementCollection
     private List<Integer> genreIds;

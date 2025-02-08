@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,6 +64,10 @@ public class NowPlayingMovieService {
                     movie.setVoteAverage(movieNode.get("vote_average").asDouble());
                     movie.setVoteCount(movieNode.get("vote_count").asInt());
                     movie.setPopularity(movieNode.get("popularity").asDouble());
+                    String releaseDateString = movieNode.get("release_date").asText();
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    LocalDate releaseDate = LocalDate.parse(releaseDateString, formatter);
+                    movie.setReleaseDate(releaseDate);
                     movies.add(movie);
 
                     // 비디오 정보 가져오기 (첫 번째 비디오만)

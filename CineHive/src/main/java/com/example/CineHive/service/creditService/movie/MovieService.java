@@ -83,7 +83,10 @@ public class MovieService {
                         movie.setVoteCount(movieNode.get("vote_count").asInt());
                         movie.setPopularity(movieNode.get("popularity").asDouble());
                         movie.setAdult(movieNode.get("adult").asBoolean());
-
+                        String releaseDateString = movieNode.get("release_date").asText();
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                        LocalDate releaseDate = LocalDate.parse(releaseDateString, formatter);
+                        movie.setReleaseDate(releaseDate);
                         // 비디오 정보 가져오기 (첫 번째 비디오만)
                         Video video = movieVideoService.getFirstVideoForMovie(movieId);
                         if (video != null) {
@@ -139,7 +142,10 @@ public class MovieService {
                         topmovie.setVoteCount(movieNode.get("vote_count").asInt());
                         topmovie.setPopularity(movieNode.get("popularity").asDouble());
                         topmovie.setAdult(movieNode.get("adult").asBoolean());
-
+                        String releaseDateString = movieNode.get("release_date").asText();
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                        LocalDate releaseDate = LocalDate.parse(releaseDateString, formatter);
+                        topmovie.setReleaseDate(releaseDate);
 
                         // 데이터베이스에 저장
                         topmovieRepository.save(topmovie);

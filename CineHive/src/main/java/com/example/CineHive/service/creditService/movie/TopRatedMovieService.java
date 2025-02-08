@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +67,10 @@ public class TopRatedMovieService {
                     topMovie.setVoteAverage(movieNode.get("vote_average").asDouble());
                     topMovie.setVoteCount(movieNode.get("vote_count").asInt());
                     topMovie.setPopularity(movieNode.get("popularity").asDouble());
-
+                    String releaseDateString = movieNode.get("release_date").asText();
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    LocalDate releaseDate = LocalDate.parse(releaseDateString, formatter);
+                    topMovie.setReleaseDate(releaseDate);
                     topMovies.add(topMovie);
 
                     // TopMovie 테이블에 저장
@@ -87,6 +92,7 @@ public class TopRatedMovieService {
                         movie.setVoteAverage(topMovie.getVoteAverage());
                         movie.setVoteCount(topMovie.getVoteCount());
                         movie.setPopularity(topMovie.getPopularity());
+                        movie.setReleaseDate(topMovie.getReleaseDate());
                         // 비디오 정보 가져오기 (첫 번째 비디오만)
                         Video video = movieVideoService.getFirstVideoForMovie(movieId);
                         if (video != null) {
