@@ -97,8 +97,8 @@ export default {
         const response = await axios.post('http://localhost:8081/preferredGenres', {
           generes: this.user.preferredGenres
         });
-        console.log('선호 장르 데이터:', response.data); // 서버에서 받아온 데이터를 확인
-        this.prefer = response.data; // 선호 장르 콘텐츠 저장
+        console.log('선호 장르 데이터:', response.data);
+        this.prefer = response.data;
       } catch (error) {
         console.error('선호 장르 데이터를 가져오는 중 오류가 발생했습니다:', error);
       }
@@ -112,24 +112,25 @@ export default {
       }
     },
     goToLogin() {
-      this.$router.push({ name: 'Login' }); // 로그인 페이지로 이동하는 코드
+      this.$router.push('/auth');
+
     },
   },
   watch: {
-    // Vuex의 user 상태가 변할 때마다 호출
+
     user(newUser) {
       if (newUser && newUser.preferredGenres && newUser.preferredGenres.length > 0) {
-        this.fetchPreferredGenres(); // 사용자가 로그인했을 때 선호 장르 가져오기
+        this.fetchPreferredGenres();
       }
     }
   },
   mounted() {
     this.fetchMovies();
     this.fetchTopmovies();
-    console.log('Vuex 상태:', this.$store.state.user); // Vuex 상태 확인
-    console.log('선호 장르:', this.$store.state.user.preferredGenres); // 선호 장르 확인
+    console.log('Vuex 상태:', this.$store.state.user);
+    console.log('선호 장르:', this.$store.state.user.preferredGenres);
     if (this.user && this.user.preferredGenres && this.user.preferredGenres.length > 0) {
-      this.fetchPreferredGenres(); // 사용자가 로그인했을 때 선호 장르 가져오기
+      this.fetchPreferredGenres();
     } else {
       console.log('선호 장르가 없거나 user 데이터가 없음');
     }

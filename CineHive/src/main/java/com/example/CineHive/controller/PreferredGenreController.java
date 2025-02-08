@@ -58,7 +58,7 @@ public class PreferredGenreController {
             }
         }
 
-        // 콘텐츠 리스트가 비어 있는지 확인하고 로그 출력
+
         if (contents.isEmpty()) {
             System.out.println("선호 장르에 대한 콘텐츠가 없습니다.");
         }

@@ -25,13 +25,13 @@ public class NaverUser {
     private String naverId; //네이버 고유 아이디
 
     @Column(length = 50)
-    private String nickname; //별명
+    private String nickname;
 
     @Column(name = "mem_userid", nullable = false)
     private String memUserId; //이메일
 
     @Column(name = "user_id")
-    private Long userId; // users 테이블의 외래 키
+    private Long userId;
 
     // User 엔티티와의 관계 설정
     @ManyToOne
@@ -39,17 +39,17 @@ public class NaverUser {
     private User user;
 
     @Column
-    private String name; // 추가된 name 필드
+    private String name;
 
     @ElementCollection
     @CollectionTable(name = "google_user_genres", joinColumns = @JoinColumn(name = "google_user_id"))
     @Column(name = "genre")
-    private List<String> genres; // 추가된 genre 필드
+    private List<String> genres;
 
     public NaverUser(String naverId, String nickname, String memUserId, String name, List<String> genres) {
         this.naverId = naverId;
         this.nickname = nickname;
-        this.memUserId = memUserId; // 추가된 필드 초기화
+        this.memUserId = memUserId;
         this.name = name;
         this.genres = genres;
     }

@@ -75,8 +75,8 @@ export default {
   },
   created() {
     this.loginType = this.$route.query.loginType;
-    console.log('로그인 타입:', this.loginType); // 로그인 타입 로그
-    this.getUserInfo(); // 사용자 정보 가져오기
+    console.log('로그인 타입:', this.loginType);
+    this.getUserInfo();
   },
   methods: {
     validatePhone() {
@@ -180,7 +180,7 @@ export default {
           this.$store.commit('SET_USER', response.data.user);
 
           alert('회원가입에 성공하셨습니다. 다시 로그인해주세요.');
-          this.$router.push('/auth'); // Redirect to the login page
+          this.$router.push('/auth');
 
         } else {
           this.$store.dispatch('login', userExistsResponse.data);

@@ -40,17 +40,17 @@ public class KakaoUser {
     private User user;
 
     @Column
-    private String name; // 추가된 name 필드
+    private String name;
 
     @ElementCollection
     @CollectionTable(name = "google_user_genres", joinColumns = @JoinColumn(name = "google_user_id"))
     @Column(name = "genre")
-    private List<String> genres; // 추가된 genre 필드
+    private List<String> genres;
 
     public KakaoUser(String kakaoId, String nickname, String memUserId,String name, List<String> genres) {
         this.kakaoId = kakaoId;
         this.nickname = nickname;
-        this.memUserId = memUserId; // 추가된 필드 초기화
+        this.memUserId = memUserId;
         this.name = name;
         this.genres = genres;
     }

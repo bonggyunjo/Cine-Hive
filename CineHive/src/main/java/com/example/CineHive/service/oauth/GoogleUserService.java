@@ -96,25 +96,25 @@ public class GoogleUserService {
     public GoogleUser registerNewGoogleUser(GoogleUserInfo userInfo) {
         // 먼저 User 엔티티에 사용자 정보 저장
         User user = new User();
-        user.setMemUserid(userInfo.getEmail());  // 구글 ID를 사용자 ID로 사용 (혹은 적절히 설정)
+        user.setMemUserid(userInfo.getEmail());
         user.setMemEmail(userInfo.getEmail());
         user.setMemNickname(userInfo.getNickname());
         user.setMemName(userInfo.getName());
-        user.setMemPhone("");  // 필요에 따라 전화번호도 설정
-        user.setMemSex("");    // 필요에 따라 성별 설정
+        user.setMemPhone("");
+        user.setMemSex("");
         user.setMemRegisterDatetime(LocalDateTime.now());
         user.setMemType("구글");
-        user.setGenres(userInfo.getGenres());  // 장르 정보 설정
-        userRepository.save(user);  // User 테이블에 저장
+        user.setGenres(userInfo.getGenres());
+        userRepository.save(user);
 
         // 이제 GoogleUser 엔티티를 생성하고 memUserId를 설정
         GoogleUser googleUser = new GoogleUser();
         googleUser.setGoogleId(userInfo.getGoogleId());
         googleUser.setNickname(userInfo.getNickname());
-        googleUser.setMemUserId(user.getMemUserid());  // User의 memUserId를 GoogleUser에 설정
+        googleUser.setMemUserId(user.getMemUserid());
         googleUser.setName(userInfo.getName());
         googleUser.setGenres(userInfo.getGenres());
-        googleUserRepository.save(googleUser);  // GoogleUser 테이블에 저장
+        googleUserRepository.save(googleUser);
 
         return googleUser;
     }

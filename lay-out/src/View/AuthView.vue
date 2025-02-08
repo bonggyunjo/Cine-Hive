@@ -332,7 +332,7 @@ export default {
           };
 
 
-          // Store the user in Vuex
+
           this.$store.commit('SET_LOGIN', { isLoggedIn: true, user });
           localStorage.setItem('isLoggedIn', 'true');
           localStorage.setItem('user', JSON.stringify(user));
