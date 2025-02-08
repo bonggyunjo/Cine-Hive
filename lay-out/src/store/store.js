@@ -14,7 +14,6 @@ export default new Vuex.Store({
         SET_LOGIN(state, payload) {
             state.isLoggedIn = payload.isLoggedIn;
             state.user = {
-                userid: payload.user.memUserid, // 사용자 ID
                 name: payload.user.name, // 사용자 이름
                 nickname: payload.user.nickname, // 사용자 닉네임
                 email: payload.user.email, // 사용자 이메일

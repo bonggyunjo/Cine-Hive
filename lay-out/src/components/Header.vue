@@ -64,7 +64,6 @@ export default {
       this.getUserInfo('naver');
     }
   },
-
   computed: {
     ...mapState(['isLoggedIn', 'user']),
     userId() {
@@ -92,7 +91,6 @@ export default {
         this.$store.commit('SET_LOGIN', {
           isLoggedIn: true,
           user: {
-            id: userData.memUserid,
             email: userData.email || '',
             nickname: userData.nickname,
             name: userData.name || '', // 이름 추가
@@ -167,9 +165,6 @@ export default {
     if (this.isLoggedIn) {
       this.getUserInfo();
     }
-    this.$store.dispatch('initializeStore').then(() => {
-      this.loading = false; // 상태 초기화가 완료되면 로딩을 해제
-    });
   }
 };
 </script>

@@ -164,7 +164,6 @@ export default {
 
         if (!userExistsResponse.data) {
           const userData = {
-            memUserid: this.memUserid,
             [loginTypeId]: this.userInfo[loginTypeId],
             memNickname: this.userInfo.nickname,
             memName: this.memName,

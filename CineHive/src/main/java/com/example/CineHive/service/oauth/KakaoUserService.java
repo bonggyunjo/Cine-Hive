@@ -111,7 +111,7 @@ public class KakaoUserService {
     public KakaoUser registerNewKakaoUser(KakaoUserInfo userInfo) {
         // 먼저 User 엔티티에 사용자 정보 저장
         User user = new User();
-        user.setMemUserid(userInfo.getKakaoId());  // 구글 ID를 사용자 ID로 사용 (혹은 적절히 설정)
+        user.setMemUserid(userInfo.getEmail());  // 구글 ID를 사용자 ID로 사용 (혹은 적절히 설정)
         user.setMemEmail(userInfo.getEmail());
         user.setMemNickname(userInfo.getNickname());
         user.setMemName(userInfo.getName());

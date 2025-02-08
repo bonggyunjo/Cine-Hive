@@ -103,7 +103,7 @@ public class NaverUserService {
     public NaverUser registerNewNaverUser(NaverUserInfo userInfo) {
 
         User user = new User();
-        user.setMemUserid(userInfo.getNaverId());
+        user.setMemUserid(userInfo.getEmail());
         user.setMemEmail(userInfo.getEmail());
         user.setMemNickname(userInfo.getNickname());
         user.setMemName(userInfo.getName());
