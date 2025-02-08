@@ -37,11 +37,13 @@ export default {
   position: relative;
   top:-65px;
   left:100px;
+  display: flex;
+  justify-content: flex-start;
 }
 
 .search-bar input {
   width: 100%;
-  max-width: 750px;
+  max-width: 550px;
   padding: 10px;
   border: none;
   border-radius: 5px;
@@ -50,6 +52,60 @@ export default {
   outline: none;
   transition: border-color 0.3s;
   font-size: 14px;
+}
+@media (max-width: 768px) {
+  .search-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .search-bar input {
+    max-width: 100%;
+    padding: 8px;
+    font-size: 13px;
+  }
+
+  .search-bar button {
+    max-width: 100%;
+    padding: 8px 0;
+    font-size: 14px;
+  }
+}
+@media (max-width: 480px) {
+  .search-bar {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .search-bar input {
+    max-width: 100%;
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  .search-bar button {
+    max-width: 100%;
+    padding: 8px 0;
+    font-size: 12px;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .search-bar input {
+    max-width: 100%;
+    padding: 8px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-bar input {
+    max-width: 100%;
+    padding: 8px;
+    font-size: 12px;
+  }
 }
 
 .search-bar input::placeholder {

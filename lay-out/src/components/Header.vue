@@ -242,7 +242,7 @@ header {
 .search-bar-info{
   position: relative;
   top:0px;
-  left: 20px;
+  left: 10px;
 }
 @media (max-width: 768px) {
   .header-container {

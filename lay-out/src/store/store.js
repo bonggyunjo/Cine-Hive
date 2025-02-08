@@ -74,8 +74,6 @@ export default new Vuex.Store({
 
             console.log('isLoggedIn:', isLoggedIn);
             console.log('user:', user);
-            console.log('loginType:', loginType);
-
             if (isLoggedIn === 'true' && user) {
 
                 commit('SET_LOGIN', { isLoggedIn: true, user, loginType });
