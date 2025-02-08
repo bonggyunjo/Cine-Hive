@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -26,5 +27,11 @@ public class  AnimationController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/animations")
+    @ResponseBody
+    public List<Animation> getMovies(){
+        return animationRepository.findAll();
     }
 }
