@@ -29,7 +29,7 @@ public class Movie {
 
     private String posterPath;
     private String backdropPath;
-    @Column(name = "release_date") 
+    @Column(name = "release_date")
     private LocalDate releaseDate;
     @ElementCollection
     private List<Integer> genreIds;

@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -190,7 +192,11 @@ public class MovieService {
                     movie.setVoteCount(movieNode.get("vote_count").asInt());
                     movie.setPopularity(movieNode.get("popularity").asDouble());
                     movie.setAdult(movieNode.get("adult").asBoolean());
+                    String releaseDateString = movieNode.get("release_date").asText();
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    LocalDate releaseDate = LocalDate.parse(releaseDateString, formatter);
 
+                    movie.setReleaseDate(releaseDate);
                     //애니메이션 장르 제외
                     if(movie.getGenreIds().contains(16)){
                         continue;
