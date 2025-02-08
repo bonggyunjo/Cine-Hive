@@ -10,7 +10,7 @@
           @click="sortByPopularity"
           :class="['rating-button', { active: popularitySorted }]">인기 순</span>
     </div>
-
+    <div class="separator"></div>
     <div class="top-slider">
       <div
           class="drama-card"
@@ -94,6 +94,15 @@ export default {
   position: relative;
   left: 4%;
   margin-bottom: 20px;
+}
+
+.separator {
+  width: 93%;
+  border-bottom: 1px solid;
+  background-color: white; /* 구분선 색상 */
+  margin-bottom: 20px; /* 구분선과 버튼 사이 여백 추가 */
+  position: relative;
+  left: 4%;
 }
 
 .button-group {

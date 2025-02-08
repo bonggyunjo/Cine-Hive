@@ -11,9 +11,21 @@
           :class="['rating-button', { active: sorted }]">평점 순</span> &nbsp;&nbsp;
       <span
           @click="sortByPopularity"
-          :class="['rating-button', { active: popularitySorted }]">인기 순</span>
+          :class="['rating-button', { active: popularitySorted }]">인기 순</span> &nbsp;&nbsp;
+      <span
+          @click="filterByDecade(2000)"
+          :class="['rating-button', { active: decadeFiltered === 2000 }]">2000s</span> &nbsp;&nbsp;
+      <span
+          @click="filterByDecade(2010)"
+          :class="['rating-button', { active: decadeFiltered === 2010 }]">2010s</span> &nbsp;&nbsp;
+      <span
+          @click="filterByDecade(2020)"
+          :class="['rating-button', { active: decadeFiltered === 2020 }]">2020s</span> &nbsp;&nbsp;
+      <span
+          @click="filterByDecade(2000, true)"
+          :class="['rating-button', { active: decadeFiltered === 'before2000' }]">Before 2000s</span>
     </div>
-
+    <div class="separator"></div>
     <div class="top-slider">
       <div
           class="animation-card"
@@ -47,7 +59,8 @@ export default {
     return {
       animations: [],
       sorted: false,
-      popularitySorted: false, // 인기 정렬 상태 추가
+      popularitySorted: false,
+      decadeFiltered: null, // 연대 필터 상태 추가
     };
   },
   created() {
@@ -55,12 +68,38 @@ export default {
   },
   computed: {
     sortedAnimations() {
-      if (this.popularitySorted) {
-        return this.animations.slice().sort((a, b) => b.popularity - a.popularity); // 인기 기준 정렬
-      } else if (this.sorted) {
-        return this.animations.slice().sort((a, b) => b.voteAverage - a.voteAverage); // 평점 기준 정렬
+      let filtered = this.animations;
+
+      // 연대 필터링
+      if (this.decadeFiltered === 2000) {
+        filtered = filtered.filter(animation => {
+          const year = parseInt(animation.releaseDate.split('-')[0]);
+          return year >= 2000 && year < 2010;
+        });
+      } else if (this.decadeFiltered === 2010) {
+        filtered = filtered.filter(animation => {
+          const year = parseInt(animation.releaseDate.split('-')[0]);
+          return year >= 2010 && year < 2020;
+        });
+      } else if (this.decadeFiltered === 2020) {
+        filtered = filtered.filter(animation => {
+          const year = parseInt(animation.releaseDate.split('-')[0]);
+          return year >= 2020;
+        });
+      } else if (this.decadeFiltered === 'before2000') {
+        filtered = filtered.filter(animation => {
+          const year = parseInt(animation.releaseDate.split('-')[0]);
+          return year < 2000;
+        });
       }
-      return this.animations; // 기본 목록
+
+      // 정렬 처리
+      if (this.popularitySorted) {
+        return filtered.slice().sort((a, b) => b.popularity - a.popularity);
+      } else if (this.sorted) {
+        return filtered.slice().sort((a, b) => b.voteAverage - a.voteAverage);
+      }
+      return filtered; // 기본 목록
     }
   },
   methods: {
@@ -82,15 +121,22 @@ export default {
     resetSort() {
       this.sorted = false; // 정렬 상태 초기화
       this.popularitySorted = false; // 인기 정렬 비활성화
+      this.decadeFiltered = null; // 연대 필터 해제
       this.fetchAnimations(); // 전체 애니메이션 목록으로 돌아가기
     },
     sortByPopularity() {
       this.popularitySorted = true; // 인기 순위 정렬 활성화
       this.sorted = false; // 평점 정렬 비활성화
+    },
+    filterByDecade(decade, before2000 = false) {
+      this.decadeFiltered = before2000 ? 'before2000' : decade; // 선택한 연대 필터 설정
+      this.sorted = false; // 정렬 해제
+      this.popularitySorted = false; // 인기 정렬 해제
     }
   }
 }
 </script>
+
 
 <style scoped>
 .animation-list {
@@ -107,6 +153,14 @@ export default {
   margin-bottom: 20px;
   position: relative;
   left:4%;
+}
+.separator {
+  width: 93%;
+  border-bottom: 1px solid;
+  background-color: white; /* 구분선 색상 */
+  margin-bottom: 20px; /* 구분선과 버튼 사이 여백 추가 */
+  position: relative;
+  left: 4%;
 }
 
 .button-group {
@@ -125,7 +179,6 @@ export default {
 }
 
 .rating-button:hover {
-  background-color: #d40000;
   transform: scale(1.05); /* 버튼 호버 시 확대 효과 */
 }
 

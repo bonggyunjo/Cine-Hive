@@ -26,7 +26,8 @@
           :class="['rating-button', { active: decadeFiltered === 'before2000' }]">2000s 이하</span>
     </div>
 
-    <!-- 로딩 상태 표시 -->
+    <div class="separator"></div>
+
     <div v-if="loading" class="loading">로딩 중...</div>
 
     <div class="top-slider" v-if="!loading">
@@ -158,6 +159,14 @@ export default {
   margin-bottom: 20px; /* 제목과 버튼 사이 여백 추가 */
   position: relative;
   left:4%;
+}
+.separator {
+  width: 93%;
+  border-bottom: 1px solid;
+  background-color: white; /* 구분선 색상 */
+  margin-bottom: 20px; /* 구분선과 버튼 사이 여백 추가 */
+  position: relative;
+  left: 4%;
 }
 
 .button-group {
