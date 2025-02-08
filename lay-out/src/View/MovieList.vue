@@ -107,7 +107,7 @@ h1 {
 }
 
 .movie-title {
-  font-size: 1.5rem; /* 제목 크기 */
+  font-size: 14px;
   font-weight: bold;
   color: #F50000; /* 제목 색상 */
   margin: 5px 0; /* 위 아래 여백 */

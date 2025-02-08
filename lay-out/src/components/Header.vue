@@ -7,7 +7,7 @@
 
       <nav class="nav">
         <ul>
-          <li>Animation</li>
+          <li @click="goToAnimationsList">Animation</li>
           <li @click="goToMoviesList">Movie</li>
           <li>Drama</li>
           <li>Community</li>
@@ -124,7 +124,12 @@ export default {
           });
     },
     goToMoviesList(){
-      this.$router.push({ path: '/movies' }); // 영화 목록 페이지로 이동
+      if(this.$route.path!=='/movies')
+      this.$router.push({ path: '/movies' });
+    },
+    goToAnimationsList(){
+      if(this.$route.path!=='/animations')
+      this.$router.push({ path: '/animations' });
     },
   },
 

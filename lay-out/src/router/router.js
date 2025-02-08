@@ -9,6 +9,7 @@ import DramaDetail from "@/View/DramaDetail.vue";
 import AnimationDetail from "@/View/AnimationDetail.vue";
 import TopMovieDetail from "@/View/TopMovieDetail.vue";
 import MovieList from "@/View/MovieList.vue";
+import AnimationList from "@/View/AnimationList.vue";
 
 Vue.use(Router);
 
@@ -40,6 +41,12 @@ const routes = [
         path: '/movies',
         name: 'MovieList',
         component: MovieList,
+        meta: { hideFooter: true }
+    },
+    {
+        path: '/animations',
+        name: 'AnimationList',
+        component: AnimationList,
         meta: { hideFooter: true }
     }
 
