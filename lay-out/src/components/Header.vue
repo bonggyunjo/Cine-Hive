@@ -6,15 +6,16 @@
       </router-link>
 
       <nav class="nav">
-        <ul>
-          <li @click="goToAnimationsList">Animation</li>
-          <li @click="goToMoviesList">Movie</li>
-          <li>Drama</li>
-          <li>Community</li>
-          <li>My List</li>
-          <li>Watched List</li>
+        <ul style="cursor: pointer">
+          <li @click="goToAnimationsList" >Animation</li>
+          <li @click="goToMoviesList" >Movie</li>
+          <li @click="goToDramasList">Drama</li>
+          <li >Community</li>
+          <li >My List</li>
+          <li >Watched List</li>
         </ul>
       </nav>
+
 
       <SearchBar class="search-bar-info" ></SearchBar>
 
@@ -131,6 +132,10 @@ export default {
       if(this.$route.path!=='/animations')
       this.$router.push({ path: '/animations' });
     },
+    goToDramasList(){
+      if(this.$route.path!=='/dramas')
+        this.$router.push({ path: '/dramas' });
+    },
   },
 
   created() {
@@ -244,6 +249,7 @@ header {
 
   .nav ul {
     display: none;
+    cursor: pointer;
   }
 
   .login-area {
