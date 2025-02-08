@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +29,8 @@ public class Animation {
     private String overview;
     private String posterPath;
     private String backdropPath;
-
+    @Column(name = "release_date")
+    private LocalDate releaseDate;
     private double voteAverage;
     private int voteCount;
     private double popularity;

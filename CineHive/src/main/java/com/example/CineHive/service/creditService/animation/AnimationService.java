@@ -12,6 +12,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriUtils;
 
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,6 +81,10 @@ public class AnimationService {
                     animation.setVoteAverage(animationNode.get("vote_average").asDouble());
                     animation.setVoteCount(animationNode.get("vote_count").asInt());
                     animation.setPopularity(animationNode.get("popularity").asDouble());
+                    String releaseDateString = animationNode.get("release_date").asText();
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    LocalDate releaseDate = LocalDate.parse(releaseDateString, formatter);
+                    animation.setReleaseDate(releaseDate);
 
 
                     Video video = animationVideoService.getFirstVideoForAnimation(animationId);
