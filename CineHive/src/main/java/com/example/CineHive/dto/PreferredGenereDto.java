@@ -12,5 +12,5 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PreferredGenereDto {
-    private List<String> generes;
+    private List<String> genres;
 }

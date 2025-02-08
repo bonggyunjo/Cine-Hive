@@ -31,11 +31,11 @@ public class PreferredGenreController {
     @PostMapping("/preferredGenres")
     public ResponseEntity<List<Content>> getContentByGenres(@RequestBody PreferredGenereDto preferredGenereDto) {
         // 전송된 선호 장르 로그 출력
-        System.out.println("전송된 선호 장르: " + preferredGenereDto.getGeneres());
+        System.out.println("전송된 선호 장르: " + preferredGenereDto.getGenres());
 
         List<Content> contents = new ArrayList<>();
 
-        for (String genre : preferredGenereDto.getGeneres()) {
+        for (String genre : preferredGenereDto.getGenres()) {
             switch (genre) {
                 case "드라마":
                     for (Drama drama : dramaRepository.findAll()) {

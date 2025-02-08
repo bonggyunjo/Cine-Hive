@@ -95,7 +95,7 @@ export default {
       try {
         console.log('사용자의 선호 장르:', this.user.preferredGenres);
         const response = await axios.post('http://localhost:8081/preferredGenres', {
-          generes: this.user.preferredGenres
+          genres: this.user.preferredGenres
         });
         console.log('선호 장르 데이터:', response.data);
         this.prefer = response.data;
@@ -127,8 +127,6 @@ export default {
   mounted() {
     this.fetchMovies();
     this.fetchTopmovies();
-    console.log('Vuex 상태:', this.$store.state.user);
-    console.log('선호 장르:', this.$store.state.user.preferredGenres);
     if (this.user && this.user.preferredGenres && this.user.preferredGenres.length > 0) {
       this.fetchPreferredGenres();
     } else {

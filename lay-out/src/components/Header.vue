@@ -82,7 +82,6 @@ export default {
           withCredentials: true
         });
 
-        // API 응답에서 필요한 데이터 추출
         const userData = response.data;
 
         console.log("data", userData);
@@ -98,8 +97,7 @@ export default {
           },
           loginType // 여기서 loginType을 추가
         });
-        console.log("data", userData);
-        // 로컬 스토리지에 사용자 정보와 loginType 저장
+
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('user', JSON.stringify({
           id: userData.memUserid,

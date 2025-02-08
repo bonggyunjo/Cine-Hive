@@ -14,19 +14,18 @@ export default new Vuex.Store({
         SET_LOGIN(state, payload) {
             state.isLoggedIn = payload.isLoggedIn;
             state.user = {
-                name: payload.user.name, // 사용자 이름
-                nickname: payload.user.nickname, // 사용자 닉네임
-                email: payload.user.email, // 사용자 이메일
-                preferredGenres: payload.user.preferredGenres || [], // 선호 장르
+                name: payload.user.name,
+                nickname: payload.user.nickname,
+                email: payload.user.email,
+                preferredGenres: payload.user.preferredGenres || [],
             };
             console.log("Setting user in Vuex:", state.user);
-            state.loginType = payload.loginType; // 로그인 타입 추가
+            state.loginType = payload.loginType;
         },
         SET_LOGOUT(state) {
             state.isLoggedIn = false;
             state.user = null;
             state.loginType = null;
-            console.log("로그아웃 상태로 변경됨");
         },
         SET_SEARCH_RESULTS(state, results) {
             state.searchResults = results;
@@ -36,7 +35,6 @@ export default new Vuex.Store({
         // 로그인 액션
         async login({ commit }, { user, loginType }) {
             try {
-                // 로그인 성공 후, 상태 업데이트
                 commit('SET_LOGIN', { isLoggedIn: true, user, loginType });
 
                 // 로그인 상태를 localStorage에 저장
@@ -44,18 +42,16 @@ export default new Vuex.Store({
                 localStorage.setItem('user', JSON.stringify(user));
                 localStorage.setItem('loginType', loginType);
 
-                // 추가적인 로그인 성공 처리 (예: API 호출 등)
+
             } catch (error) {
                 console.error('로그인 중 오류 발생:', error);
             }
         },
         // 로그아웃 액션
         logout({ commit }) {
-            // Vuex에서 로그인 상태 초기화
+
             commit('SET_LOGOUT');
 
-            // 디버깅용 콘솔 로그 추가
-            console.log("로그아웃 실행됨");
 
             // 로컬 스토리지에서 로그인 정보 제거
             localStorage.removeItem('isLoggedIn');
@@ -65,27 +61,26 @@ export default new Vuex.Store({
             console.log("로그아웃 후 localStorage:", localStorage.getItem('isLoggedIn'), localStorage.getItem('user'));
         },
 
-        // 검색 결과 업데이트 액션
+
         updateSearchResults({ commit }, results) {
             commit('SET_SEARCH_RESULTS', results);
         },
 
-        // 앱 초기화 시 localStorage에서 로그인 정보 복원
-// store.js 내 initializeStore 액션 수정
+
         initializeStore({ commit }) {
             const isLoggedIn = localStorage.getItem('isLoggedIn');
             const user = JSON.parse(localStorage.getItem('user'));
             const loginType = localStorage.getItem('loginType');
 
-            console.log('isLoggedIn:', isLoggedIn);  // 확인: localStorage에서 isLoggedIn 값
-            console.log('user:', user);  // 확인: localStorage에서 user 값
-            console.log('loginType:', loginType);  // 확인: localStorage에서 loginType 값
+            console.log('isLoggedIn:', isLoggedIn);
+            console.log('user:', user);
+            console.log('loginType:', loginType);
 
             if (isLoggedIn === 'true' && user) {
-                // 로그인 상태가 'true'라면 로그인 정보 복원
+
                 commit('SET_LOGIN', { isLoggedIn: true, user, loginType });
             } else {
-                // 로그인 상태가 아니면 초기화
+
                 commit('SET_LOGOUT');
             }
         }
@@ -93,6 +88,6 @@ export default new Vuex.Store({
     getters: {
         getUserId: (state) => (state.user ? state.user.userid : null),
         getUserInfo: (state) => state.user,
-        getLoginType: (state) => state.loginType, // 로그인 타입 getter 추가
+        getLoginType: (state) => state.loginType,
     }
 });
