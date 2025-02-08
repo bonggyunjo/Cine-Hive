@@ -43,7 +43,7 @@
           <span class="more-text" >{{ showMore ? '접기' : '더 보기' }}</span>
         </span>
       </h2>
-      <SearchBar v-if="showSearchButton"></SearchBar>
+      <SearchBar v-if="showSearchButton" @click="searchMovies"></SearchBar>
 
       <div v-if="!user" class="login-prompt-container">
         <p class="login-prompt">로그인을 하시면 선호하는 장르를 추천해드립니다.</p>
@@ -55,7 +55,7 @@
               class="movie-card"
               v-for="content in prefer"
               :key="content.id"
-              @click="goToMovieDetail(content.id)"
+              @click="goToContentDetail(content.id)"
           >
             <img :src="'https://image.tmdb.org/t/p/w300' + content.posterPath" alt="movie poster" />
           </div>
@@ -117,7 +117,13 @@ export default {
         console.error('영화 데이터를 가져오는 중 오류가 발생했습니다:', error);
       }
     },
-
+    goToMovieDetail(movieId, movieType) {
+      if (movieType === 'top') {
+        this.$router.push({name: 'TopMovieDetail', params: {id: movieId}});
+      } else {
+        this.$router.push({name: 'MovieDetail', params: {id: movieId}});
+      }
+    },
     async fetchPreferredGenres() {
       try {
         console.log('사용자의 선호 장르:', this.user.preferredGenres);
@@ -161,7 +167,7 @@ export default {
       }
     },
 
-    goToMovieDetail(movieId) {
+    goToContentDetail(movieId) {
       const selectedContent = this.prefer.find(content => content.id === movieId);
       if (selectedContent) {
         switch (selectedContent.genre) {
