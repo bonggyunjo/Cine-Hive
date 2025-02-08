@@ -36,7 +36,15 @@
         </div>
       </div>
 
-      <h2 class="section-title">선호 장르</h2>
+      <h2 class="section-title">
+        선호 장르
+        <span class="more-info" @click="toggleShowMore" v-if="!showSearchButton">
+          <span class="plus-sign">+</span>
+          <span class="more-text" >{{ showMore ? '접기' : '더 보기' }}</span>
+        </span>
+      </h2>
+      <SearchBar v-if="showSearchButton"></SearchBar>
+
       <div v-if="!user" class="login-prompt-container">
         <p class="login-prompt">로그인을 하시면 선호하는 장르를 추천해드립니다.</p>
         <button class="login-button" @click="goToLogin">로그인</button>
@@ -52,6 +60,20 @@
             <img :src="'https://image.tmdb.org/t/p/w300' + content.posterPath" alt="movie poster" />
           </div>
         </div>
+
+        <!-- 더보기 클릭 후, 추가적으로 선호 장르를 보여주고 '검색하기' 버튼을 나타냄 -->
+        <div v-if="showMore" class="prefer-slide">
+          <div
+              class="movie-card"
+              v-for="content in prefer.slice(18)"
+              :key="content.id"
+              @click="goToMovieDetail(content.id)"
+          >
+            <img :src="'https://image.tmdb.org/t/p/w300' + content.posterPath" alt="movie poster" />
+          </div>
+        </div>
+
+
       </div>
     </div>
   </div>
@@ -60,13 +82,17 @@
 <script>
 import axios from 'axios';
 import { mapState } from 'vuex';
-
+import SearchBar from "@/components/SearchBar.vue";
 export default {
+  components: {SearchBar},
   data() {
     return {
       movies: [],
       topmovies: [],
       prefer: [],
+      showMore: false, // 더 보기 상태
+      showSearchButton: false, // 검색 버튼 상태
+      searchQuery:'',
     };
   },
 
@@ -91,6 +117,7 @@ export default {
         console.error('영화 데이터를 가져오는 중 오류가 발생했습니다:', error);
       }
     },
+
     async fetchPreferredGenres() {
       try {
         console.log('사용자의 선호 장르:', this.user.preferredGenres);
@@ -98,10 +125,39 @@ export default {
           genres: this.user.preferredGenres
         });
         console.log('선호 장르 데이터:', response.data);
-        this.prefer = response.data.slice(0, 18);  
-        this.prefer = response.data;
+        this.prefer = response.data.slice(0, 18);
       } catch (error) {
         console.error('선호 장르 데이터를 가져오는 중 오류가 발생했습니다:', error);
+      }
+    },
+    async searchMovies() {
+      if (!this.searchQuery.trim()) {
+        alert("검색어를 입력하세요!");
+        return;
+      }
+      this.loading = true;
+
+      try {
+        const response = await axios.post('http://localhost:8081/search', {
+          query: this.searchQuery
+        });
+
+        this.updateSearchResults(response.data);
+
+        this.$router.push({
+          path: '/search',
+          query: { q: this.searchQuery }
+        });
+      } catch (error) {
+        console.error("검색 중 오류가 발생했습니다:", error);
+      } finally {
+        this.loading = false;
+      }
+  },
+    toggleShowMore() {
+      this.showMore = !this.showMore; // 더 보기 상태 변경
+      if (!this.showSearchButton) {
+        this.showSearchButton = true; // '검색하기' 버튼 보이기
       }
     },
 
@@ -123,10 +179,16 @@ export default {
         }
       }
     },
+
+    goToSearchPage() {
+      // 검색 페이지로 이동하는 로직 추가
+      this.$router.push('/search');
+    },
+
     goToLogin() {
       this.$router.push('/auth');
-
     },
+
   },
   watch: {
     user(newUser) {
@@ -239,12 +301,6 @@ h1 {
   gap: 20px;
 }
 
-.movie-slider {
-  display: flex;
-  overflow-x: auto;
-  padding: 10px;
-  gap: 15px;
-}
 .top-slider,
 .movie-slider {
   display: flex;
@@ -388,13 +444,65 @@ h1 {
 
 .prefer-slide {
   display: flex;
-  flex-wrap: wrap;  /* 줄 바꿈을 허용 */
+  flex-wrap: wrap;
   gap: 15px;
   padding: 10px;
   justify-content: center;
 }
 .movie-card {
-  flex: 0 0 calc(11.1% - 15px);  /* 9개를 한 줄에 배치하기 위한 계산 */
-  max-width: calc(11.1% - 15px);  /* 최대 너비 설정 */
+  flex: 0 0 calc(11.1% - 15px);
+  max-width: calc(11.1% - 15px);
 }
+
+.more-info {
+  display: inline-flex; /* 인라인 플렉스 사용 */
+  align-items: center; /* 세로 정렬 */
+  margin-left: 10px; /* 간격 */
+}
+
+.plus-sign {
+  font-size: 22px; /* 기호 크기 */
+  color: darkslateblue;
+  margin-right: 5px; /* 기호와 텍스트 간격 */
+  animation: pulse 1.5s ease-in-out infinite; /* 기호 애니메이션 */
+}
+
+.more-text {
+  background-color: transparent; /* 배경 투명 */
+  border: 2px solid darkslateblue;;
+  color: darkslateblue;;
+  font-size: 15px; /* 텍스트 크기 */
+  padding: 5px 15px; /* 여백 */
+  border-radius: 25px; /* 둥근 모서리 */
+  cursor: pointer; /* 포인터 효과 */
+  transition: background-color 0.3s, color 0.3s; /* 부드러운 전환 효과 */
+  animation: bounce 1s infinite; /* 통통 튀는 애니메이션 추가 */
+}
+
+.more-text:hover {
+  background-color: #1E1E1E;
+  color: white; /* 호버 시 글씨 색상 */
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2); /* 기호가 커지는 효과 */
+  }
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-5px); /* 위로 튕기는 효과 */
+  }
+  60% {
+    transform: translateY(-3px); /* 살짝 덜 튕기는 효과 */
+  }
+}
+
 </style>

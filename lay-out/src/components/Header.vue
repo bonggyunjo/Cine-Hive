@@ -16,15 +16,7 @@
         </ul>
       </nav>
 
-      <div class="search-bar">
-        <input
-            type="text"
-            v-model="searchQuery"
-            placeholder="search..."
-            @keyup.enter="searchMovies"
-        />
-        <button @click="searchMovies">검색</button>
-      </div>
+      <SearchBar class="search-bar-info"></SearchBar>
 
       <div class="login-area">
         <template v-if="isLoggedIn">
@@ -48,9 +40,11 @@
 <script>
 import axios from 'axios';
 import { mapActions, mapState } from 'vuex';
+import SearchBar from "@/components/SearchBar.vue";
 
 export default {
   name: 'HeaderComponent',
+  components: {SearchBar},
   data() {
     return {
       searchQuery: "", // 검색어
@@ -74,7 +68,9 @@ export default {
     ...mapActions(['updateSearchResults']),
 
     goToHome() {
+      if (this.$route.path !== '/') {
       this.$router.push('/');
+      }
     },
     async getUserInfo(loginType) {
       try {
@@ -82,6 +78,7 @@ export default {
           withCredentials: true
         });
 
+        // API 응답에서 필요한 데이터 추출
         const userData = response.data;
 
         console.log("data", userData);
@@ -97,7 +94,8 @@ export default {
           },
           loginType // 여기서 loginType을 추가
         });
-
+        console.log("data", userData);
+        // 로컬 스토리지에 사용자 정보와 loginType 저장
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('user', JSON.stringify({
           id: userData.memUserid,
@@ -220,31 +218,6 @@ header {
   margin-left: 230px;
 }
 
-.search-bar {
-  flex: 1;
-  text-align: left;
-  margin: 0 20px;
-}
-
-.search-bar input {
-  width: 100%;
-  max-width: 750px;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  background-color: #1a1a1a;
-  color: white;
-  outline: none;
-  transition: border-color 0.3s;
-}
-
-.search-bar input::placeholder {
-  color: #ccc;
-}
-
-.search-bar input:focus {
-  border-color: #F50000;
-}
 
 .login-area {
   display: flex;
@@ -266,6 +239,11 @@ header {
   color: #F50000;
 }
 
+.search-bar-info{
+  position: relative;
+  top:0px;
+  left: 20px;
+}
 @media (max-width: 768px) {
   .header-container {
     flex-direction: column;
@@ -282,11 +260,6 @@ header {
     flex-wrap: wrap;
     justify-content: center;
     gap: 10px;
-    margin: 10px 0;
-  }
-
-  .search-bar {
-    width: 100%;
     margin: 10px 0;
   }
 
@@ -310,38 +283,12 @@ header {
     display: none;
   }
 
-  .search-bar {
-    width: 100%;
-  }
-
   .login-area {
     flex-direction: column;
     align-items: center;
     gap: 5px;
     position: relative;
   }
-}
-
-.search-bar button {
-  background-color: #393636;
-  color: white;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 13px;
-  margin-left: 10px;
-  transition: background-color 0.3s ease;
-  position: relative;
-  top: 1px;
-}
-
-.search-bar button:hover {
-  background-color: #555555;
-}
-
-.search-bar button:active {
-  background-color: #990000;
 }
 
 .signup-link{
