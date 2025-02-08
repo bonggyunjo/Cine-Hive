@@ -1,10 +1,20 @@
 <template>
   <div class="drama-list">
     <h1>드라마 목록</h1>
+
+    <div class="button-group">
+      <span
+          @click="resetSort"
+          :class="['rating-button', { active: !popularitySorted }]">전체</span> &nbsp;&nbsp;
+      <span
+          @click="sortByPopularity"
+          :class="['rating-button', { active: popularitySorted }]">인기 순</span>
+    </div>
+
     <div class="top-slider">
       <div
           class="drama-card"
-          v-for="drama in dramas"
+          v-for="drama in sortedDramas"
           :key="drama.id"
           @click="goToDramaDetail(drama.id)"
       >
@@ -12,11 +22,12 @@
         <div class="drama-info">
           <h3 class="drama-title">{{ drama.name }}</h3>
           <p class="info-text">
-        <span v-if="drama.directors.length > 0">
-            {{ [...new Set(drama.directors.map(director => director.name))].join(', ') }}
-        </span>
+            <span v-if="drama.directors.length > 0">
+              {{ [...new Set(drama.directors.map(director => director.name))].join(', ') }}
+            </span>
             <span v-else>정보 없음</span>
           </p>
+          <p class="popularity-text" v-if="popularitySorted">인기: {{ drama.popularity.toFixed(1) }}</p> <!-- 인기 표시 -->
         </div>
       </div>
     </div>
@@ -31,10 +42,19 @@ export default {
   data() {
     return {
       dramas: [],
+      popularitySorted: false, // 인기 정렬 상태 추가
     };
   },
   created() {
     this.fetchDramas();
+  },
+  computed: {
+    sortedDramas() {
+      if (this.popularitySorted) {
+        return this.dramas.slice().sort((a, b) => b.popularity - a.popularity); // 인기 기준 정렬
+      }
+      return this.dramas; // 기본 목록
+    }
   },
   methods: {
     async fetchDramas() {
@@ -46,7 +66,14 @@ export default {
       }
     },
     goToDramaDetail(dramaId) {
-      this.$router.push({path: `/drama/${dramaId}`});
+      this.$router.push({ path: `/drama/${dramaId}` });
+    },
+    resetSort() {
+      this.popularitySorted = false; // 인기 정렬 비활성화
+      this.fetchDramas(); // 전체 드라마 목록으로 돌아가기
+    },
+    sortByPopularity() {
+      this.popularitySorted = true; // 인기 순위 정렬 활성화
     }
   }
 }
@@ -57,6 +84,7 @@ export default {
   padding: 20px;
   background-color: black;
   color: white;
+  overflow-x: hidden;
 }
 
 .drama-list h1 {
@@ -64,8 +92,33 @@ export default {
   color: white;
   font-size: 19px;
   position: relative;
-  left: 3.5%;
-  margin-bottom: 30px;
+  left: 4%;
+  margin-bottom: 20px;
+}
+
+.button-group {
+  display: flex;
+  margin-bottom: 20px;
+  position: relative;
+  left: 4%;
+}
+
+.rating-button {
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s; /* 부드러운 전환 효과 */
+}
+
+.rating-button:hover {
+  background-color: #d40000;
+  transform: scale(1.05); /* 버튼 호버 시 확대 효과 */
+}
+
+.rating-button.active {
+  font-weight: bold; /* 클릭한 버튼을 진하게 표시 */
+  text-decoration: underline; /* 클릭한 버튼에 밑줄 추가 */
 }
 
 .top-slider {
@@ -119,5 +172,11 @@ export default {
   color: #ccc;
   margin: 5px 0;
   font-style: italic;
+}
+
+.popularity-text {
+  font-size: 1rem;
+  color: #FFD700; /* 인기 텍스트 색상 */
+  margin-top: 5px;
 }
 </style>

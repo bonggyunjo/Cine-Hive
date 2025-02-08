@@ -107,11 +107,15 @@ export default {
   color: white;
   font-size: 19px;
   margin-bottom: 20px; /* 제목과 버튼 사이 여백 추가 */
+  position: relative;
+  left:4%;
 }
 
 .button-group {
   display: flex;
   margin-bottom: 20px; /* 버튼 그룹과 영화 목록 사이 여백 추가 */
+  position: relative;
+  left:4%;
 }
 
 .rating-button {
