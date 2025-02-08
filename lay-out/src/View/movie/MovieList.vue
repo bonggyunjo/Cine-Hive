@@ -60,11 +60,11 @@ export default {
       sorted: false,
       popularitySorted: false,
       loading: false,
-      decadeFiltered: null, // 연대 필터 상태 추가
+      decadeFiltered: null,
     };
   },
   created() {
-    this.fetchMovies(); // 초기 영화 목록 가져오기
+    this.fetchMovies();
   },
   computed: {
     filteredMovies() {
@@ -104,7 +104,7 @@ export default {
   },
   methods: {
     async fetchMovies() {
-      this.loading = true; // 로딩 시작
+      this.loading = true;
       try {
         const response = await axios.get('http://localhost:8081/movies');
         this.movies = response.data;
@@ -112,7 +112,7 @@ export default {
       } catch (error) {
         console.error('영화 데이터를 가져오는 중 오류가 발생했습니다:', error);
       } finally {
-        this.loading = false; // 로딩 종료
+        this.loading = false;
       }
     },
     goToMovieDetail(movieId) {
@@ -121,23 +121,23 @@ export default {
     sortByRating() {
       this.sorted = true;
       this.popularitySorted = false;
-      this.decadeFiltered = null; // 연대 필터 해제
+      this.decadeFiltered = null;
     },
     resetSort() {
       this.sorted = false;
       this.popularitySorted = false;
-      this.decadeFiltered = null; // 연대 필터 해제
-      this.fetchMovies(); // 전체 영화 목록으로 돌아가기
+      this.decadeFiltered = null;
+      this.fetchMovies();
     },
     sortByPopularity() {
       this.popularitySorted = true;
       this.sorted = false;
-      this.decadeFiltered = null; // 연대 필터 해제
+      this.decadeFiltered = null;
     },
     filterByDecade(decade, before2000 = false) {
-      this.decadeFiltered = before2000 ? 'before2000' : decade; // 선택한 연대 필터 설정
-      this.sorted = false; // 정렬 해제
-      this.popularitySorted = false; // 인기 정렬 해제
+      this.decadeFiltered = before2000 ? 'before2000' : decade;
+      this.sorted = false;
+      this.popularitySorted = false;
     }
   }
 }
@@ -156,15 +156,15 @@ export default {
   text-align: left;
   color: white;
   font-size: 19px;
-  margin-bottom: 20px; /* 제목과 버튼 사이 여백 추가 */
+  margin-bottom: 20px;
   position: relative;
   left:4%;
 }
 .separator {
   width: 93%;
   border-bottom: 1px solid;
-  background-color: white; /* 구분선 색상 */
-  margin-bottom: 20px; /* 구분선과 버튼 사이 여백 추가 */
+  background-color: white;
+  margin-bottom: 20px;
   position: relative;
   left: 4%;
 }

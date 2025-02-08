@@ -115,23 +115,23 @@ export default {
       this.$router.push({ path: `/animation/${animationId}` });
     },
     sortByRating() {
-      this.sorted = true; // 평점 순위 정렬 활성화
-      this.popularitySorted = false; // 인기 정렬 비활성화
+      this.sorted = true;
+      this.popularitySorted = false;
     },
     resetSort() {
-      this.sorted = false; // 정렬 상태 초기화
-      this.popularitySorted = false; // 인기 정렬 비활성화
-      this.decadeFiltered = null; // 연대 필터 해제
-      this.fetchAnimations(); // 전체 애니메이션 목록으로 돌아가기
+      this.sorted = false;
+      this.popularitySorted = false;
+      this.decadeFiltered = null;
+      this.fetchAnimations();
     },
     sortByPopularity() {
-      this.popularitySorted = true; // 인기 순위 정렬 활성화
-      this.sorted = false; // 평점 정렬 비활성화
+      this.popularitySorted = true;
+      this.sorted = false;
     },
     filterByDecade(decade, before2000 = false) {
-      this.decadeFiltered = before2000 ? 'before2000' : decade; // 선택한 연대 필터 설정
-      this.sorted = false; // 정렬 해제
-      this.popularitySorted = false; // 인기 정렬 해제
+      this.decadeFiltered = before2000 ? 'before2000' : decade;
+      this.sorted = false;
+      this.popularitySorted = false;
     }
   }
 }
@@ -143,7 +143,7 @@ export default {
   padding: 20px;
   background-color: black;
   color: white;
-  overflow-x: hidden; /* 좌우 스크롤 숨기기 */
+  overflow-x: hidden;
 }
 
 .animation-list h1 {
@@ -157,15 +157,15 @@ export default {
 .separator {
   width: 93%;
   border-bottom: 1px solid;
-  background-color: white; /* 구분선 색상 */
-  margin-bottom: 20px; /* 구분선과 버튼 사이 여백 추가 */
+  background-color: white;
+  margin-bottom: 20px;
   position: relative;
   left: 4%;
 }
 
 .button-group {
   display: flex;
-  margin-bottom: 20px; /* 버튼 그룹과 애니메이션 목록 사이 여백 추가 */
+  margin-bottom: 20px;
   position: relative;
   left:4%;
 }
@@ -175,16 +175,16 @@ export default {
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s; /* 부드러운 전환 효과 */
+  transition: background-color 0.3s, transform 0.2s;
 }
 
 .rating-button:hover {
-  transform: scale(1.05); /* 버튼 호버 시 확대 효과 */
+  transform: scale(1.05);
 }
 
 .rating-button.active {
-  font-weight: bold; /* 클릭한 버튼을 진하게 표시 */
-  text-decoration: underline; /* 클릭한 버튼에 밑줄 추가 */
+  font-weight: bold;
+  text-decoration: underline;
 }
 
 .top-slider {
@@ -242,13 +242,13 @@ export default {
 
 .rating-text {
   font-size: 1rem;
-  color: #FFD700; /* 평점 텍스트 색상 */
+  color: #FFD700;
   margin-top: 5px;
 }
 
 .popularity-text {
   font-size: 1rem;
-  color: #FFD700; /* 인기 텍스트 색상 */
+  color: #FFD700;
   margin-top: 5px;
 }
 </style>
