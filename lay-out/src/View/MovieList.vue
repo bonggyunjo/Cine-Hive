@@ -5,13 +5,25 @@
     <div class="button-group"> <!-- 버튼 그룹 추가 -->
       <span
           @click="resetSort"
-          :class="['rating-button', { active: !sorted && !popularitySorted }]">전체</span> &nbsp;&nbsp;
+          :class="['rating-button', { active: !sorted && !popularitySorted && !decadeFiltered }]">전체</span> &nbsp;&nbsp;
       <span
           @click="sortByRating"
           :class="['rating-button', { active: sorted }]">평점 순</span> &nbsp;&nbsp;
       <span
           @click="sortByPopularity"
-          :class="['rating-button', { active: popularitySorted }]">인기 순</span>
+          :class="['rating-button', { active: popularitySorted }]">인기 순</span> &nbsp;&nbsp;&nbsp;
+      <span
+          @click="filterByDecade(2000)"
+          :class="['rating-button', { active: decadeFiltered === 2000 }]">2000s</span> &nbsp;&nbsp;&nbsp;
+      <span
+          @click="filterByDecade(2010)"
+          :class="['rating-button', { active: decadeFiltered === 2010 }]">2010s</span> &nbsp;&nbsp;&nbsp;
+      <span
+          @click="filterByDecade(2020)"
+          :class="['rating-button', { active: decadeFiltered === 2020 }]">2020s</span> &nbsp;&nbsp;&nbsp;
+      <span
+          @click="filterByDecade(2000, true)"
+          :class="['rating-button', { active: decadeFiltered === 'before2000' }]">2000s 이하</span>
     </div>
 
     <!-- 로딩 상태 표시 -->
@@ -20,7 +32,7 @@
     <div class="top-slider" v-if="!loading">
       <div
           class="movie-card"
-          v-for="movie in sortedMovies"
+          v-for="movie in filteredMovies"
           :key="movie.id"
           @click="goToMovieDetail(movie.id)"
       >
@@ -45,21 +57,48 @@ export default {
     return {
       movies: [],
       sorted: false,
-      popularitySorted: false, // 인기 정렬 상태 추가
-      loading: false, // 로딩 상태 추가
+      popularitySorted: false,
+      loading: false,
+      decadeFiltered: null, // 연대 필터 상태 추가
     };
   },
   created() {
     this.fetchMovies(); // 초기 영화 목록 가져오기
   },
   computed: {
-    sortedMovies() {
-      if (this.popularitySorted) {
-        return this.movies.slice().sort((a, b) => b.popularity - a.popularity); // 인기 기준 정렬
-      } else if (this.sorted) {
-        return this.movies.slice().sort((a, b) => b.voteAverage - a.voteAverage); // 평점 기준 정렬
+    filteredMovies() {
+      let filtered = this.movies;
+
+      // 연대 필터링
+      if (this.decadeFiltered === 2000) {
+        filtered = filtered.filter(movie => {
+          const year = parseInt(movie.releaseDate.split('-')[0]);
+          return year >= 2000 && year < 2010;
+        });
+      } else if (this.decadeFiltered === 2010) {
+        filtered = filtered.filter(movie => {
+          const year = parseInt(movie.releaseDate.split('-')[0]);
+          return year >= 2010 && year < 2020;
+        });
+      } else if (this.decadeFiltered === 2020) {
+        filtered = filtered.filter(movie => {
+          const year = parseInt(movie.releaseDate.split('-')[0]);
+          return year >= 2020;
+        });
+      } else if (this.decadeFiltered === 'before2000') {
+        filtered = filtered.filter(movie => {
+          const year = parseInt(movie.releaseDate.split('-')[0]);
+          return year < 2000;
+        });
       }
-      return this.movies; // 기본 목록
+
+      // 정렬 처리
+      if (this.popularitySorted) {
+        return filtered.slice().sort((a, b) => b.popularity - a.popularity);
+      } else if (this.sorted) {
+        return filtered.slice().sort((a, b) => b.voteAverage - a.voteAverage);
+      }
+      return filtered; // 기본 목록
     }
   },
   methods: {
@@ -79,27 +118,37 @@ export default {
       this.$router.push({ path: `/movie/${movieId}` });
     },
     sortByRating() {
-      this.sorted = true; // 평점 순위 정렬 활성화
-      this.popularitySorted = false; // 인기 정렬 비활성화
+      this.sorted = true;
+      this.popularitySorted = false;
+      this.decadeFiltered = null; // 연대 필터 해제
     },
     resetSort() {
-      this.sorted = false; // 정렬 상태 초기화
-      this.popularitySorted = false; // 인기 정렬 비활성화
+      this.sorted = false;
+      this.popularitySorted = false;
+      this.decadeFiltered = null; // 연대 필터 해제
       this.fetchMovies(); // 전체 영화 목록으로 돌아가기
     },
     sortByPopularity() {
-      this.popularitySorted = true; // 인기 순위 정렬 활성화
-      this.sorted = false; // 평점 정렬 비활성화
+      this.popularitySorted = true;
+      this.sorted = false;
+      this.decadeFiltered = null; // 연대 필터 해제
+    },
+    filterByDecade(decade, before2000 = false) {
+      this.decadeFiltered = before2000 ? 'before2000' : decade; // 선택한 연대 필터 설정
+      this.sorted = false; // 정렬 해제
+      this.popularitySorted = false; // 인기 정렬 해제
     }
   }
 }
 </script>
+
 
 <style scoped>
 .movie-list {
   padding: 20px;
   background-color: black;
   color: white;
+  overflow-x: hidden;
 }
 
 .movie-list h1 {
