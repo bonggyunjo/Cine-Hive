@@ -1,6 +1,6 @@
 <template>
   <div class="animation-list">
-    <h1>검색한 애니메이션 목록</h1>
+    <h1>애니메이션 목록</h1>
     <div class="top-slider">
       <div
           class="animation-card"

@@ -1,6 +1,6 @@
 <template>
   <div class="drama-list">
-    <h1>검색한 드라마 목록</h1>
+    <h1>드라마 목록</h1>
     <div class="top-slider">
       <div
           class="drama-card"
