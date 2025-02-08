@@ -13,7 +13,6 @@
 
     <div class="movie-container">
       <h2 class="section-title">인기 영화</h2>
-      <!-- 영화 포스터 -->
       <div class="top-slider">
         <div
             class="movie-card"
@@ -35,11 +34,9 @@
         >
           <img :src="'https://image.tmdb.org/t/p/w300' + movie.posterPath" alt="movie poster" />
         </div>
-
       </div>
 
       <h2 class="section-title">선호 장르</h2>
-      <!-- 로그인 여부 체크 -->
       <div v-if="!user" class="login-prompt-container">
         <p class="login-prompt">로그인을 하시면 선호하는 장르를 추천해드립니다.</p>
         <button class="login-button" @click="goToLogin">로그인</button>
@@ -72,6 +69,7 @@ export default {
       prefer: [],
     };
   },
+
   computed: {
     ...mapState(['user']),
   },
@@ -85,12 +83,24 @@ export default {
       }
     },
 
-    async fetchTopmovies(){
+    async fetchTopmovies() {
       try {
         const response1 = await axios.get('http://localhost:8081/get_topmovies');
         this.topmovies = response1.data.slice(0, 18);
       } catch (error) {
         console.error('영화 데이터를 가져오는 중 오류가 발생했습니다:', error);
+      }
+    },
+
+    async fetchPreferredGenres() {
+      try {
+        const response = await axios.post('http://localhost:8081/preferredGenres', {
+          geners: this.user.preferredGenres // 사용자의 선호 장르 배열
+        });
+        console.log('선호 장르 데이터:', response.data); // 응답 데이터 확인
+        this.prefer = response.data; // 서버에서 받은 선호 장르 콘텐츠
+      } catch (error) {
+        console.error('선호 장르 데이터를 가져오는 중 오류가 발생했습니다:', error);
       }
     },
 
@@ -105,13 +115,23 @@ export default {
       this.$router.push({ name: 'Login' }); // 로그인 페이지로 이동하는 코드
     },
   },
+  watch: {
+    // Vuex의 user 상태가 변할 때마다 호출
+    user(newUser) {
+      if (newUser && newUser.preferredGenres && newUser.preferredGenres.length > 0) {
+        this.fetchPreferredGenres(); // 사용자가 로그인했을 때 선호 장르 가져오기
+      }
+    }
+  },
   mounted() {
     this.fetchMovies();
     this.fetchTopmovies();
-  },
+    if (this.user && this.user.preferredGenres && this.user.preferredGenres.length > 0) {
+      this.fetchPreferredGenres(); // 사용자가 로그인했을 때 선호 장르 가져오기
+    }
+  }
 };
 </script>
-
 <style scoped>
 
 #homepage {

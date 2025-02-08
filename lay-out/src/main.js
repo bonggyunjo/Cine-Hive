@@ -8,8 +8,10 @@ import store from './store/store';
 
 Vue.config.productionTip = false
 
-new Vue({
-  router,
-  store,
-  render: h => h(App),
-}).$mount('#app')
+store.dispatch('initializeStore').then(() => {
+  new Vue({
+    store,
+    router,
+    render: h => h(App)
+  }).$mount('#app');
+});

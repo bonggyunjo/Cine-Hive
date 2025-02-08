@@ -106,9 +106,9 @@ export default {
       this.$store.commit('SET_LOGOUT');
 
       // 로컬/세션 스토리지 데이터 삭제
-      localStorage.removeItem('token');
-      sessionStorage.clear();
-      window.location.reload();
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('user');
+      localStorage.removeItem('loginType');
 
       axios.get('http://localhost:8081/api/auth/logout', {withCredentials: true})
           .then(() => {
