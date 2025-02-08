@@ -98,6 +98,7 @@ export default {
           genres: this.user.preferredGenres
         });
         console.log('선호 장르 데이터:', response.data);
+        this.prefer = response.data.slice(0, 18);  // 18개로 제한
         this.prefer = response.data;
       } catch (error) {
         console.error('선호 장르 데이터를 가져오는 중 오류가 발생했습니다:', error);
@@ -117,7 +118,6 @@ export default {
     },
   },
   watch: {
-
     user(newUser) {
       if (newUser && newUser.preferredGenres && newUser.preferredGenres.length > 0) {
         this.fetchPreferredGenres();
@@ -377,9 +377,13 @@ h1 {
 
 .prefer-slide {
   display: flex;
+  flex-wrap: wrap;  /* 줄 바꿈을 허용 */
   gap: 15px;
-  overflow-x: auto;
   padding: 10px;
   justify-content: center;
+}
+.movie-card {
+  flex: 0 0 calc(11.1% - 15px);  /* 9개를 한 줄에 배치하기 위한 계산 */
+  max-width: calc(11.1% - 15px);  /* 최대 너비 설정 */
 }
 </style>

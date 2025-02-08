@@ -30,7 +30,7 @@ public class PreferredGenreController {
 
     @PostMapping("/preferredGenres")
     public ResponseEntity<List<Content>> getContentByGenres(@RequestBody PreferredGenereDto preferredGenereDto) {
-        // 전송된 선호 장르 로그 출력
+
         System.out.println("전송된 선호 장르: " + preferredGenereDto.getGenres());
 
         List<Content> contents = new ArrayList<>();
@@ -38,26 +38,29 @@ public class PreferredGenreController {
         for (String genre : preferredGenereDto.getGenres()) {
             switch (genre) {
                 case "드라마":
-                    for (Drama drama : dramaRepository.findAll()) {
+                    List<Drama> dramas = dramaRepository.findAll();
+                    for (Drama drama : dramas) {
                         contents.add(convertToContent(drama));
-                        System.out.println("드라마 개수: " + dramaRepository.findAll().size());
+                        if (contents.size() >= 18) break;  // 20개 이상이면 종료
                     }
                     break;
                 case "애니메이션":
-                    for (Animation animation : animationRepository.findAll()) {
+                    List<Animation> animations = animationRepository.findAll();
+                    for (Animation animation : animations) {
                         contents.add(convertToContent(animation));
-                        System.out.println("애니메이션 개수: " + animationRepository.findAll().size());
+                        if (contents.size() >= 18) break;  // 20개 이상이면 종료
                     }
                     break;
                 case "영화":
-                    for (Movie movie : movieRepository.findAll()) {
+                    List<Movie> movies = movieRepository.findAll();
+                    for (Movie movie : movies) {
                         contents.add(convertToContent(movie));
-                        System.out.println("영화 개수: " + movieRepository.findAll().size());
+                        if (contents.size() >= 18) break;  // 20개 이상이면 종료
                     }
                     break;
             }
+            if (contents.size() >= 18) break; // 모든 장르에서 20개 이상이면 종료
         }
-
 
         if (contents.isEmpty()) {
             System.out.println("선호 장르에 대한 콘텐츠가 없습니다.");
@@ -65,6 +68,7 @@ public class PreferredGenreController {
 
         return ResponseEntity.ok(contents);
     }
+
 
     private Content convertToContent(Drama drama) {
         return new Content(drama.getId(), drama.getName(), drama.getOverview(), drama.getPosterPath());
