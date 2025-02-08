@@ -5,9 +5,9 @@
       <div class="left-section" v-if="isLogin">
         <h1 class="login-title-h1">LOGIN</h1>
         <div class="login-buttons">
-          <img @click="kakaoLogin" src="../assets/Login/kakao.png" alt="Kakao Login" width="35" height="35" class="login-image">
+          <img @click="kakaoLogin" src="@/assets/Login/kakao.png" alt="Kakao Login" width="35" height="35" class="login-image">
           <img @click="googleLogin" src="@/assets/Login/google.png" alt="Google Login" width="35" height="35" class="login-image">
-          <img @click="naverLogin" src="../assets/Login/naver.png" alt="Naver Login" width="41" height="36" class="login-image">
+          <img @click="naverLogin" src="@/assets/Login/naver.png" alt="Naver Login" width="41" height="36" class="login-image">
         </div>
         <p class="or-use-your-account">or use your account</p>
         <div class="form-group">
@@ -45,9 +45,9 @@
 
         <h1 class="signup-title-h1">SIGN UP</h1>
         <div class="login-buttons">
-          <img @click="kakaoLogin" src="../assets/Login/kakao.png" alt="Kakao Login" width="30" height="30" class="login-image-sign-up">
+          <img @click="kakaoLogin" src="@/assets/Login/kakao.png" alt="Kakao Login" width="30" height="30" class="login-image-sign-up">
           <img @click="googleLogin" src="@/assets/Login/google.png" alt="Google Login" width="30" height="30" class="login-image-sign-up">
-          <img @click="naverLogin" src="../assets/Login/naver.png" alt="Naver Login" width="36" height="30" class="login-image-sign-up">
+          <img @click="naverLogin" src="@/assets/Login/naver.png" alt="Naver Login" width="36" height="30" class="login-image-sign-up">
         </div>
         <div class="signup-prompt-1">
           <div class="form-group-signup">

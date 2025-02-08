@@ -51,10 +51,10 @@
     <div class="bottom-section">
       <h3 class="section-title">바로가기</h3>
       <div class="streaming-services">
-        <img class="streaming-logo" src="../assets/movieDetailLogo/bing.png" alt="Wave" @click="goToLink('https://www.watcha.com')" />
-        <img class="streaming-logo" src="../assets/movieDetailLogo/wiki.png" alt="Watcha" @click="goToLink('https://www.wavve.com')" />
-        <img class="streaming-logo" src="../assets/movieDetailLogo/netflix.png" alt="Netflix" @click="goToLink('https://www.netflix.com')" />
-        <img class="streaming-logo" src="../assets/movieDetailLogo/tiving.png" alt="Tiving" @click="goToLink('https://www.tving.com')" />
+        <img class="streaming-logo" src="@/assets/movieDetailLogo/bing.png" alt="Wave" @click="goToLink('https://www.watcha.com')" />
+        <img class="streaming-logo" src="@/assets/movieDetailLogo/wiki.png" alt="Watcha" @click="goToLink('https://www.wavve.com')" />
+        <img class="streaming-logo" src="@/assets/movieDetailLogo/netflix.png" alt="Netflix" @click="goToLink('https://www.netflix.com')" />
+        <img class="streaming-logo" src="@/assets/movieDetailLogo/tiving.png" alt="Tiving" @click="goToLink('https://www.tving.com')" />
 
       </div>
     </div>
@@ -210,7 +210,7 @@ export default {
 
 .streaming-services {
   display: flex;
-  gap: 20px; /* 로고 간격 */
+  gap: 20px;
 }
 
 .streaming-logo {

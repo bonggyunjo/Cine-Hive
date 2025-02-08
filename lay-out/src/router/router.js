@@ -1,16 +1,17 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Home from '@/View/HomePage.vue';
-import AuthView from "@/View/AuthView.vue";
-import SocialLoginAdditionalInfo from "@/View/SocialLoginAdditionalInfo.vue";
+import AuthView from "@/View/user/AuthView.vue";
+import SocialLoginAdditionalInfo from "@/View/user/SocialLoginAdditionalInfo.vue";
 import SearchPage from "@/View/SearchPage.vue";
-import MovieDetail from "@/View/MovieDetail.vue";
-import DramaDetail from "@/View/DramaDetail.vue";
-import AnimationDetail from "@/View/AnimationDetail.vue";
-import TopMovieDetail from "@/View/TopMovieDetail.vue";
-import MovieList from "@/View/MovieList.vue";
-import AnimationList from "@/View/AnimationList.vue";
-import DramaList from "@/View/DramaList.vue";
+import MovieDetail from "@/View/movie/MovieDetail.vue";
+import DramaDetail from "@/View/drama/DramaDetail.vue";
+import AnimationDetail from "@/View/animation/AnimationDetail.vue";
+import TopMovieDetail from "@/View/movie/TopMovieDetail.vue";
+import MovieList from "@/View/movie/MovieList.vue";
+import AnimationList from "@/View/animation/AnimationList.vue";
+import DramaList from "@/View/drama/DramaList.vue";
+
 
 Vue.use(Router);
 
