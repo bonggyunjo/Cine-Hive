@@ -8,13 +8,25 @@
           :class="['rating-button', { active: !popularitySorted }]">전체</span> &nbsp;&nbsp;
       <span
           @click="sortByPopularity"
-          :class="['rating-button', { active: popularitySorted }]">인기 순</span>
+          :class="['rating-button', { active: popularitySorted }]">인기 순</span> &nbsp;&nbsp;
+      <span
+          @click="filterByDecade(2000)"
+          :class="['rating-button', { active: decadeFiltered === 2000 }]">2000s</span> &nbsp;&nbsp;
+      <span
+          @click="filterByDecade(2010)"
+          :class="['rating-button', { active: decadeFiltered === 2010 }]">2010s</span> &nbsp;&nbsp;
+      <span
+          @click="filterByDecade(2020)"
+          :class="['rating-button', { active: decadeFiltered === 2020 }]">2020s</span> &nbsp;&nbsp;
+      <span
+          @click="filterByDecade('before2000')"
+          :class="['rating-button', { active: decadeFiltered === 'before2000' }]">Before 2000s</span>
     </div>
     <div class="separator"></div>
     <div class="top-slider">
       <div
           class="drama-card"
-          v-for="drama in sortedDramas"
+          v-for="drama in filteredDramas"
           :key="drama.id"
           @click="goToDramaDetail(drama.id)"
       >
@@ -27,7 +39,7 @@
             </span>
             <span v-else>정보 없음</span>
           </p>
-          <p class="popularity-text" v-if="popularitySorted">인기: {{ drama.popularity.toFixed(1) }}</p> <!-- 인기 표시 -->
+          <p class="popularity-text" v-if="popularitySorted">인기: {{ drama.popularity.toFixed(1) }}</p>
         </div>
       </div>
     </div>
@@ -42,18 +54,46 @@ export default {
   data() {
     return {
       dramas: [],
-      popularitySorted: false, // 인기 정렬 상태 추가
+      popularitySorted: false,
+      decadeFiltered: null, // 연대 필터 상태 추가
     };
   },
   created() {
     this.fetchDramas();
   },
   computed: {
-    sortedDramas() {
-      if (this.popularitySorted) {
-        return this.dramas.slice().sort((a, b) => b.popularity - a.popularity); // 인기 기준 정렬
+    filteredDramas() {
+      let filtered = this.dramas;
+
+      // 연대 필터링
+      if (this.decadeFiltered === 2000) {
+        filtered = filtered.filter(drama => {
+          const year = new Date(drama.firstAirDate).getFullYear();
+          return year >= 2000 && year < 2010;
+        });
+      } else if (this.decadeFiltered === 2010) {
+        filtered = filtered.filter(drama => {
+          const year = new Date(drama.firstAirDate).getFullYear();
+          return year >= 2010 && year < 2020;
+        });
+      } else if (this.decadeFiltered === 2020) {
+        filtered = filtered.filter(drama => {
+          const year = new Date(drama.firstAirDate).getFullYear();
+          return year >= 2020;
+        });
+      } else if (this.decadeFiltered === 'before2000') {
+        filtered = filtered.filter(drama => {
+          const year = new Date(drama.firstAirDate).getFullYear();
+          return year < 2000;
+        });
       }
-      return this.dramas; // 기본 목록
+
+      // 인기 기준 정렬
+      if (this.popularitySorted) {
+        return filtered.slice().sort((a, b) => b.popularity - a.popularity);
+      }
+
+      return filtered; // 기본 목록
     }
   },
   methods: {
@@ -70,10 +110,15 @@ export default {
     },
     resetSort() {
       this.popularitySorted = false; // 인기 정렬 비활성화
+      this.decadeFiltered = null; // 연대 필터 해제
       this.fetchDramas(); // 전체 드라마 목록으로 돌아가기
     },
     sortByPopularity() {
       this.popularitySorted = true; // 인기 순위 정렬 활성화
+    },
+    filterByDecade(decade) {
+      this.decadeFiltered = decade; // 선택한 연대 필터 설정
+      this.popularitySorted = false; // 인기 정렬 비활성화
     }
   }
 }
