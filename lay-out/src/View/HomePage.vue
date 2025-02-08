@@ -211,7 +211,7 @@ export default {
 <style scoped>
 
 #homepage {
-  height: 900px;
+  height: 1200px;
   flex: 1;
   background-color : black;
   color: white;
