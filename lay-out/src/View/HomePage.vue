@@ -45,11 +45,11 @@
         <div class="prefer-slide">
           <div
               class="movie-card"
-              v-for="movie in prefer"
-              :key="movie.id"
-              @click="goToMovieDetail(movie.id)"
+              v-for="content in prefer"
+              :key="content.id"
+              @click="goToMovieDetail(content.id)"
           >
-            <img :src="'https://image.tmdb.org/t/p/w300' + movie.posterPath" alt="movie poster" />
+            <img :src="'https://image.tmdb.org/t/p/w300' + content.posterPath" alt="movie poster" />
           </div>
         </div>
       </div>
@@ -98,18 +98,29 @@ export default {
           genres: this.user.preferredGenres
         });
         console.log('선호 장르 데이터:', response.data);
-        this.prefer = response.data.slice(0, 18);  // 18개로 제한
+        this.prefer = response.data.slice(0, 18);  
         this.prefer = response.data;
       } catch (error) {
         console.error('선호 장르 데이터를 가져오는 중 오류가 발생했습니다:', error);
       }
     },
 
-    goToMovieDetail(movieId, movieType) {
-      if (movieType === 'top') {
-        this.$router.push({ name: 'TopMovieDetail', params: { id: movieId } });
-      } else {
-        this.$router.push({ name: 'MovieDetail', params: { id: movieId } });
+    goToMovieDetail(movieId) {
+      const selectedContent = this.prefer.find(content => content.id === movieId);
+      if (selectedContent) {
+        switch (selectedContent.genre) {
+          case '드라마':
+            this.$router.push({ name: 'DramaDetail', params: { id: movieId } });
+            break;
+          case '애니메이션':
+            this.$router.push({ name: 'AnimationDetail', params: { id: movieId } });
+            break;
+          case '영화':
+            this.$router.push({ name: 'MovieDetail', params: { id: movieId } });
+            break;
+          default:
+            console.error('알 수 없는 장르입니다.');
+        }
       }
     },
     goToLogin() {

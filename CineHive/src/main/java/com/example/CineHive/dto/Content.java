@@ -11,5 +11,5 @@ public class Content {
     private String name;
     private String overview;
     private String posterPath;
-
+    private String genre;
 }
