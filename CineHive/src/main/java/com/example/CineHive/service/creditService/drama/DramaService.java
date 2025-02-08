@@ -11,6 +11,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriUtils;
 
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +23,6 @@ public class DramaService {
     private String apiKey;
 
     private final WebClient webClient;
-
     private final ObjectMapper objectMapper;
 
     @Autowired
@@ -64,7 +65,7 @@ public class DramaService {
                     drama.setOverview(dramaNode.get("overview").asText());
 
                     // 포스터 이미지가 없으면 다음 데이터로 넘어감
-                    if(posterPath==null || posterPath.isEmpty()){
+                    if (posterPath == null || posterPath.isEmpty()) {
                         continue;
                     }
                     drama.setPosterPath(posterPath);
@@ -76,24 +77,31 @@ public class DramaService {
                     drama.setPopularity(dramaNode.get("popularity").asDouble());
                     drama.setAdult(dramaNode.get("adult").asBoolean());
 
-                    if(drama.getGenreIds().contains(16)){
+                    String releaseDateString = dramaNode.get("first_air_date").asText();
+                    if (!releaseDateString.isEmpty()) {
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                        LocalDate releaseDate = LocalDate.parse(releaseDateString, formatter);
+                        drama.setFirstAirDate(String.valueOf(releaseDate));
+                    }
+
+
+
+                    if (drama.getGenreIds().contains(16)) {
                         continue;
                     }
 
                     if (!dramaRepository.existsById(dramaId)) {
                         dramaRepository.save(drama);
                         System.out.println("Saved new drama: " + drama.getName());
-
                     } else {
                         System.out.println("Drama already exists: " + drama.getName());
                     }
-                    //배우
+                    // 배우
                     dramaActorService.saveDramaCredits(dramaId);
-                    //감독 정보 저장
+                    // 감독 정보 저장
                     dramaDirectorService.saveDramaDirectors(dramaId);
                     // 데이터베이스와 상관없이 항상 리스트에 추가
                     dramas.add(drama);
-
                 }
             } catch (Exception e) {
                 e.printStackTrace();

@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate; // LocalDate 추가
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,10 +23,12 @@ public class Drama {
     private Long id;
     private String name;
     private String originalName;
+
     @Lob
     private String overview;
     private String posterPath;
     private String backdropPath;
+    @Column(name = "first_air_date")
     private String firstAirDate;
     private double voteAverage;
     private int voteCount;
@@ -42,5 +45,4 @@ public class Drama {
 
     @OneToMany(mappedBy = "drama", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Actor> actors = new ArrayList<>();
-
 }
