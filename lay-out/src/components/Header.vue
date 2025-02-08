@@ -16,7 +16,7 @@
         </ul>
       </nav>
 
-      <SearchBar class="search-bar-info"></SearchBar>
+      <SearchBar class="search-bar-info" ></SearchBar>
 
       <div class="login-area">
         <template v-if="isLoggedIn">
@@ -30,16 +30,12 @@
       </div>
     </div>
 
-    <!-- 로딩 메시지 -->
-    <div v-if="loading" class="loading-overlay">
-      <p>검색 중...</p>
-    </div>
   </header>
 </template>
 
 <script>
 import axios from 'axios';
-import { mapActions, mapState } from 'vuex';
+import { mapState } from 'vuex';
 import SearchBar from "@/components/SearchBar.vue";
 
 export default {
@@ -48,7 +44,6 @@ export default {
   data() {
     return {
       searchQuery: "", // 검색어
-      loading: false, // 로딩 상태
     };
   },
   mounted() {
@@ -65,7 +60,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['updateSearchResults']),
 
     goToHome() {
       if (this.$route.path !== '/') {
@@ -129,33 +123,6 @@ export default {
             console.error("로그아웃 오류:", error);
           });
     },
-    async searchMovies() {
-      if (!this.searchQuery.trim()) {
-        alert("검색어를 입력하세요!");
-        return;
-      }
-
-      this.loading = true;
-
-      try {
-        const response = await axios.post('http://localhost:8081/search', {
-          query: this.searchQuery
-        });
-
-
-        this.updateSearchResults(response.data);
-
-
-        this.$router.push({
-          path: '/search',
-          query: { q: this.searchQuery }
-        });
-      } catch (error) {
-        console.error("검색 중 오류가 발생했습니다:", error);
-      } finally {
-        this.loading = false;
-      }
-    },
   },
   created() {
     if (this.isLoggedIn) {
@@ -166,20 +133,7 @@ export default {
 </script>
 
 <style scoped>
-.loading-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  font-size: 20px;
-}
+
 
 .site-title {
   text-decoration: none;

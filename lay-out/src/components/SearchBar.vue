@@ -7,25 +7,52 @@
         @keyup.enter="searchMovies"
     />
     <button @click="searchMovies">검색</button>
+    <div v-if="loading" class="loading-overlay">
+      <span>로딩 중...</span>
+    </div>
   </div>
+
 </template>
 <script>
+import axios from "axios";
+import {mapActions} from "vuex";
+
 export default {
   name: 'SearchBar',
   data() {
     return {
       searchQuery: "", // 검색어
+      loading: false,  // 로딩 상태
     };
   },
   methods: {
-    searchMovies() {
+    ...mapActions(['updateSearchResults']),
+    async searchMovies() {
       if (!this.searchQuery.trim()) {
         alert("검색어를 입력하세요!");
         return;
       }
 
-      this.$emit('search', this.searchQuery); // Emit the search query to the parent component
-    },
+      this.loading = true;
+
+      try {
+        const response = await axios.post('http://localhost:8081/search', {
+          query: this.searchQuery
+        });
+
+        this.updateSearchResults(response.data);
+
+        // 현재 경로와 같다면 이동하지 않음
+        const newRoute = `/search?q=${encodeURIComponent(this.searchQuery)}`;
+        if (this.$route.fullPath !== newRoute) {
+          this.$router.push(newRoute);
+        }
+      } catch (error) {
+        console.error("검색 중 오류가 발생했습니다:", error);
+      } finally {
+        this.loading = false;
+      }
+    }
   },
 };
 </script>
@@ -134,5 +161,20 @@ export default {
 
 .search-bar button:active {
   background-color: #990000;
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  font-size: 20px;
 }
 </style>
