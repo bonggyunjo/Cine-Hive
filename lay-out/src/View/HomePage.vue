@@ -91,14 +91,14 @@ export default {
         console.error('영화 데이터를 가져오는 중 오류가 발생했습니다:', error);
       }
     },
-
     async fetchPreferredGenres() {
       try {
+        console.log('사용자의 선호 장르:', this.user.preferredGenres);
         const response = await axios.post('http://localhost:8081/preferredGenres', {
-          geners: this.user.preferredGenres // 사용자의 선호 장르 배열
+          generes: this.user.preferredGenres
         });
-        console.log('선호 장르 데이터:', response.data); // 응답 데이터 확인
-        this.prefer = response.data; // 서버에서 받은 선호 장르 콘텐츠
+        console.log('선호 장르 데이터:', response.data); // 서버에서 받아온 데이터를 확인
+        this.prefer = response.data; // 선호 장르 콘텐츠 저장
       } catch (error) {
         console.error('선호 장르 데이터를 가져오는 중 오류가 발생했습니다:', error);
       }
@@ -126,8 +126,12 @@ export default {
   mounted() {
     this.fetchMovies();
     this.fetchTopmovies();
+    console.log('Vuex 상태:', this.$store.state.user); // Vuex 상태 확인
+    console.log('선호 장르:', this.$store.state.user.preferredGenres); // 선호 장르 확인
     if (this.user && this.user.preferredGenres && this.user.preferredGenres.length > 0) {
       this.fetchPreferredGenres(); // 사용자가 로그인했을 때 선호 장르 가져오기
+    } else {
+      console.log('선호 장르가 없거나 user 데이터가 없음');
     }
   }
 };

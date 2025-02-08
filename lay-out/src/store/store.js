@@ -83,11 +83,13 @@ export default new Vuex.Store({
             console.log('loginType:', loginType);  // 확인: localStorage에서 loginType 값
 
             if (isLoggedIn === 'true' && user) {
+                // 로그인 상태가 'true'라면 로그인 정보 복원
                 commit('SET_LOGIN', { isLoggedIn: true, user, loginType });
+            } else {
+                // 로그인 상태가 아니면 초기화
+                commit('SET_LOGOUT');
             }
         }
-
-
     },
     getters: {
         getUserId: (state) => (state.user ? state.user.userid : null),

@@ -64,6 +64,7 @@ export default {
       this.getUserInfo('naver');
     }
   },
+
   computed: {
     ...mapState(['isLoggedIn', 'user']),
     userId() {
@@ -85,7 +86,9 @@ export default {
         // API 응답에서 필요한 데이터 추출
         const userData = response.data;
 
-        console.log("data",userData)
+        console.log("data", userData);
+
+        // Vuex에 사용자 정보와 loginType 저장
         this.$store.commit('SET_LOGIN', {
           isLoggedIn: true,
           user: {
@@ -94,8 +97,20 @@ export default {
             nickname: userData.nickname,
             name: userData.name || '', // 이름 추가
             preferredGenres: userData.genres || [] // 장르 추가
-          }
+          },
+          loginType // 여기서 loginType을 추가
         });
+        console.log("data", userData);
+        // 로컬 스토리지에 사용자 정보와 loginType 저장
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('user', JSON.stringify({
+          id: userData.memUserid,
+          email: userData.email || '',
+          nickname: userData.nickname,
+          name: userData.name || '',
+          preferredGenres: userData.genres || []
+        }));
+        localStorage.setItem('loginType', loginType); // loginType도 저장
 
       } catch (error) {
         console.error(`${loginType} 사용자 정보 가져오기 실패:`, error);
@@ -152,6 +167,9 @@ export default {
     if (this.isLoggedIn) {
       this.getUserInfo();
     }
+    this.$store.dispatch('initializeStore').then(() => {
+      this.loading = false; // 상태 초기화가 완료되면 로딩을 해제
+    });
   }
 };
 </script>
