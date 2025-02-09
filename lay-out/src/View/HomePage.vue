@@ -228,6 +228,7 @@ export default {
   background-color : black;
   color: white;
   overflow-x: hidden;
+  overflow-y: hidden;
 }
 .section-title {
   text-align: left;
