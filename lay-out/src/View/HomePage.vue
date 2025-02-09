@@ -11,6 +11,12 @@
       </div>
     </div>
 
+    <svg class="curved-divider" viewBox="0 0 1440 100" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,100 Q720,0 1440,100" stroke="white" stroke-width="1" fill="black"/>
+    </svg>
+
+
+
     <div class="movie-container">
       <h2 class="section-title">인기 영화</h2>
       <div class="top-slider">
@@ -221,6 +227,7 @@ export default {
   flex: 1;
   background-color : black;
   color: white;
+  overflow-x: hidden;
 }
 .section-title {
   text-align: left;
@@ -252,6 +259,14 @@ export default {
   opacity: 0;
   transform: translate(-50%, -60%);
   animation: fadeInMove 2s ease-out forwards;
+}
+
+.curved-divider {
+  width: 100%;
+  height: auto;
+  display: block;
+  position: relative;
+  top: -170px;
 }
 
 @keyframes fadeInMove {
