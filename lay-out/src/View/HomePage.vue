@@ -159,7 +159,7 @@ export default {
       } finally {
         this.loading = false;
       }
-  },
+    },
     toggleShowMore() {
       this.showMore = !this.showMore; // 더 보기 상태 변경
       if (!this.showSearchButton) {
@@ -461,33 +461,33 @@ h1 {
 }
 
 .more-info {
-  display: inline-flex; /* 인라인 플렉스 사용 */
-  align-items: center; /* 세로 정렬 */
-  margin-left: 10px; /* 간격 */
+  display: inline-flex;
+  align-items: center;
+  margin-left: 10px;
 }
 
 .plus-sign {
-  font-size: 22px; /* 기호 크기 */
+  font-size: 22px;
   color: darkslateblue;
-  margin-right: 5px; /* 기호와 텍스트 간격 */
-  animation: pulse 1.5s ease-in-out infinite; /* 기호 애니메이션 */
+  margin-right: 5px;
+  animation: pulse 1.5s ease-in-out infinite;
 }
 
 .more-text {
-  background-color: transparent; /* 배경 투명 */
+  background-color: transparent;
   border: 2px solid darkslateblue;;
   color: darkslateblue;;
-  font-size: 15px; /* 텍스트 크기 */
-  padding: 5px 15px; /* 여백 */
-  border-radius: 25px; /* 둥근 모서리 */
-  cursor: pointer; /* 포인터 효과 */
-  transition: background-color 0.3s, color 0.3s; /* 부드러운 전환 효과 */
-  animation: bounce 1s infinite; /* 통통 튀는 애니메이션 추가 */
+  font-size: 15px;
+  padding: 5px 15px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  animation: bounce 1s infinite;
 }
 
 .more-text:hover {
   background-color: #1E1E1E;
-  color: white; /* 호버 시 글씨 색상 */
+  color: white;
 }
 
 @keyframes pulse {
@@ -495,7 +495,7 @@ h1 {
     transform: scale(1);
   }
   50% {
-    transform: scale(1.2); /* 기호가 커지는 효과 */
+    transform: scale(1.2);
   }
 }
 
@@ -504,10 +504,10 @@ h1 {
     transform: translateY(0);
   }
   40% {
-    transform: translateY(-5px); /* 위로 튕기는 효과 */
+    transform: translateY(-5px);
   }
   60% {
-    transform: translateY(-3px); /* 살짝 덜 튕기는 효과 */
+    transform: translateY(-3px);
   }
 }
 

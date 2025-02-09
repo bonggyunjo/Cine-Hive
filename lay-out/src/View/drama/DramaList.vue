@@ -20,7 +20,7 @@
           :class="['rating-button', { active: decadeFiltered === 2020 }]">2020s</span> &nbsp;&nbsp;
       <span
           @click="filterByDecade('before2000')"
-          :class="['rating-button', { active: decadeFiltered === 'before2000' }]">Before 2000s</span>
+          :class="['rating-button', { active: decadeFiltered === 'before2000' }]">2000s 이하</span>
     </div>
     <div class="separator"></div>
     <div class="top-slider">
