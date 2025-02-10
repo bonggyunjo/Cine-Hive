@@ -75,21 +75,24 @@ export default {
 
         // API 응답에서 필요한 데이터 추출
         const userData = response.data;
+        console.log(`${loginType} 로그인 사용자 데이터:`, userData);
 
-        console.log("data", userData);
+        const finalLoginType = userData.mem_type || loginType;
 
         // Vuex에 사용자 정보와 loginType 저장
         this.$store.commit('SET_LOGIN', {
           isLoggedIn: true,
           user: {
+            id: userData.memUserid,
             email: userData.email || '',
             nickname: userData.nickname,
             name: userData.name || '', // 이름 추가
             preferredGenres: userData.genres || [] // 장르 추가
           },
-          loginType // 여기서 loginType을 추가
+          loginType: finalLoginType // 여기서 loginType을 추가 (일반 타입 추가)
         });
-        console.log("data", userData);
+
+
         // 로컬 스토리지에 사용자 정보와 loginType 저장
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('user', JSON.stringify({
@@ -97,9 +100,10 @@ export default {
           email: userData.email || '',
           nickname: userData.nickname,
           name: userData.name || '',
-          preferredGenres: userData.genres || []
+          preferredGenres: userData.genres || [],
+          mem_type: userData.mem_type
         }));
-        localStorage.setItem('loginType', loginType); // loginType도 저장
+        localStorage.setItem('loginType', finalLoginType); // loginType도 저장
 
       } catch (error) {
         console.error(`${loginType} 사용자 정보 가져오기 실패:`, error);
@@ -140,7 +144,20 @@ export default {
 
   created() {
     if (this.isLoggedIn) {
-      this.getUserInfo();
+      // 일반 로그인 사용자는 별도 API 호출 없이 localStorage에서 복구
+      const user = JSON.parse(localStorage.getItem('user'));
+      const loginType = user?.mem_type || localStorage.getItem('loginType');
+
+      this.$store.commit('SET_LOGIN', {
+        isLoggedIn: true,
+        user,
+        loginType
+      });
+    } else {
+      // OAuth 로그인이 아닐 경우, 따로 API 호출 필요 없음
+      this.getUserInfo('kakao');
+      this.getUserInfo('google');
+      this.getUserInfo('naver');
     }
   }
 };
