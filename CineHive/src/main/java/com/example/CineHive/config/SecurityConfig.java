@@ -48,7 +48,8 @@ public class SecurityConfig {
                                 "/api/auth/google/callback",
                                 "/api/auth/google/success",
                                 "/register",
-                                "/login"
+                                "/login",
+                                "api/auth/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

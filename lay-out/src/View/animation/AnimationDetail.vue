@@ -1,23 +1,23 @@
 <template>
-  <div class="animation-detail">
+  <div v-if="animation" class="animation-detail">
     <div class="animation-backdrop">
       <div class="animation-poster">
-        <img :src="'https://image.tmdb.org/t/p/original' + animation.posterPath" alt="포스터" class="poster-image" />
+        <img v-if="animation.posterPath" :src="'https://image.tmdb.org/t/p/original' + animation.posterPath" alt="포스터" class="poster-image" />
       </div>
       <div class="animation-content">
         <div class="info-item">
           <span class="info-label">제목</span>
-          <p class="info-text">{{ animation.name }}</p>
+          <p v-if="animation.name" class="info-text">{{ animation.name }}</p>
         </div>
         <div class="animation-info">
           <div class="info-item">
             <span class="info-label">평점</span>
-            <p class="info-text">{{ animation.voteAverage }}</p>
+            <p v-if="animation.voteAverage" class="info-text">{{ animation.voteAverage }}</p>
           </div>
           <div class="info-item">
             <span class="info-label">감독</span>
             <p class="info-text">
-              <span v-if="animation.directors.length > 0">
+              <span v-if="animation.directors && animation.directors.length > 0">
                 {{ animation.directors.map(d => d.name).join(', ') }}
               </span>
               <span v-else>정보 없음</span>
@@ -41,6 +41,7 @@
         ></iframe>
       </div>
     </div>
+
     <div class="action-buttons">
       <button class="action-button" @click="viewReviews">감상평 보기</button>
       <button class="action-button" @click="viewReview">리뷰 보기</button>
@@ -55,12 +56,13 @@
         <img class="streaming-logo" src="@/assets/movieDetailLogo/wiki.png" alt="Watcha" @click="goToLink('https://www.wavve.com')" />
         <img class="streaming-logo" src="@/assets/movieDetailLogo/netflix.png" alt="Netflix" @click="goToLink('https://www.netflix.com')" />
         <img class="streaming-logo" src="@/assets/movieDetailLogo/tiving.png" alt="Tiving" @click="goToLink('https://www.tving.com')" />
-
       </div>
     </div>
   </div>
+  <div v-else>
+    <p>애니메이션 정보를 불러오는 중...</p>
+  </div>
 </template>
-
 
 <script>
 import axios from 'axios';
@@ -68,7 +70,7 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      animation: {},
+      animation: null,
     };
   },
   created() {

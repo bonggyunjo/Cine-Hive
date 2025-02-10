@@ -1,22 +1,22 @@
 <template>
-  <div class="movie-detail">
+  <div v-if="movie" class="movie-detail">
     <div class="movie-backdrop">
       <div class="movie-poster">
-        <img :src="'https://image.tmdb.org/t/p/original' + movie.posterPath" alt="포스터" class="poster-image" />
+        <img v-if="movie.posterPath" :src="'https://image.tmdb.org/t/p/original' + movie.posterPath" alt="포스터" class="poster-image" />
       </div>
       <div class="movie-content">
         <div class="info-item">
           <span class="info-label">제목</span>
-          <p class="info-text">{{ movie.title }}</p>
+          <p v-if="movie.title" class="info-text">{{ movie.title }}</p>
         </div>
         <div class="movie-info">
           <div class="info-item">
             <span class="info-label">평점</span>
-            <p class="info-text">{{ movie.voteAverage }}</p>
+            <p v-if="movie.voteAverage" class="info-text">{{ movie.voteAverage }}</p>
           </div>
           <div class="info-item">
             <span class="info-label">출연진</span>
-            <div class="actors-list">
+            <div v-if="movie.actors && movie.actors.length > 0" class="actors-list">
               <span v-for="actor in movie.actors.slice(0, 5)" :key="actor.id" class="actor-item">
                 {{ actor.name }}
               </span>
@@ -28,7 +28,7 @@
           </div>
           <div class="info-item">
             <span class="info-label">출시일</span>
-            <p class="info-text">{{ movie.releaseDate }}</p>
+            <p v-if="movie.releaseDate" class="info-text">{{ movie.releaseDate }}</p>
           </div>
           <div class="info-item">
             <span class="info-label">줄거리</span>
@@ -47,14 +47,15 @@
             class="trailer-iframe"
         ></iframe>
       </div>
-
     </div>
+
     <div class="action-buttons">
       <button class="action-button" @click="viewReviews">감상평 보기</button>
       <button class="action-button" @click="viewReview">리뷰 보기</button>
       <button class="action-button" @click="addToFavorites">찜하기</button>
       <button class="action-button" @click="goBack">뒤로 가기</button>
     </div>
+
     <div class="bottom-section">
       <h3 class="section-title">바로가기</h3>
       <div class="streaming-services">
@@ -62,11 +63,14 @@
         <img class="streaming-logo" src="@/assets/movieDetailLogo/wiki.png" alt="Watcha" @click="goToLink('https://www.wavve.com')" />
         <img class="streaming-logo" src="@/assets/movieDetailLogo/netflix.png" alt="Netflix" @click="goToLink('https://www.netflix.com')" />
         <img class="streaming-logo" src="@/assets/movieDetailLogo/tiving.png" alt="Tiving" @click="goToLink('https://www.tving.com')" />
-
       </div>
     </div>
   </div>
+  <div v-else>
+    <p>영화 정보를 불러오는 중...</p>
+  </div>
 </template>
+
 
 <script>
 import axios from 'axios';
@@ -74,11 +78,17 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      movie: {},
+      movie: null,
     };
   },
-  created() {
-    this.fetchMovieDetails();
+  async created() {
+    const movieId = this.$route.params.id;
+    try {
+      const response = await fetch(`http://localhost:8081/movies/${movieId}`);
+      this.movie = await response.json();
+    } catch (error) {
+      console.error("영화 정보를 불러오는 중 오류 발생:", error);
+    }
   },
   watch: {
     '$route.params.id': 'fetchMovieDetails' // URL 매개변수 변경 시 데이터 다시 로드

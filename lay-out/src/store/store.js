@@ -20,7 +20,7 @@ export default new Vuex.Store({
                 preferredGenres: payload.user.preferredGenres || [],
             };
             console.log("Setting user in Vuex:", state.user);
-            state.loginType = payload.loginType;
+            state.loginType = payload.loginType || payload.user.mem_type;
         },
         SET_LOGOUT(state) {
             state.isLoggedIn = false;
@@ -35,12 +35,14 @@ export default new Vuex.Store({
         // 로그인 액션
         async login({ commit }, { user, loginType }) {
             try {
+                const finalloginType = loginType || user.mem_type;
+
                 commit('SET_LOGIN', { isLoggedIn: true, user, loginType });
 
                 // 로그인 상태를 localStorage에 저장
                 localStorage.setItem('isLoggedIn', 'true');
                 localStorage.setItem('user', JSON.stringify(user));
-                localStorage.setItem('loginType', loginType);
+                localStorage.setItem('loginType', finalloginType);
 
 
             } catch (error) {
@@ -70,17 +72,17 @@ export default new Vuex.Store({
         initializeStore({ commit }) {
             const isLoggedIn = localStorage.getItem('isLoggedIn');
             const user = JSON.parse(localStorage.getItem('user'));
-            const loginType = localStorage.getItem('loginType');
+            //const loginType = localStorage.getItem('loginType');
+            if (isLoggedIn === 'true' && user) {
+                // user.mem_type을 기반으로 loginType을 설정
+                const loginType = user.mem_type || localStorage.getItem('loginType');
+                commit('SET_LOGIN', { isLoggedIn: true, user, loginType });
+            } else {
+                commit('SET_LOGOUT');
+            }
 
             console.log('isLoggedIn:', isLoggedIn);
             console.log('user:', user);
-            if (isLoggedIn === 'true' && user) {
-
-                commit('SET_LOGIN', { isLoggedIn: true, user, loginType });
-            } else {
-
-                commit('SET_LOGOUT');
-            }
         }
     },
     getters: {

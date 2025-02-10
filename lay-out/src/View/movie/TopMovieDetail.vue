@@ -1,18 +1,18 @@
 <template>
-  <div class="top-movie-detail">
+  <div v-if="topMovie" class="top-movie-detail">
     <div class="movie-backdrop">
       <div class="movie-poster">
-        <img :src="'https://image.tmdb.org/t/p/original' + topMovie.posterPath" alt="포스터" class="poster-image" />
+        <img v-if="topMovie.posterPath" :src="'https://image.tmdb.org/t/p/original' + topMovie.posterPath" alt="포스터" class="poster-image" />
       </div>
       <div class="movie-content">
         <div class="info-item">
           <span class="info-label">제목</span>
-          <p class="info-text">{{ topMovie.title }}</p>
+          <p v-if="topMovie.title" class="info-text">{{ topMovie.title }}</p>
         </div>
         <div class="movie-info">
           <div class="info-item">
             <span class="info-label">평점</span>
-            <p class="info-text">{{ topMovie.voteAverage }}</p>
+            <p v-if="topMovie.voteAverage" class="info-text">{{ topMovie.voteAverage }}</p>
           </div>
           <div class="info-item">
             <span class="info-label">감독</span>
@@ -20,7 +20,7 @@
           </div>
           <div class="info-item">
             <span class="info-label">개봉일</span>
-            <p class="info-text">{{ topMovie.releaseDate }}</p>
+            <p v-if="topMovie.releaseDate" class="info-text">{{ topMovie.releaseDate }}</p>
           </div>
           <div class="info-item">
             <span class="info-label">줄거리</span>
@@ -56,15 +56,17 @@
       </div>
     </div>
   </div>
+  <div v-else>
+    <p>영화 정보를 불러오는 중...</p>
+  </div>
 </template>
-
 <script>
 import axios from 'axios';
 
 export default {
   data() {
     return {
-      topMovie: {},
+      topMovie: null,
     };
   },
   created() {
@@ -75,7 +77,7 @@ export default {
       const movieId = this.$route.params.id;
       try {
         const response = await axios.get(`http://localhost:8081/movies/${movieId}`);
-        console.log(response.data); // 추가
+        console.log(response.data);
         this.topMovie = response.data;
       } catch (error) {
         console.error('영화 상세 정보를 가져오는 중 오류가 발생했습니다:', error);
