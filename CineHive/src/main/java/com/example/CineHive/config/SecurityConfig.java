@@ -20,8 +20,18 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // CSRF 비활성화 (테스트용)
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authz -> authz
+                        .requestMatchers("/movies",
+                                         "/now_playing",
+                                         "/search",
+                                         "/top_movie","/movies/**",
+                                "/api/auth/undefined/success",
+                                "/dramas/**",
+                                "/animations/**",
+                                "/get_topmovies",
+                                "/topmovies/**", "/now_playing_movies"
+                        ,"/preferredGenres").permitAll()
                         .requestMatchers("/login", "/register", "/checkuserId/**","/checknickname/**","/checkemail/**",
                                 "/api/auth/kakao/check-user","/api/auth/kakao/register",
                                 "/api/auth/google/register","/api/auth/google/check-user","/api/auth/naver/check-user","/api/auth/naver/register").permitAll() // 로그인과 회원가입은 누구나 접근 가능
@@ -37,9 +47,10 @@ public class SecurityConfig {
                                 "/api/auth/google",
                                 "/api/auth/google/callback",
                                 "/api/auth/google/success",
-                                "/register"
+                                "/register",
+                                "/login"
                         ).permitAll()
-                        .anyRequest().authenticated() // 나머지 요청은 인증 필요
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
                         .sessionFixation().newSession()
@@ -47,5 +58,11 @@ public class SecurityConfig {
                 );
 
         return http.build();
+    }
+
+
+    @Bean
+    public BCryptPasswordEncoder bCrpytPasswordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }
