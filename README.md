@@ -2,13 +2,15 @@
 - TMDB API를 활용하여 Spring+Java를 이용한 영화 소개 프로젝트 
 ## 시스템 아키텍처
 
-IDE : IntelliJ 
+IDE : IntelliJ IDEA
 
-엔진 및 언어 : Spring & Java (RestfulAPI and TMDB API)
+프레임워크 및 언어 : Spring & Java (RestfulAPI)
 
 DMBS : MariaDB
 
 클라우드 서비스 : AWS (ec2 + rds)
+
+API : TMDB API
 
 ---
 
