@@ -26,6 +26,7 @@ public class SecurityConfig {
                                          "/now_playing",
                                          "/search",
                                          "/top_movie","/movies/**",
+                                "/api/auth/undefined/success",
                                 "/dramas/**",
                                 "/animations/**",
                                 "/get_topmovies",
