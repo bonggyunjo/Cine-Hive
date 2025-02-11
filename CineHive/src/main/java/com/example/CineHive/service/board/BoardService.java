@@ -7,7 +7,10 @@ import com.example.CineHive.repository.UserRepository;
 import com.example.CineHive.repository.board.BoardRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Service
 public class BoardService {
@@ -18,14 +21,14 @@ public class BoardService {
     private UserRepository userRepository;
 
     public Board createBoard(BoardDto boardDto){
-        User user = userRepository.findByMemUserid(boardDto.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findByMemEmail(boardDto.getEmail())
+                .orElse(null);
 
-        Board board = new Board();
-        board.setBrdTitle(boardDto.getBrdTitle());
-        board.setBrdContent(boardDto.getBrdContent());
-        board.setUser(user);
+            Board board = new Board();
+            board.setBrdTitle(boardDto.getBrdTitle());
+            board.setBrdContent(boardDto.getBrdContent());
+            board.setUser(user);
 
-        return boardRepository.save(board);
+            return boardRepository.save(board);
     }
 }
