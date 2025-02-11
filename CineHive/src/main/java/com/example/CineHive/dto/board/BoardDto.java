@@ -10,9 +10,9 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class boardDto {
+public class BoardDto {
     private Long id;
     private String brdTitle;
     private String brdContent;
-    private String userId;
+    private String email;
 }

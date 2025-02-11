@@ -34,7 +34,7 @@ public class Board {
     private int reports;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_email", referencedColumnName = "mem_id", nullable = false)
     private User user;
 
     @PrePersist
